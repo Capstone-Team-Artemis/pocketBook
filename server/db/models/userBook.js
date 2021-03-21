@@ -1,11 +1,10 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const UserBook = db.define('userbook', {
+const UserBook = db.define('userBook', {
     status: {
         type: Sequelize.ENUM('Completed', 'Currently Reading', 'To Read')
     },
-    allowNull: false
 })
 
 module.exports = UserBook

@@ -1,7 +1,7 @@
 
 'use strict'
 const db = require('./server/db')
-const { User, Event, Book } = require ('./server/db/models')
+const { User, Event, Book, UserBook, UserEvent } = require ('./server/db/models')
 
 async function seed () {
 
@@ -38,6 +38,10 @@ async function seed () {
         },
     ]
 
+    const [selina, catherine, sandy, kay] = await User.bulkCreate(users, {
+        returning: true
+      })
+
     const events = [
         {
             eventTitle: "Welcome to Hogwarts!",
@@ -59,12 +63,18 @@ async function seed () {
         },
     ]
 
+    const [
+        hogwarts,
+        bookwriting, 
+        women
+      ] = await Event.bulkCreate(events, {returning: true})
+
     const books = [
         {
         googleId: "_ojXNuzgHRcC",
         title: "Flowers",
         authors: ["Vijaya Khisty Bodach"],
-        rating: 3.5
+        rating: 3.5,
         description: "Discover the beautiful science of flowers! Through full-color photos and simple, easy-to-follow text, this nonfiction book introduces emergent readers to the basics of botany, including information on how flowers grow, along with their uses. All Pebble Plus books align with national and state standards and are designed to help new readers read independently, making them the perfect choice for every child."
         },
         {
@@ -82,27 +92,37 @@ async function seed () {
         description: "A special new edition in celebration of the 20th anniversary of the publication of Harry Potter and the Sorcerer’s Stone, with a stunning new cover illustration by Caldecott Medalist Brian Selznick. Harry Potter has never been the star of a Quidditch team, scoring points while riding a broom far above the ground. He knows no spells, has never helped to hatch a dragon, and has never worn a cloak of invisibility. All he knows is a miserable life with the Dursleys, his horrible aunt and uncle, and their abominable son, Dudley - a great big swollen spoiled bully. Harry’s room is a tiny closet at the foot of the stairs, and he hasn’t had a birthday party in eleven years. But all that is about to change when a mysterious letter arrives by owl messenger: a letter with an invitation to an incredible place that Harry - and anyone who reads about him - will find unforgettable. For it’s there that he finds not only friends, aerial sports, and magic in everything from classes to meals, but a great destiny that’s been waiting for him... if Harry can survive the encounter. This gorgeous new edition in celebration of the 20th anniversary of the publication of Harry Potter and the Sorcerer’s Stone features a newly designed cover illustrated by Caldecott Medalist Brian Selznick, as well as the beloved original interior decorations by Mary GrandPré."
         }
     ]
+    const [
+        flowers,
+        hornet, 
+        harry
+      ] = await Book.bulkCreate(books, {returning: true})
+
+    const userBooks = [
+        {
+          userId: 1,
+          bookId: 2,
+          status: 'Currently Reading'
+        },
+    ]
+
+    const [
+        testcase
+      ] = await UserBook.bulkCreate(userBooks, {returning: true})
+
+    const userEvents = [
+        {
+          userId: 1,
+          eventId: 1,
+          attending: true
+        }
+    ]
+
+    const [
+        eventcase
+      ] = await UserEvent.bulkCreate(userEvents, {returning: true})
 }
 
-// async function seed () {
-//     try {
-// 		await db.sync({ force: true });
-
-// 		const createdProducts = await Product.bulkCreate(products);
-// 		console.log(green("Seeded products!"));
-
-// 		const createdUsers = await User.bulkCreate(users);
-// 		console.log(green("Seeded users!"));
-
-// 		const createdCarts = await Cart.bulkCreate(carts);
-// 		console.log(green("Seeded carts!"));
-
-// 		const createdCartItems = await CartItem.bulkCreate(cartItems);
-// 		console.log(green("Seeded cart items!"));
-// 	} catch (err) {
-// 		console.log(red(err));
-// 	}
-// }
 
 // We've separated the `seed` function from the `runSeed` function.
 async function runSeed() {

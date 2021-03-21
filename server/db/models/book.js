@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
+const { DataTypes } = require('sequelize')
 
 const Book = db.define('book', {
     //check if it is string or other types
@@ -10,7 +11,7 @@ const Book = db.define('book', {
         type: Sequelize.STRING
     },
     authors: {
-        type: Sequelize.ARRAY
+        type: Sequelize.ARRAY(DataTypes.STRING)
     },
     rating: {
         type: Sequelize.FLOAT

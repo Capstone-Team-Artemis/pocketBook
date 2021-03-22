@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { Text, TextInput, StyleSheet, SafeAreaView } from 'react-native';
+import { Text, TextInput, StyleSheet, View } from 'react-native';
 import React, { Component } from 'react';
 
 class Chat extends Component {

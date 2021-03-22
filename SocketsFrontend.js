@@ -38,7 +38,7 @@ class Chat extends Component {
       </Text>
     ));
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {discussion}
         <TextInput
           style={{
@@ -56,7 +56,7 @@ class Chat extends Component {
             this.setState({ chatMessage });
           }}
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }

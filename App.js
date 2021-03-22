@@ -13,36 +13,35 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import GOOGLE_API from './secrets';
-import Chat from './SocketFrontend';
+import Chat from './SocketsFrontend';
 
 export default function App() {
   // REACT HOOKS
   const [book, setBook] = useState('');
   const [result, setResult] = useState([]);
-  const [apikey, setApiKey] = useState(GOOGLE_API);
   const [toggle, setToggle] = useState(true);
 
+  // <TextInput onChangeText={handleChange} /> triggers this
   function handleChange(bookTitle) {
-    console.log('BOOK TITLE: ', bookTitle)
-    console.log('IN HANDLE CHANGE')
+    // Sets "book" state to the book title we typed in
     setBook(bookTitle);
   }
 
+  // <Button title="Submit" onPress={handleSubmit} /> triggers this
   function handleSubmit() {
-    console.log('IN HANDLE SUBMIT!!')
-    console.log('BOOK: ', book)
+    // Axios runs, passing in "book" & our Google Books API key
     axios
       .get(
         'https://www.googleapis.com/books/v1/volumes?q=' +
           book +
           '&key=' +
           GOOGLE_API +
-          '&maxResults=1'
+          '&maxResults=10'
       )
+      // Axios retrieves max list of 10 results
       .then((data) => {
-        console.log('IN AXIOS!!');
+        // We set array of book objects inside "result" state
         setResult(data.data.items);
-        console.log("RESULTS: ", result)
       })
       .catch((err) => {
         console.log(err);
@@ -53,62 +52,65 @@ export default function App() {
     <Formik>
       <View style={styles.container}>
         <View>
+          {/* Toggle ternary to render either Google Book Search or Socket live chat */}
           {toggle ? (
             <View>
               <Text style={{ marginTop: 50, textAlign: 'center' }}>
                 Google Book Search
               </Text>
-              <TextInput
-                onChangeText={handleChange}
-              />
+              <TextInput onChangeText={handleChange} />
+              <Button title="Submit" onPress={handleSubmit} />
+
+              {/* SafeAreaView & Scrollview to allow horizontal scrolling */}
+              <SafeAreaView>
+                <ScrollView horizontal={true}>
+                  {/* CSS on View to have books render left to right */}
+                  <View style={styles.bookList}>
+                    {/* Map over "result" state and render each book object details */}
+                    {result.map((book, idx) => {
+                      // console.log('book in map: ', book.volumeInfo);
+                      return (
+                        <View key={idx}>
+                          {/* Render book cover image first, with styling */}
+                          <Image
+                            alt={book.volumeInfo.title}
+                            style={{ width: 100, height: 150 }}
+                            source={{
+                              uri: book.volumeInfo.imageLinks.smallThumbnail,
+                            }}
+                          />
+                          {/* Render book title, authors array, rating */}
+                          <Text>{book.volumeInfo.title}</Text>
+                          <Text>{book.volumeInfo.authors}</Text>
+                          <Text>{book.volumeInfo.averageRating}</Text>
+                        </View>
+                      );
+                    })}
+                  </View>
+                </ScrollView>
+              </SafeAreaView>
             </View>
           ) : (
             <Chat setToggle={setToggle} />
           )}
         </View>
-        <Button title="Submit" onPress={handleSubmit} />
-
+        {/* Separate button to toggle between Google Book Search & Sockets live chat */}
         <Button
           onPress={() => setToggle(!toggle)}
           title={toggle ? 'chat' : 'search'}
         />
-        <View>
-          {result.map((book, idx) => {
-            console.log('book in map: ', book.volumeInfo)
-            return <View key={idx}>
-              <Text>
-              {book.volumeInfo.title}
-              {"\n"}
-              </Text>
-              <Text>
-              {book.volumeInfo.authors}
-              {"\n"}
-              </Text>
-              <Text>
-              {book.volumeInfo.averageRating}
-              {"\n"}
-              </Text>
-              
-              {/* <View> {book.volumeInfo.imageLinks.smallThumbnail} </View> */}
-              <Image
-                alt = {book.volumeInfo.title}
-                source={{
-                uri: 'http://books.google.com/books/content?id=5iTebBW-w7QC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api',
-                }}
-                />
-            </View>;
-          })}
-        </View>
       </View>
     </Formik>
   );
 }
 
+// CSS STYLING
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: "center",
+  },
+  bookList: {
+    flexDirection: 'row',
   },
 });

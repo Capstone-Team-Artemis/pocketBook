@@ -1,31 +1,22 @@
 module.exports = io => {
-    io.on('connection', socket => {
-      console.log(`A socket connection to the server has been made: ${socket.id}`)
-  
-      socket.on('disconnect', () => {
-        console.log(`Connection ${socket.id} has left the building`)
-      })
+  //connection is established
+  //socket is an object that has socket id
+  io.on('connection', (socket) => {
+    console.log(`Connection from a user ${socket.id}`);
+    //step2: taking in msg(this.state.chatmessage from the front end) then it runs line 9
+    socket.on("chat message", msg => {
+      console.log("message backend", msg);
+      //send messages to everyone except the one just joined 
+      socket.broadcast.emit("messages")
+      //step3: emiting the messages event to all the users and passing msg
+      io.emit("messages", msg);
     })
+  });
+    // io.on('connection', socket => {
+    //   console.log(`A socket connection to the server has been made: ${socket.id}`)
+  
+    //   socket.on('disconnect', () => {
+    //     console.log(`Connection ${socket.id} has left the building`)
+    //   })
+    // })
 }
-
-// test branch socket 
- 
-// const app = require('express')();
-// const http = require('http').Server(app);
-// const io = require('socket.io')(http);
-
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/index.html');
-// });
-
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-//   socket.on("chat message", msg => {
-//     console.log(msg);
-//     io.emit("chat message", msg);
-//   })
-// });
-
-// http.listen(3000, () => {
-//   console.log('listening on *:3000');
-// });

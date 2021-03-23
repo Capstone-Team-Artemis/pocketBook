@@ -22,17 +22,18 @@ class Chat extends Component {
   componentDidMount() {
     //connection between client and server starts
     const thisComponent = this;
-    const socket = io('http://127.0.0.1:3000', {
+    this.socket = io('http://127.0.0.1:3000', {
       transports: ['websocket'],
       jsonp: false,
     });
-    socket.connect();
+    this.socket.connect();
     // Step4: (putting msg to the front end) listening for the 'messages' event from the backend index.js line 10
-    socket.on('connect', () => {
+    this.socket.on('connect', () => {
       console.log('Connected to socket server');
     });
-    socket.on('messages', (msg) => {
-      //it's adding emitted discussion to the discussion already exist
+    this.socket.on('messages', (msg) => {
+      //[listening..]it's adding emitted discussion to the discussion already exist
+      console.log("**msg**", msg)
       console.log(
         'THISCOMPONENT.STATE.DISCUSSION ->',
         thisComponent.state.discussion
@@ -40,12 +41,14 @@ class Chat extends Component {
       // console.log('thisComponent ->', this);
       const discussion = thisComponent.state.discussion.slice();
       thisComponent.setState({ discussion: [...discussion, msg] });
+      console.log("**discussion!",thisComponent.state.discussion)
     });
+
   }
 
   submitChatMessage() {
     //step1: socket is emitting chat message to the backend line6 of index.js
-    socket.emit('chat message', this.state.chatMessage);
+    this.socket.emit('chat message', this.state.chatMessage);
     console.log('in submit chat message: ', this.state.chatMessage);
     this.setState({ chatMessage: '' });
   }

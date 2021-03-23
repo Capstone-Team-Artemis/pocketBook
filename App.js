@@ -9,7 +9,7 @@ import {
   Button,
   SafeAreaView,
   TextInput,
-  Image
+  Image,
 } from 'react-native';
 import { Formik } from 'formik';
 import GOOGLE_API from './secrets';

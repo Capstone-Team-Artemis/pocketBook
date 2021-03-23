@@ -20,20 +20,32 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    //connection between client and server starts
-    const thisComponent = this;
-    this.socket = io('http://127.0.0.1:3000', {
+    // Instead of connecting with local backend server...
+    // We are connecting with NGROK (allows us to access local backend server)
+    // MAKE SURE to have ngrok installed on your terminal
+    // After installed, run 'ngrok http 3000' on your terminal
+    // Paste generated URL into 'this.socket = io('****HERE***')' (line 36)
+
+    // this.socket = io('http://127.0.0.1:3000', {
+    //   transports: ['websocket'],
+    //   jsonp: false,
+    // });
+    this.socket = io('http://721e1df4d08b.ngrok.io', {
       transports: ['websocket'],
       jsonp: false,
     });
     this.socket.connect();
+
+    const thisComponent = this;
+
+    //connection between client and server starts
     // Step4: (putting msg to the front end) listening for the 'messages' event from the backend index.js line 10
     this.socket.on('connect', () => {
       console.log('Connected to socket server');
     });
     this.socket.on('messages', (msg) => {
       //[listening..]it's adding emitted discussion to the discussion already exist
-      console.log("**msg**", msg)
+      console.log('**msg**', msg);
       console.log(
         'THISCOMPONENT.STATE.DISCUSSION ->',
         thisComponent.state.discussion
@@ -41,9 +53,8 @@ class Chat extends Component {
       // console.log('thisComponent ->', this);
       const discussion = thisComponent.state.discussion.slice();
       thisComponent.setState({ discussion: [...discussion, msg] });
-      console.log("**discussion!",thisComponent.state.discussion)
+      console.log('**discussion!', thisComponent.state.discussion);
     });
-
   }
 
   submitChatMessage() {

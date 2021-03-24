@@ -24,7 +24,12 @@ const Login = ({ navigation }) => {
 
         {/* Email Address Input */}
         <View style={styles.inputContainer}>
-          <Icon name={'user'} size={30} color={'grey'} style={styles.icon} />
+          <Icon
+            name={'envelope'}
+            size={30}
+            color={'grey'}
+            style={styles.icon}
+          />
           <TextInput style={styles.inputText} placeholder={'Email Address'} />
         </View>
 
@@ -42,7 +47,7 @@ const Login = ({ navigation }) => {
         <TouchableOpacity
           style={[styles.inputContainer, styles.submitContainer]}
         >
-          <Text style={styles.submitText}>Login</Text>
+          <Text style={styles.submitText}>LOGIN</Text>
         </TouchableOpacity>
 
         {/* Don't have an account? Navigates to Sign Up component */}
@@ -87,21 +92,24 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 50,
     borderWidth: 2,
-    justifyContent: 'center',
-    paddingTop: 10,
-    marginHorizontal: 25,
+    paddingTop: 5,
   },
   inputText: {
-    color: '#0779e4',
     fontWeight: 'bold',
+    marginLeft: 60,
+    width: '100%',
   },
   submitContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#6475a5',
   },
   submitText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
     textAlign: 'center',
+    bottom: 2,
   },
 });
 

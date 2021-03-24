@@ -13,6 +13,7 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {/* You can have as many Stack.Screen as you want */}
+        {/* Each Screen takes a React "component" React component prop */}
         <Stack.Screen
           name="Login"
           component={Login}

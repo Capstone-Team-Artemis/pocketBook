@@ -17,12 +17,8 @@ module.exports = router
 
 router.post("/:userId/createEvent", async (req, res, next) => {
     try {
-        // let eventTitle = req.body.eventTitle;
-        // let eventDescrition = req.body.eventDescription;
-        // let eventDate = req.body.eventDate;
-        // let eventTime = req.body.eventTime;
         const newEvent = await Event.create(req.body)
-        res.status(201).send(newCampus)
+        res.status(201).send(newEvent)
     } catch (error) {
         next(error)
     }
@@ -30,11 +26,11 @@ router.post("/:userId/createEvent", async (req, res, next) => {
 
 //PUT api/events/:userId/updateEvent/:eventId 
 //host key 
-router.put('/events/:userId/updateEvent/:eventId', async(req, res, next) => {
+router.put('/:userId/updateEvent/:eventId', async(req, res, next) => {
     try {
         const eventId = req.params.eventId
         const event = await Event.findByPk(eventId)
-        const updatedEvent = await campus.update(req.body)
+        const updatedEvent = await event.update(req.body)
         res.send(updatedEvent)
     } catch (error) {
         next(error)

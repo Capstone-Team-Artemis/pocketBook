@@ -117,13 +117,15 @@ async function seed () {
         {
           userId: 1,
           eventId: 1,
-          host: true
         },
         {
           userId: 2,
           eventId: 1,
-          host: false
-        }
+        },
+        {
+          userId: 2,
+          eventId: 2,  
+        },
     ]
 
     const [

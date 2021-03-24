@@ -1,13 +1,112 @@
 const router = require('express').Router();
-const { Event } = require('../db/models')
-module.exports = router
+const { Event, User, UserEvent } = require('../db/models');
+module.exports = router;
 
-//GET api/events
+// GET api/events --> get ALL events  of the event
+router.get('/', async (req, res, next) => {
+    try {
+        const events = await Event.findAll();
+        if (events.length >= 1) {
+            res.json(events);
+        }
+        else {
+            res.send('There are currently no upcoming events!')
+        }
+    } catch (err) {
+        next(err);
+    }
+  })
 
-// router.get('/', async (req, res, next) => {
-//     try {
+// GET api/events/attending --> get ALL events that you are attending
+router.get('/:userId/attending', async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+        const events = await Event.findAll({
+            include: {
+                model: User,
+                where: {
+                    id: userId 
+                }
+            },
+        });
+        if (events.length >= 1) {
+            console.log(events)
+            res.json(events);
+        }
+        else {
+            res.send('Currently not attending any events!');
+        }   
+    } catch (err) {
+        next(err);
+    }
+  })
 
-//     } catch (err) {
-//         next (err)
-//     }
-// )}
+
+// GET api/events/created --> get ALL events that you CREATED (you are the HOST)
+router.get('/:userId/created', async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+        const events = await Event.findAll({
+            where: {
+                host: userId 
+            }
+        });
+        if (events.length >= 1) {
+            console.log(events)
+            res.json(events);
+        }
+        else {
+            res.send('Currently have not created any events!');
+        }   
+    } catch (err) {
+        next(err);
+    }
+  })
+
+
+// DELETE api/events/delete/eventId --> delete SINGLE event (if you are the host) based on the event id
+router.delete('/:userId/delete/:eventId', async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+        const eventId = req.params.eventId;
+        // destroy the event where you are the host and the event matches your request
+        // finds all rows (will only be 1 match b/c event ids are unique) where host id matches whoever is logged in & the event id matches what was submitted in the route
+        const result = await Event.destroy({
+            where: { host: userId, id: eventId }  
+            }
+        )
+        if (result) {
+            res.sendStatus(200)
+        }
+        else {
+            res.send('You are not authorized to delete this event!');
+        }
+    } catch (err) {
+      next(err);
+    }
+  })
+
+
+// DELETE api/events/unregister/eventId --> unregister from single event based on the event id
+router.delete('/:userId/unregister/:eventId', async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+        const eventId = req.params.eventId;
+        const result = await UserEvent.destroy({
+            // only able to unregister your own attendance to an event
+            // finds all rows (will only be 1 match b/c event ids are unique) where user id matches whoever is logged in & the event id matches what was submitted in the route
+            where: { userId: userId, eventId: eventId } 
+            }
+        )
+        if (result) {
+            res.sendStatus(200)
+        }
+    } catch (err) {
+      next(err);
+    }
+  })
+
+
+
+
+

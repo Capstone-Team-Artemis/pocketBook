@@ -1,8 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Login = () => {
+const Login = ({ navigation }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -13,7 +21,40 @@ const Login = () => {
           style={styles.image}
         />
         <Text style={styles.heading}>Login</Text>
-        <View></View>
+
+        {/* Email Address Input */}
+        <View style={styles.inputContainer}>
+          <Icon name={'user'} size={30} color={'grey'} style={styles.icon} />
+          <TextInput style={styles.inputText} placeholder={'Email Address'} />
+        </View>
+
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
+          <Icon name={'lock'} size={30} color={'grey'} style={styles.icon} />
+          <TextInput
+            style={styles.inputText}
+            secureTextEntry={true}
+            placeholder={'Password'}
+          />
+        </View>
+
+        {/* Login Button */}
+        <TouchableOpacity
+          style={[styles.inputContainer, styles.submitContainer]}
+        >
+          <Text style={styles.submitText}>Login</Text>
+        </TouchableOpacity>
+
+        {/* Don't have an account? Navigates to Sign Up component */}
+        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+          <Text style={styles.textBody}>Don't have an account?</Text>
+          <Text
+            style={[styles.textBody, { color: 'blue' }, { marginLeft: 3 }]}
+            onPress={() => navigation.navigate('SignUp')}
+          >
+            Sign Up!
+          </Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -32,6 +73,35 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 40,
+  },
+  icon: {
+    top: 8,
+    left: 20,
+    position: 'absolute',
+  },
+  // Edits the round container around the Input
+  inputContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    width: '90%',
+    height: 50,
+    borderRadius: 50,
+    borderWidth: 2,
+    justifyContent: 'center',
+    paddingTop: 10,
+    marginHorizontal: 25,
+  },
+  inputText: {
+    color: '#0779e4',
+    fontWeight: 'bold',
+  },
+  submitContainer: {
+    backgroundColor: '#6475a5',
+  },
+  submitText: {
+    color: 'white',
+    fontSize: 20,
+    textAlign: 'center',
   },
 });
 

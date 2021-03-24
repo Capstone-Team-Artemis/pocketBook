@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
     bottom: 2,

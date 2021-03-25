@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from './client/Login';
 import SignUp from './client/SignUp';
+import AllEvents from './client/AllEvents'
+import CreateEvent from './client/CreateEvent'
 
 const Stack = createStackNavigator();
 
@@ -14,6 +16,16 @@ const Navigation = () => {
       <Stack.Navigator>
         {/* You can have as many Stack.Screen as you want */}
         {/* Each Screen takes a React "component" prop */}
+        <Stack.Screen
+          name="AllEvents"
+          component={AllEvents}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CreateEvent"
+          component={CreateEvent}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login"
           component={Login}

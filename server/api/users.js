@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { User, Book, UserBook} = require('../db/models');
-const { route } = require('./events');
 module.exports = router
 
 //GET SINGLE USER and roads all books
@@ -23,6 +22,7 @@ router.get('/:userId', async (req, res, next) => {
     }
 })
 
+// Create GET route to generate books by status
 router.get("/:userId/:status", async (req, res, next) => {
     try {
         let userId = req.params.userId

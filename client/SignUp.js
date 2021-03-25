@@ -15,7 +15,6 @@ import { Formik } from 'formik';
 import { auth } from './store/user';
 
 const SignUp = (props, { navigation }) => {
-  console.log('PROPS.NAME --->', props.name);
   return (
     <ScrollView>
       <Formik
@@ -29,7 +28,6 @@ const SignUp = (props, { navigation }) => {
         onSubmit={(values) => {
           // values.firstName..
           console.log(values);
-          console.log('PROPS -->', props);
           // const firstName = values.firstName;
           // const lastName = values.lastName;
           // const username = values.username;
@@ -42,7 +40,7 @@ const SignUp = (props, { navigation }) => {
             values.username,
             values.email,
             values.password,
-            props.name
+            props.route.name
           );
         }}
       >
@@ -204,9 +202,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  name: 'signup',
-});
+// const mapStateToProps = (state) => ({
+//   name: 'signup',
+// });
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
@@ -216,4 +214,4 @@ const mapDispatchToProps = (dispatch) =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default connect(null, mapDispatchToProps)(SignUp);

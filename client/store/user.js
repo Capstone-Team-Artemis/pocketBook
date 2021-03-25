@@ -20,19 +20,19 @@ export const auth = (
 ) => async (dispatch) => {
   let res;
   try {
-    if (method === 'signup') {
+    if (method === 'SignUp') {
       console.log('method -->', method);
       console.log('firstName -->', firstName);
-      res = await axios.post('/auth/signup', {
+      res = await axios.post('http://localhost:3000/auth/signup/', {
         firstName,
         lastName,
         username,
         email,
         password,
       });
-      // If method is 'login':
+      // If method is 'Login':
     } else {
-      res = await axios.post(`/auth/${method}`, {
+      res = await axios.post('http://localhost:3000/auth/login/', {
         email,
         password,
       });

@@ -111,9 +111,9 @@ const SignUp = ({ navigation }) => {
             {/* Sign Up Button */}
             <TouchableOpacity
               style={[styles.inputContainer, styles.submitContainer]}
+              onPress={props.handleSubmit}
             >
               <Text style={styles.submitText}>SIGN UP</Text>
-              onPress={props.handleSubmit}
             </TouchableOpacity>
 
             {/* Already have an account? Navigates to Login component */}

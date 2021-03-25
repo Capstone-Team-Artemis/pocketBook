@@ -38,3 +38,9 @@ router.post('/signup', async (req, res, next) => {
     }
   }
 });
+
+// POST auth/logout
+router.post('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
+});

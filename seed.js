@@ -104,7 +104,17 @@ async function seed () {
     const userBooks = [
         {
           userId: 1,
+          bookId: 1,
+          status: 'Currently Reading'
+        },
+        {
+          userId: 1,
           bookId: 2,
+          status: 'Currently Reading'
+        },
+        {
+          userId: 1,
+          bookId: 3,
           status: 'Currently Reading'
         },
     ]
@@ -121,11 +131,15 @@ async function seed () {
         {
           userId: 2,
           eventId: 1,
+
         },
         {
           userId: 2,
           eventId: 2,  
         },
+
+        }
+
     ]
 
     const [

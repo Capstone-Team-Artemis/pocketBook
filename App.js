@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 // import SocketsFrontEnd from './test/SocketsFrontend';
-import AllEvents from './test/AllEvents';
+//import AllEvents from './test/AllEvents';
 //import your component
 
 export default function App() {
@@ -10,7 +10,7 @@ export default function App() {
     <View style={styles.container}>
       {/* <SocketsFrontEnd /> */}
       {/* you can put your component to test */}
-      <AllEvents/>
+      {/* <AllEvents/> */}
       <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>

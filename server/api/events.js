@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { Event, User, UserEvent } = require('../db/models');
 module.exports = router;
-
+//Events Routes
 // GET api/events --> get ALL events  of the event
 router.get('/', async (req, res, next) => {
     try {

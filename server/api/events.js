@@ -14,7 +14,6 @@ module.exports = router
 
 //POST api/events/:userId/createEvent
 //host key 
-
 router.post("/:userId/createEvent", async (req, res, next) => {
     try {
         const newEvent = await Event.create(req.body)

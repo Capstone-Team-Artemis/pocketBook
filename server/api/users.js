@@ -23,18 +23,16 @@ router.get('/:userId', async (req, res, next) => {
     }
 })
 
-// GET route for books by status currently reading, to read, completed
-// GET/users/:userId/:status or does it make sence to have GET/books/userId/:status?
-
 router.get("/:userId/:status", async (req, res, next) => {
     try {
         let userId = req.params.userId
         // status would be Currently Reading, To Read, or Completed
         let status = req.params.status
         const myBooks = await UserBook.findAll({
-            where: {userId: userId, status: status},
-            //include: { model: Book }
+                where: {userId: userId, status: status},
+                include: Book
         })
+
         if (myBooks.length>=1) {
             res.status(200).send(myBooks)
         } else {

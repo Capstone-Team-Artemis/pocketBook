@@ -1,12 +1,16 @@
 import React, { userState } from 'react'
-import { SafeAreaView, ScrollView, View, Text, StyleSheet, StatusBar} from 'react-native'
+import { SafeAreaView, ScrollView, View, Text, StyleSheet, StatusBar, Dimensions} from 'react-native'
 
-export default UserProfile = () => {
+
+const { width: WIDTH } = Dimensions.get('window')
+
+export default UserProfile = (props) => {
+    console.log("props",props)
     return (
         <SafeAreaView style ={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View>
-                <Text>UserName</Text>
+                <Text style={styles.heading}>UserName</Text>
                 </View>
 
                 <View>
@@ -15,16 +19,6 @@ export default UserProfile = () => {
 
                 <View>
                 <Text>Currently Reading</Text>
-                <ScrollView horizontal={true}>
-                    {/* add book info */}
-                <View style={styles.bookList}>
-                    {/* map out book list here */}
-                </View>
-                </ScrollView>
-                </View>
-
-                <View>
-                <Text>To Read</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -34,15 +28,22 @@ export default UserProfile = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1, 
-        paddingTop: StatusBar.currentHeight
+        paddingTop: StatusBar.currentHeight,
+        justifyContent: "space-evenly",
+        alignItems: "center"
+        
+    },
+    heading: {
+        fontSize: 40,
     },
     scrollView:{
-        backgroundColor: 'pink',
-        marginHorizontal:10,
+        backgroundColor: '#f0f8ff',
+        marginHorizontal:1,
+        width: WIDTH - 20
     },
-    bookList: {
-        flexDirection: 'row'
-    }
+    // bookList: {
+    //     flexDirection: 'row'
+    // }
 })
 
 //export default UserProfile

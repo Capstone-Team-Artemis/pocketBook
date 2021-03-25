@@ -7,3 +7,7 @@ const rootReducer = combineReducers({
   user,
   form: formReducer,
 });
+
+const store = createStore(rootReducer);
+
+export default store;

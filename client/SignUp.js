@@ -9,92 +9,126 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { reduxForm } from 'redux-form';
+import { Formik } from 'formik';
 
 const SignUp = ({ navigation }) => {
   return (
     <ScrollView>
-      <View style={styles.container}>
-        {/* Icon Image */}
-        <Image
-          source={{
-            uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
-          }}
-          style={styles.image}
-        />
-        <Text style={styles.heading}>Sign Up</Text>
+      <Formik
+        initialValues={{
+          firstName: '',
+          lastName: '',
+          username: '',
+          email: '',
+          password: '',
+        }}
+        onSubmit={(values) => {
+          // values.firstName..
+          console.log(values);
+        }}
+      >
+        {(props) => (
+          <View style={styles.container}>
+            {/* Icon Image */}
+            <Image
+              source={{
+                uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
+              }}
+              style={styles.image}
+            />
+            <Text style={styles.heading}>Sign Up</Text>
 
-        {/* First Name Input */}
-        <View style={styles.inputContainer}>
-          {/* <Icon
-            name={'address-card'}
-            size={20}
-            color={'grey'}
-            style={styles.icon}
-          /> */}
-          <TextInput style={styles.inputText} placeholder={'First Name'} />
-        </View>
+            {/* First Name Input */}
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputText}
+                placeholder={'First Name'}
+                onChangeText={props.handleChange('firstName')}
+                value={props.values.firstName}
+              />
+            </View>
 
-        {/* Last Name Input */}
-        <View style={styles.inputContainer}>
-          {/* <Icon
-            name={'address-card'}
-            size={20}
-            color={'grey'}
-            style={styles.icon}
-          /> */}
-          <TextInput style={styles.inputText} placeholder={'Last Name'} />
-        </View>
+            {/* Last Name Input */}
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputText}
+                placeholder={'Last Name'}
+                onChangeText={props.handleChange('lastName')}
+                value={props.values.lastName}
+              />
+            </View>
 
-        {/* Username Input */}
-        <View style={styles.inputContainer}>
-          <Icon
-            name={'user-plus'}
-            size={19}
-            color={'grey'}
-            style={styles.icon}
-          />
-          <TextInput style={styles.inputText} placeholder={'Username'} />
-        </View>
+            {/* Username Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name={'user-plus'}
+                size={19}
+                color={'grey'}
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputText}
+                placeholder={'Username'}
+                onChangeText={props.handleChange('username')}
+                value={props.values.username}
+              />
+            </View>
 
-        {/* Email Input */}
-        <View style={styles.inputContainer}>
-          <Icon
-            name={'envelope'}
-            size={19}
-            color={'grey'}
-            style={styles.icon}
-          />
-          <TextInput style={styles.inputText} placeholder={'Email Address'} />
-        </View>
+            {/* Email Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name={'envelope'}
+                size={19}
+                color={'grey'}
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputText}
+                placeholder={'Email Address'}
+                onChangeText={props.handleChange('email')}
+                value={props.values.email}
+              />
+            </View>
 
-        {/* Password Input */}
-        <View style={styles.inputContainer}>
-          <Icon name={'lock'} size={20} color={'grey'} style={styles.icon} />
-          <TextInput
-            style={styles.inputText}
-            secureTextEntry={true}
-            placeholder={'Password'}
-          />
-        </View>
+            {/* Password Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name={'lock'}
+                size={20}
+                color={'grey'}
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputText}
+                secureTextEntry={true}
+                placeholder={'Password'}
+                onChangeText={props.handleChange('password')}
+                value={props.values.password}
+              />
+            </View>
 
-        {/* Sign Up Button */}
-        <TouchableOpacity
-          style={[styles.inputContainer, styles.submitContainer]}
-        >
-          <Text style={styles.submitText}>SIGN UP</Text>
-        </TouchableOpacity>
+            {/* Sign Up Button */}
+            <TouchableOpacity
+              style={[styles.inputContainer, styles.submitContainer]}
+            >
+              <Text style={styles.submitText}>SIGN UP</Text>
+              onPress={props.handleSubmit}
+            </TouchableOpacity>
 
-        {/* Already have an account? Navigates to Login component */}
-        <View style={{ flexDirection: 'row', marginTop: 5 }}>
-          <Text style={styles.textBody}> Already have an account?</Text>
-          <Text
-            style={[styles.textBody, { color: 'blue' }, { marginLeft: 3 }]}
-            onPress={() => navigation.navigate('Login')}
-          >
-            Login!
-          </Text>
-        </View>
-      </View>
+            {/* Already have an account? Navigates to Login component */}
+            <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              <Text style={styles.textBody}> Already have an account?</Text>
+              <Text
+                style={[styles.textBody, { color: 'blue' }, { marginLeft: 3 }]}
+                onPress={() => navigation.navigate('Login')}
+              >
+                Login!
+              </Text>
+            </View>
+          </View>
+        )}
+      </Formik>
     </ScrollView>
   );
 };

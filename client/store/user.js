@@ -21,7 +21,9 @@ export const auth = (
   let res;
   try {
     if (method === 'signup') {
-      res = await axios.post(`/auth/${method}`, {
+      console.log('method -->', method);
+      console.log('firstName -->', firstName);
+      res = await axios.post('/auth/signup', {
         firstName,
         lastName,
         username,

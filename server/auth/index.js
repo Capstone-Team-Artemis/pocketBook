@@ -26,6 +26,7 @@ router.post('/login', async (req, res, next) => {
 // POST auth/signup
 router.post('/signup', async (req, res, next) => {
   try {
+    console.log('/SIGNUP PATH RAN!');
     // Try creating the user & logging them in
     const user = await User.create(req.body);
     req.login(user, (err) => (err ? next(err) : res.json(user)));

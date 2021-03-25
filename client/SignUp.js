@@ -9,10 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
+import { auth } from './store/user';
 
-const SignUp = ({ navigation }) => {
+const SignUp = (props, { navigation }) => {
+  console.log('PROPS.NAME --->', props.name);
   return (
     <ScrollView>
       <Formik
@@ -26,6 +29,21 @@ const SignUp = ({ navigation }) => {
         onSubmit={(values) => {
           // values.firstName..
           console.log(values);
+          console.log('PROPS -->', props);
+          // const firstName = values.firstName;
+          // const lastName = values.lastName;
+          // const username = values.username;
+          // const email = values.email;
+          // const password = values.password;
+          // const method = props.name;
+          props.auth(
+            values.firstName,
+            values.lastName,
+            values.username,
+            values.email,
+            values.password,
+            props.name
+          );
         }}
       >
         {(props) => (
@@ -186,4 +204,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+const mapStateToProps = (state) => ({
+  name: 'signup',
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      auth,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

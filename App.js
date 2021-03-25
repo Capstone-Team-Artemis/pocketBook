@@ -3,7 +3,8 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 // import SocketsFrontEnd from './test/SocketsFrontend';
 //import your component
-import LandingPage from "./client/LandingPage";
+// import LandingPage from "./client/LandingPage";
+import SingleBookView from "./client/SingleBookView";
 
 export default function App() {
   return (
@@ -11,7 +12,8 @@ export default function App() {
       {/* <SocketsFrontEnd /> */}
       {/* you can put your component to test */}
       {/* <Text>Open up App.js to start working on your app!</Text> */}
-      <LandingPage />
+      {/* <LandingPage /> */}
+      <SingleBookView />
       <StatusBar style='auto' />
     </View>
   );

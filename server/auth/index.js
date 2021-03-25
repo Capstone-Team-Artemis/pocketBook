@@ -14,7 +14,7 @@ router.post('/login', async (req, res, next) => {
     } else if (!user.correctPassword(req.body.password)) {
       console.log('Incorrect password for email:', req.body.email);
       res.status(401).send('Wrong username and/or password');
-      // If can find user, login!
+      // If we can find user, login!
     } else {
       req.login(user, (err) => (err ? next(err) : res.json(user)));
     }

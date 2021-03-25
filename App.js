@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 // import SocketsFrontEnd from './test/SocketsFrontend';
-import AllEvents from './test/AllEvents';
+import AllEvents from './client/AllEvents';
 //import your component
 
 export default function App() {

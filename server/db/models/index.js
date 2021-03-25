@@ -9,6 +9,10 @@ const UserEvent = require('./userEvent')
 User.belongsToMany(Book, {through: UserBook})
 Book.belongsToMany(User, {through: UserBook})
 
+// Book hasMany userBook / userBook belongs to user
+Book.hasMany(UserBook)
+UserBook.belongsTo(Book)
+
 //User belongs to many Event / Event belongs to many User
 User.belongsToMany(Event, {through: UserEvent})
 Event.belongsToMany(User, {through: UserEvent})

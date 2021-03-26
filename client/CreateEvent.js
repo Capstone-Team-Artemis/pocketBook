@@ -1,17 +1,17 @@
 import { Text, TextInput, StyleSheet, View, SafeAreaView, Dimensions, TouchableHighlight} from 'react-native';
 import React, { Component } from 'react';
-//move axios when we create redux store
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { postEvent } from './store/event'
 
-import GoogleAPI from '../test/GoogleAPI';
+//import GoogleAPI from '../test/GoogleAPI';
 
-const { width: WIDTH} = Dimensions.get('window')
+const { width: WIDTH } = Dimensions.get('window')
 
-export default class CreateEvent extends Component {
+class CreateEvent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            title : '',
+            eventTitle : '',
             date: '',
             time: '',
             description: '',
@@ -19,36 +19,29 @@ export default class CreateEvent extends Component {
         }
         this.handleSubmit.bind(this)
     }
-    async handleSubmit() {
-        //post new events
-        //POST api/events/:userId/createEvent
-        try {
-            let newEventInfo = this.state
-            console.log("newEventInfo", newEventInfo)
-            const newEvent = await axios.post(`/api/events/1/createEvent`, newEventInfo)
-            console.log("newEvent", newEvent)
-        } catch (error) {
-            console.log(error)
-        }
+    handleSubmit() {
+        let newEventInfo = this.state
+        console.log("newEventInfo", newEventInfo)
+        this.props.create({...this.state})
     }
 
     render() {
-
+        console.log("props in createEvent", this.props)
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.heading}>CreateEvent</Text>
                 <View style={styles.inputContainer}>
                 {/* <GoogleAPI /> */}
-                <TextInput style={styles.input} placeholder={'Title'}  onChangeText={(title) => {this.setState({ title })}}></TextInput>
+                <TextInput style={styles.input} placeholder={'Title'}  onChangeText={(eventTitle) => {this.setState({ eventTitle })}}></TextInput>
 
-                <TextInput style={styles.input} placeholder={'Date'} value={this.state.date} onChangeText={(date) => {this.setState({ date })}}></TextInput>
+                <TextInput style={styles.input} placeholder={'Date (mm/dd/yy)'} value={this.state.date} onChangeText={(date) => {this.setState({ date })}}></TextInput>
                 
-                <TextInput style={styles.input} placeholder={'Time'} value={this.state.time} onChangeText={(time) => {this.setState({ time })}}></TextInput>
+                <TextInput style={styles.input} placeholder={'Time (00:00Am - 00:00pm)'} value={this.state.time} onChangeText={(time) => {this.setState({ time })}}></TextInput>
                 
                 <TextInput style={[styles.input, description]} placeholder={'Description'} onChangeText={(description) => {this.setState({ description })}}></TextInput>
                 
                 <TouchableHighlight style={styles.button} onPress={() => this.handleSubmit()}>
-                <Text>Submit</Text>
+                <Text style={styles.submitText}>Submit</Text>
                 </TouchableHighlight>
                 </View>
             </SafeAreaView>
@@ -72,16 +65,36 @@ const styles = StyleSheet.create({
     },
     input: {
         width: WIDTH -55,
-        height: 25,
+        height: 35,
         marginTop: 20,
         backgroundColor:'#f0f8ff',
+        borderRadius: 50,
+        borderWidth: 1.5,
     },
     button: {
         alignItems: "center",
-        backgroundColor: `#e9967a`,
+        backgroundColor: '#6475a5',
         padding: 10,
         borderRadius: 45,
-        marginTop: 20
-    }
+        marginTop: 20,
+        borderWidth: 1.5,
+    },
+    submitText: {
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        bottom: 2,
+      },
 
 })
+// const mapState = (state) => {
+//     console.log("map state", state)
+// }
+
+const mapDispatch = dispatch => {
+    return {
+      create: (newEventInfo) => dispatch(postEvent(newEventInfo))
+    }
+  }
+export default connect(null, mapDispatch)(CreateEvent)

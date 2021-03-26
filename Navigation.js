@@ -1,10 +1,12 @@
-import * as React from 'react';
+import * as React from "react";
 // Importing React libraries to help with navigating between screens
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import Login from './client/Login';
-import SignUp from './client/SignUp';
+import Login from "./client/Login";
+import SignUp from "./client/SignUp";
+import LandingPage from "./client/LandingPage";
+import SingleBookView from "./client/SingleBookView";
 
 const Stack = createStackNavigator();
 
@@ -15,13 +17,23 @@ const Navigation = () => {
         {/* You can have as many Stack.Screen as you want */}
         {/* Each Screen takes a React "component" prop */}
         <Stack.Screen
-          name="Login"
+          name='LandingPage'
+          component={LandingPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='Login'
           component={Login}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="SignUp"
+          name='SignUp'
           component={SignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='SingleBookView'
+          component={SingleBookView}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

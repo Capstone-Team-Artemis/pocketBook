@@ -34,6 +34,7 @@ const SignUp = (props) => {
             values.firstName,
             values.lastName
           );
+          props.navigation.navigate('App');
         }}
       >
         {(props) => (

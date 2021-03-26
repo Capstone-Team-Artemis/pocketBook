@@ -8,14 +8,39 @@ import { createStackNavigator } from 'react-navigation-stack';
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
 import AllEvents from './client/AllEvents';
+import CreateEvent from './client/CreateEvent';
 
 // const Stack = createStackNavigator();
 
-const StackContainer = createStackNavigator({
-  LandingPage: LandingPage,
-  SingleBookView: SingleBookView,
-  AllEvents: AllEvents,
-});
+const StackContainer = createStackNavigator(
+  {
+    LandingPage: {
+      screen: LandingPage,
+      navigationOptions: {
+        title: 'Home',
+      },
+    },
+    SingleBookView: {
+      screen: SingleBookView,
+      navigationOptions: {
+        title: 'Single Book View',
+      },
+    },
+    AllEvents: {
+      screen: AllEvents,
+      navigationOptions: {
+        title: 'Events',
+      },
+    },
+    CreateEvent: {
+      screen: CreateEvent,
+      navigationOptions: {
+        title: 'Create Event',
+      },
+    },
+  },
+  { headerMode: 'none' }
+);
 
 export default StackContainer;
 

@@ -29,6 +29,7 @@ export default function SingleBookView(route) {
     getStatus();
   }, [setStatus]);
   const bookPath = route.navigation.state.params;
+  console.log('NAVIGATION?? -->', route.navigation);
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -76,10 +77,10 @@ export default function SingleBookView(route) {
               });
             }}
           />
-          <Button
+          {/* <Button
             title="Go Back"
             onPress={() => route.navigation.navigate('LandingPage')}
-          />
+          /> */}
         </ScrollView>
       </SafeAreaView>
     </View>

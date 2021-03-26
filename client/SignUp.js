@@ -14,33 +14,25 @@ import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
 import { auth } from './store/user';
 
-const SignUp = (props, { navigation }) => {
+const SignUp = (props) => {
   return (
     <ScrollView>
       <Formik
         initialValues={{
-          firstName: '',
-          lastName: '',
-          username: '',
           email: '',
           password: '',
+          username: '',
+          firstName: '',
+          lastName: '',
         }}
         onSubmit={(values) => {
-          // values.firstName..
-          console.log(values);
-          // const firstName = values.firstName;
-          // const lastName = values.lastName;
-          // const username = values.username;
-          // const email = values.email;
-          // const password = values.password;
-          // const method = props.name;
           props.auth(
-            values.firstName,
-            values.lastName,
-            values.username,
             values.email,
             values.password,
-            props.route.name
+            values.username,
+            props.route.name,
+            values.firstName,
+            values.lastName
           );
         }}
       >
@@ -102,6 +94,9 @@ const SignUp = (props, { navigation }) => {
               <TextInput
                 style={styles.inputText}
                 placeholder={'Email Address'}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
                 onChangeText={props.handleChange('email')}
                 value={props.values.email}
               />
@@ -131,20 +126,19 @@ const SignUp = (props, { navigation }) => {
             >
               <Text style={styles.submitText}>SIGN UP</Text>
             </TouchableOpacity>
-
-            {/* Already have an account? Navigates to Login component */}
-            <View style={{ flexDirection: 'row', marginTop: 5 }}>
-              <Text style={styles.textBody}> Already have an account?</Text>
-              <Text
-                style={[styles.textBody, { color: 'blue' }, { marginLeft: 3 }]}
-                onPress={() => navigation.navigate('Login')}
-              >
-                Login!
-              </Text>
-            </View>
           </View>
         )}
       </Formik>
+      {/* Already have an account? Navigates to Login component */}
+      <View style={styles.navContainer}>
+        <Text> Already have an account?</Text>
+        <Text
+          style={[{ color: 'blue' }, { marginLeft: 3 }]}
+          onPress={() => props.navigation.navigate('Login')}
+        >
+          Login!
+        </Text>
+      </View>
     </ScrollView>
   );
 };
@@ -165,7 +159,6 @@ const styles = StyleSheet.create({
     margin: 0,
     fontSize: 40,
   },
-
   inputContainer: {
     marginTop: 20,
     flexDirection: 'row',
@@ -200,11 +193,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     bottom: 2,
   },
+  navContainer: {
+    flexDirection: 'row',
+    marginVertical: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
-
-// const mapStateToProps = (state) => ({
-//   name: 'signup',
-// });
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(

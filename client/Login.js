@@ -9,57 +9,92 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Formik } from 'formik';
+import { auth } from './store/user';
 
-const Login = ({ navigation }) => {
+const Login = (props) => {
   return (
     <ScrollView>
-      <View style={styles.container}>
-        {/* Icon Image */}
-        <Image
-          source={{ uri: 'https://img.icons8.com/plasticine/2x/pocket.png' }}
-          resizeMode="center"
-          style={styles.image}
-        />
-        <Text style={styles.heading}>Login</Text>
+      <Formik
+        initialValues={{
+          email: '',
+          password: '',
+        }}
+        onSubmit={(values) => {
+          const hello = props.auth(values.email, values.password, props.method);
+          console.log('HELLO!! -->', hello);
+          props.navigation.navigate('App');
+        }}
+      >
+        {(props) => (
+          <View style={styles.container}>
+            {/* Icon Image */}
+            <Image
+              source={{
+                uri: 'https://img.icons8.com/plasticine/2x/pocket.png',
+              }}
+              resizeMode="center"
+              style={styles.image}
+            />
+            <Text style={styles.heading}>Login</Text>
 
-        {/* Email Address Input */}
-        <View style={styles.inputContainer}>
-          <Icon
-            name={'envelope'}
-            size={30}
-            color={'grey'}
-            style={styles.icon}
-          />
-          <TextInput style={styles.inputText} placeholder={'Email Address'} />
-        </View>
+            {/* Email Address Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name={'envelope'}
+                size={30}
+                color={'grey'}
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputText}
+                placeholder={'Email Address'}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={props.handleChange('email')}
+                value={props.values.email}
+              />
+            </View>
 
-        {/* Password Input */}
-        <View style={styles.inputContainer}>
-          <Icon name={'lock'} size={30} color={'grey'} style={styles.icon} />
-          <TextInput
-            style={styles.inputText}
-            secureTextEntry={true}
-            placeholder={'Password'}
-          />
-        </View>
+            {/* Password Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name={'lock'}
+                size={30}
+                color={'grey'}
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputText}
+                secureTextEntry={true}
+                placeholder={'Password'}
+                onChangeText={props.handleChange('password')}
+                value={props.values.password}
+              />
+            </View>
 
-        {/* Login Button */}
-        <TouchableOpacity
-          style={[styles.inputContainer, styles.submitContainer]}
+            {/* Login Button */}
+            <TouchableOpacity
+              style={[styles.inputContainer, styles.submitContainer]}
+              onPress={props.handleSubmit}
+            >
+              <Text style={styles.submitText}>LOGIN</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </Formik>
+      {/* Don't have an account? Navigates to Sign Up component */}
+      <View style={styles.navContainer}>
+        <Text>Don't have an account?</Text>
+        <Text
+          style={[{ color: 'blue' }, { marginLeft: 3 }]}
+          onPress={() => props.navigation.navigate('SignUp')}
         >
-          <Text style={styles.submitText}>LOGIN</Text>
-        </TouchableOpacity>
-
-        {/* Don't have an account? Navigates to Sign Up component */}
-        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-          <Text style={styles.textBody}>Don't have an account?</Text>
-          <Text
-            style={[styles.textBody, { color: 'blue' }, { marginLeft: 3 }]}
-            onPress={() => navigation.navigate('SignUp')}
-          >
-            Sign Up!
-          </Text>
-        </View>
+          Sign Up!
+        </Text>
       </View>
     </ScrollView>
   );
@@ -111,6 +146,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     bottom: 2,
   },
+  navContainer: {
+    flexDirection: 'row',
+    marginVertical: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
-export default Login;
+const mapStateToProps = (state) => ({
+  method: 'Login',
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      auth,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,32 +1,47 @@
-import * as React from 'react';
-// Importing React libraries to help with navigating between screens
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import LandingPage from './client/LandingPage';
+import SingleBookView from './client/SingleBookView';
+import UserProfile from './client/UserProfile';
+import AllEvents from './client/AllEvents';
+import CreateEvent from './client/CreateEvent';
+import Home from './client/Home';
 
-import Login from './client/Login';
-import SignUp from './client/SignUp';
-
-const Stack = createStackNavigator();
-
-const Navigation = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {/* You can have as many Stack.Screen as you want */}
-        {/* Each Screen takes a React "component" prop */}
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+const Navigation = createDrawerNavigator(
+  {
+    LandingPage: {
+      screen: LandingPage,
+      navigationOptions: () => ({
+        title: 'Home',
+        header: null,
+      }),
+    },
+    AllEvents: {
+      screen: AllEvents,
+      navigationOptions: () => ({
+        title: 'Events',
+        header: null,
+      }),
+    },
+    CreateEvent: {
+      screen: CreateEvent,
+      navigationOptions: () => ({
+        title: 'Create Event',
+        header: null,
+      }),
+    },
+    SingleBookView: {
+      screen: SingleBookView,
+      navigationOptions: () => ({
+        title: 'Single Book View',
+        header: null,
+      }),
+    },
+  },
+  {
+    initialRouteName: 'LandingPage',
+  }
+);
 
 export default Navigation;
+
+// SingleBookView: { screen: SingleBookView },

@@ -2,17 +2,17 @@ import { Text, StyleSheet, View, ScrollView, SafeAreaView, Button, Image } from 
 // import DropdownMenu from 'react-native-dropdown-menu';
 import { connect } from "react-redux";
 import React from 'react';
-
-// import thunk creator
+// import thunk creator 
 import {fetchEvents} from './store/events';
 
 export class AllEvents extends React.Component {
-    
+
     componentDidMount() {
         this.props.getEvents();
     }
-    
+
     render() {
+        
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
@@ -25,7 +25,10 @@ export class AllEvents extends React.Component {
                         />
                     </View>
                     <View >
-                        {this.props.events.map((event) => (
+                        {this.props.events === 'There are currently no upcoming events!' ? 
+                            <Text style={styles.noEvents}>There are currently no upcoming events! </Text>
+                        : 
+                        this.props.events.map((event) => (
                         <View style={styles.listContainer} key={event.id}>                           
                             <Image
                                 source={{
@@ -114,6 +117,9 @@ const styles = StyleSheet.create({
     eventData: {
         padding: 10,
         width: 250
+    },
+    noEvents: {
+        fontSize: 20,
     }
 
     // attendingButtonContainer: {

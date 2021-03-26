@@ -14,9 +14,7 @@ const receivedEvents = (events) => ({
 export const fetchEvents = () => {
   return async (dispatch) => {
     try {
-      console.log('in try')
       const {data} = await axios.get('http://localhost:3000/api/events')
-      console.log('data: ', data)
       dispatch(receivedEvents(data));
     } catch (error) {
         console.log('Error fetching events from server')

@@ -131,15 +131,11 @@ async function seed () {
         {
           userId: 2,
           eventId: 1,
-
         },
         {
           userId: 2,
           eventId: 2,  
         },
-
-        }
-
     ]
 
     const [

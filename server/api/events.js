@@ -5,7 +5,6 @@ module.exports = router;
 // GET api/events --> get ALL events  of the event
 router.get('/', async (req, res, next) => {
     try {
-        console.log('ALL EVENTS!')
         const events = await Event.findAll();
         if (events.length >= 1) {
             res.json(events);

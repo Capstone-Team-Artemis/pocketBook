@@ -23,7 +23,8 @@ const Login = (props) => {
           password: '',
         }}
         onSubmit={(values) => {
-          props.auth(values.email, values.password, props.route.name);
+          props.auth(values.email, values.password, props.method);
+          props.navigation.navigate('App');
         }}
       >
         {(props) => (
@@ -152,6 +153,10 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = (state) => ({
+  method: 'Login',
+});
+
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
@@ -160,4 +165,4 @@ const mapDispatchToProps = (dispatch) =>
     dispatch
   );
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

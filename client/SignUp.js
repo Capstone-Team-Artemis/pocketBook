@@ -29,7 +29,7 @@ const SignUp = (props) => {
           props.auth(
             values.email,
             values.password,
-            props.route.name,
+            props.method,
             values.username,
             values.firstName,
             values.lastName
@@ -199,6 +199,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+});
+
+const mapStateToProps = (state) => ({
+  method: 'SignUp',
 });
 
 const mapDispatchToProps = (dispatch) =>

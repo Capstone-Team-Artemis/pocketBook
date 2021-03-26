@@ -15,6 +15,7 @@ import { Formik } from 'formik';
 import { auth } from './store/user';
 
 const SignUp = (props) => {
+  console.log('HIIIII --->', props.method);
   return (
     <ScrollView>
       <Formik
@@ -213,4 +214,4 @@ const mapDispatchToProps = (dispatch) =>
     dispatch
   );
 
-export default connect(null, mapDispatchToProps)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

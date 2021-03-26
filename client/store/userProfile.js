@@ -2,6 +2,7 @@ import axios from 'axios';
 
 //ACTION TYPE
 const GET_USER_PROFILE = 'GET_USER_PROFILE'
+const GET_BOOKS = 'GET_BOOKS'
 
 //ACTION CREATORS
 const gotUserProfile = (user) => ({
@@ -9,11 +10,16 @@ const gotUserProfile = (user) => ({
     user
 })
 
+const gotBooks = (books) => ({
+    type: GET_BOOKS,
+    books
+})
+
 //THUNK CREATORS
 //getting user information 
-const getUserProfile = (userId) => async (dispatch) =>{
+export const getUserProfile = (userId) => async (dispatch) =>{
     try {
-        const user = await axios.get(`/api/users/${userId}`)
+        const user = await axios.get(`http://localhost:3000/api/users/${userId}`)
         console.log("user profile thunk", user.data)
         dispatch(gotUserProfile(user.data))
     } catch (error) {
@@ -21,6 +27,14 @@ const getUserProfile = (userId) => async (dispatch) =>{
     }
 }
 
+export const getBooks = (userId, status) => async (dispatch) => {
+    try {
+        const books = await axios.get(`http://localhost:3000/api/users/${userId}/${status}`)
+        dispatch(gotBooks(books.data))
+    } catch (error) {
+        console.error(error)
+    }
+}
 
 //INITIAL STATE
 const initialState = []
@@ -30,6 +44,8 @@ const userProfile = (state=initialState, action) => {
     switch(action.type) {
         case GET_USER_PROFILE:
             return action.user
+        case GET_BOOKS:
+            return action.books
         default:
             return state
     }

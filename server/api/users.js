@@ -32,7 +32,7 @@ router.get("/:userId/:status", async (req, res, next) => {
                 where: {userId: userId, status: status},
                 include: Book
         })
-
+        //check if more than one book saved
         if (myBooks.length>=1) {
             res.status(200).send(myBooks)
         } else {

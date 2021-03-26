@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../db/models');
+const { User, Book, UserBook } = require('../db/models');
 module.exports = router;
 
 //GET api/users
@@ -15,7 +15,9 @@ router.get('/:userId', async (req, res, next) => {
 // Create GET route to generate books by status
 router.get('/:userId/:status', async (req, res, next) => {
   try {
+    console.log('REQ PARAMS -->', req.params);
     let userId = req.params.userId;
+    console.log('USERID -->', userId);
     // status would be Currently Reading, To Read, or Completed
     let status = req.params.status;
     const myBooks = await UserBook.findAll({

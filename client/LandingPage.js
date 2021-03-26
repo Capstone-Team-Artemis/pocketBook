@@ -4,20 +4,20 @@ import {
   View,
   StyleSheet,
   TextInput,
-  Button,
   Modal,
   SafeAreaView,
   ScrollView,
   Image,
   TouchableOpacity,
 } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 import { Formik } from "formik";
 // import GOOGLE_API from "../secrets";
 import axios from "axios";
 // import SingleBookView from "./SingleBookView";
 const GOOGLE_API = "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg";
 
-export default function LandingPage() {
+export default function LandingPage({ navigation }) {
   const [book, setBook] = useState("");
   const [result, setResult] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -79,28 +79,50 @@ export default function LandingPage() {
   return (
     <Formik>
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder='Search by Title, Author, or Keyword'
-          onChangeText={handleChange}
+        <Image
+          source={{
+            uri: "https://i.ibb.co/rpJ7vjb/signupbook.png",
+          }}
+          style={styles.image}
         />
-        <Button title='Submit' onPress={handleSubmit} />
+        <Text style={styles.heading}>Find a Book</Text>
+        <View style={styles.inputContainer}>
+          {/* <Icon name={"search"} size={30} color={"grey"} style={styles.icon} /> */}
+          <TextInput
+            style={styles.inputText}
+            // placeholder='Search by Title, Author, or Keyword'
+            onChangeText={handleChange}
+          />
+        </View>
+        <TouchableOpacity
+          style={[styles.inputContainer, styles.submitContainer]}
+          onPress={handleSubmit}
+        >
+          <Text style={styles.submitText}>SUBMIT</Text>
+        </TouchableOpacity>
+        {/* <Button title='Submit' onPress={handleSubmit} /> */}
         {/* featureBook will only show up once the component mounts */}
         {featureBook.id && (
           <View>
-            <Text>Newly Published</Text>
-            <Image
-              alt={featureBook.volumeInfo.title}
-              source={{ uri: featureBook.volumeInfo.imageLinks.thumbnail }}
-              style={{ width: 200, height: 300, margin: "auto" }}
-            />
+            <Text style={styles.published}>Newly Published</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("SingleBookView", featureBook);
+              }}
+            >
+              <Image
+                alt={featureBook.volumeInfo.title}
+                source={{ uri: featureBook.volumeInfo.imageLinks.thumbnail }}
+                style={{ width: 200, height: 300, margin: "auto" }}
+              />
+            </TouchableOpacity>
             {/* <Text>{featureBook.volumeInfo.description}</Text> */}
           </View>
         )}
         <View style={styles.centeredView}>
           <Modal
             animationType='slide'
-            transparent={true}
+            transparent={false}
             visible={modalVisible}
           >
             <SafeAreaView>
@@ -114,26 +136,53 @@ export default function LandingPage() {
                       <View key={idx}>
                         {/* Render book cover image first, with styling */}
                         {/* <TouchableOpacity onPress={() => }> */}
-                        <Image
-                          // put react navigation here
-                          alt={book.volumeInfo.title}
-                          style={{ width: 100, height: 150 }}
-                          source={{
-                            uri: book.volumeInfo.imageLinks.smallThumbnail,
+                        <TouchableOpacity
+                          onPress={() => {
+                            setModalVisible(false);
+                            navigation.navigate("SingleBookView", book);
                           }}
-                        />
-                        {/* </TouchableOpacity> */}
-                        {/* Render book title, authors array, rating */}
-                        <Text>{book.volumeInfo.title}</Text>
-                        <Text>{book.volumeInfo.authors}</Text>
-                        <Text>{book.volumeInfo.averageRating}</Text>
+                        >
+                          <Image
+                            // put react navigation here
+                            alt={book.volumeInfo.title}
+                            style={{ width: 100, height: 150 }}
+                            source={{
+                              uri: book.volumeInfo.imageLinks.smallThumbnail,
+                            }}
+                          />
+                          {/* </TouchableOpacity> */}
+                          {/* Render book title, authors array, rating */}
+                          <Text style={styles.bookInfo}>
+                            {book.volumeInfo.title}
+                          </Text>
+                          <Text style={styles.bookInfo}>
+                            {book.volumeInfo.authors}
+                          </Text>
+                          <Text style={styles.bookInfo}>
+                            {book.volumeInfo.averageRating}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                     );
                   })}
                 </View>
-                <Button title='submit' onPress={() => setModalVisible(false)}>
-                  Done
-                </Button>
+                <TouchableOpacity
+                  style={[
+                    styles.inputContainer,
+                    styles.submitContainer,
+                    styles.button,
+                  ]}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.submitText}>DONE</Text>
+                </TouchableOpacity>
+                {/* <Button
+                  style={styles.published}
+                  title='DONE'
+                  onPress={() => setModalVisible(false)}
+                > */}
+                {/* Done
+                </Button> */}
               </ScrollView>
             </SafeAreaView>
           </Modal>
@@ -145,15 +194,58 @@ export default function LandingPage() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 23,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  input: {
-    margin: 15,
-    height: 40,
-    borderColor: "#7a42f4",
-    borderWidth: 1,
-    borderRadius: 20,
+  image: {
+    marginTop: 40,
+    padding: 0,
+    width: 100,
+    height: 100,
+    marginTop: 50,
   },
+  heading: {
+    margin: 0,
+    fontSize: 30,
+  },
+  published: {
+    margin: 0,
+    fontSize: 20,
+    paddingTop: 10,
+    paddingLeft: 25,
+  },
+  inputText: {
+    fontWeight: "bold",
+    marginBottom: 4,
+    marginLeft: 50,
+    width: "100%",
+  },
+  inputContainer: {
+    marginTop: 20,
+    flexDirection: "row",
+    width: "80%",
+    height: 35,
+    borderRadius: 50,
+    borderWidth: 1.5,
+    // justifyContent: 'center',
+    alignItems: "center",
+    paddingTop: 5,
+  },
+  submitContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#6475a5",
+  },
+  submitText: {
+    color: "white",
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign: "center",
+    bottom: 2,
+  },
+
+  //CSS for Modal
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -165,14 +257,18 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 0,
     padding: 35,
+    opacity: 0,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
+    shadowOpacity: 100,
     shadowRadius: 4,
     elevation: 5,
+  },
+  button: {
+    marginLeft: 35,
+  },
+  bookInfo: {
+    fontWeight: "bold",
+    marginBottom: 4,
+    width: "100%",
   },
 });

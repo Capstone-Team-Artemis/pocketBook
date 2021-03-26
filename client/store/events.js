@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // ACTION TYPES
-const RECEIVED_EVENTS= 'RECEIVED_EVENTS';
+const RECEIVED_EVENTS = 'RECEIVED_EVENTS';
 
 // ACTION CREATORS
 const receivedEvents = (events) => ({
@@ -12,12 +12,14 @@ const receivedEvents = (events) => ({
 
 // THUNK CREATORS
 export const fetchEvents = () => {
+  console.log('fetchEVENTS RAN!! -->');
   return async (dispatch) => {
     try {
-      const {data} = await axios.get('http://localhost:3000/api/events')
+      const { data } = await axios.get('http://localhost:3000/api/events');
+      console.log('DATA!! -->', data);
       dispatch(receivedEvents(data));
     } catch (error) {
-        console.log('Error fetching events from server')
+      console.log('Error fetching events from server');
     }
   };
 };
@@ -25,19 +27,19 @@ export const fetchEvents = () => {
 // INITIAL STATE
 const initialState = {
   all: [],
-}
+};
 
 // REDUCER
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case RECEIVED_EVENTS:
       return {
-        ...state, 
-        all: action.events
+        ...state,
+        all: action.events,
       };
     default:
       return state;
   }
-}
+};
 
 export default reducer;

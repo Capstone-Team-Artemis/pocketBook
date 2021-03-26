@@ -7,12 +7,14 @@ import { createStackNavigator } from 'react-navigation-stack';
 // import SignUp from "./client/SignUp";
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
+import AllEvents from './client/AllEvents';
 
 // const Stack = createStackNavigator();
 
 const StackContainer = createStackNavigator({
   LandingPage: LandingPage,
   SingleBookView: SingleBookView,
+  AllEvents: AllEvents,
 });
 
 export default StackContainer;

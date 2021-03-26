@@ -5,7 +5,12 @@ import Home from './client/Home';
 
 const Navigation = createDrawerNavigator(
   {
-    LandingPage: { screen: LandingPage },
+    LandingPage: {
+      screen: LandingPage,
+      navigationOptions: () => ({
+        title: 'Home',
+      }),
+    },
     SingleBookView: { screen: SingleBookView },
   },
   {

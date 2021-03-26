@@ -52,15 +52,12 @@ export class AllEvents extends React.Component {
 }
 
 const mapState = (state) => {
-    console.log('mapState: ',state)
-
     return {
       events: state.events.all
     };
   };
   
 const mapDispatch = (dispatch) => {
-    console.log('mapDispatch: ', dispatch)
     return {
         getEvents: () => dispatch(fetchEvents()),
     };
@@ -121,12 +118,4 @@ const styles = StyleSheet.create({
     noEvents: {
         fontSize: 20,
     }
-
-    // attendingButtonContainer: {
-    // backgroundColor: '#808080',
-    // borderRadius: 15,
-    // padding: 0.8,
-    // width: 100,
-    // height: 40
-    // }
 });

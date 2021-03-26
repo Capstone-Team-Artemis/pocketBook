@@ -15,7 +15,6 @@ import { Formik } from 'formik';
 import { auth } from './store/user';
 
 const SignUp = (props) => {
-  console.log('HIIIII --->', props.method);
   return (
     <ScrollView>
       <Formik

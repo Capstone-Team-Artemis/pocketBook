@@ -10,6 +10,15 @@ const getUser = (user) => ({
 });
 
 // THUNK CREATORS
+export const me = () => async (dispatch) => {
+  try {
+    const res = await axios.get('/auth/me');
+    dispatch(getUser(res.data || defaultUser));
+  } catch {
+    console.error(err);
+  }
+};
+
 export const auth = (
   email,
   password,
@@ -19,10 +28,8 @@ export const auth = (
   lastName
 ) => async (dispatch) => {
   let res;
-  console.log('METHOD -->', method);
   try {
     if (method === 'SignUp') {
-      console.log('ITS A SIGN UP!');
       res = await axios.post('http://localhost:3000/auth/signup/', {
         email,
         password,

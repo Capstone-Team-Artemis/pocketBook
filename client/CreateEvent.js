@@ -33,6 +33,7 @@ class CreateEvent extends Component {
     let newEventInfo = this.state;
     console.log('newEventInfo', newEventInfo);
     this.props.create({ ...this.state });
+    this.props.navigation.navigate('AllEvents');
   }
 
   render() {

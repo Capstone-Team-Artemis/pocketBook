@@ -39,6 +39,7 @@ const Login = (props) => {
               style={styles.image}
             />
             <Text style={styles.heading}>Login</Text>
+            <Text>Welcome to Pocketbook!</Text>
 
             {/* Email Address Input */}
             <View style={styles.inputContainer}>

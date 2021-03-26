@@ -3,10 +3,11 @@ import Home from './client/Home';
 
 const Navigation = createDrawerNavigator(
   {
-    Home: { screen: Home },
+    LandingPage: { screen: LandingPage },
+    SingleBookView: {screen: SingleBookView }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'LandingPage',
   }
 );
 

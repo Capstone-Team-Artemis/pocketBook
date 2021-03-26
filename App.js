@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './client/store';
-import AppContainer from './index';
+import AppContainer from './AppContainer';
 // import SocketsFrontEnd from './test/SocketsFrontend';
 
 //import your component

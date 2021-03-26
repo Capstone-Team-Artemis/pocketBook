@@ -1,35 +1,12 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
-import store from "./store";
-import Login from "./client/Login";
-// import SocketsFrontEnd from './test/SocketsFrontend';
-//import AllEvents from './test/AllEvents';
-//import your component
-// import Navigation from './Navigation';
+import store from "./client/store";
+import Navigation from "./Navigation";
 
 export default function App() {
   return (
     <Provider store={store}>
-      <View style={styles.container}>
-        {/* <SocketsFrontEnd /> */}
-        {/* you can put your component to test */}
-        {/* <AllEvents/> */}
-        {/* <Text>Open up App.js to start working on your app!</Text> */}
-        {/* <StatusBar style="auto" /> */}
-        {/* <Navigation /> */}
-        <Login />
-      </View>
+      <Navigation />
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

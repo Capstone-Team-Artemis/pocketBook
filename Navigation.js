@@ -1,6 +1,7 @@
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
+import Home from './client/Home';
 
 const Navigation = createDrawerNavigator(
   {

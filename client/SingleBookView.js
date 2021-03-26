@@ -10,9 +10,12 @@ import {
   Button,
   View,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 
-export default function SingleBookView(route, { navigation }) {
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+export default function SingleBookView(route) {
   const [status, setStatus] = useState('Completed');
   useEffect(() => {
     const getStatus = async () => {
@@ -30,6 +33,12 @@ export default function SingleBookView(route, { navigation }) {
     <View style={styles.container}>
       <SafeAreaView>
         <ScrollView>
+          <TouchableOpacity
+            style={{ alignItems: 'flex-end', margin: 16 }}
+            onPress={route.navigation.openDrawer}
+          >
+            <Icon name="bars" size={24} color="#161924" />
+          </TouchableOpacity>
           <Image
             style={{ width: 200, height: 300 }}
             alt={bookPath.volumeInfo.title}
@@ -67,10 +76,10 @@ export default function SingleBookView(route, { navigation }) {
               });
             }}
           />
-          {/* <Button
+          <Button
             title="Go Back"
-            onPress={() => navigation.navigate('LandingPage')}
-          /> */}
+            onPress={() => route.navigation.navigate('LandingPage')}
+          />
         </ScrollView>
       </SafeAreaView>
     </View>

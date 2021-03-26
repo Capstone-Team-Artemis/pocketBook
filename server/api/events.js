@@ -97,19 +97,20 @@ router.delete('/:userId/unregister/:eventId', async (req, res, next) => {
   }
 });
 
-//POST api/events/:userId/createEvent
-//host key
-router.post('/:userId/createEvent', async (req, res, next) => {
+//To create event
+//POST api/events/createEvent
+router.post('/createEvent', async (req, res, next) => {
   try {
     const newEvent = await Event.create(req.body);
+    console.log('newEvent', newEvent);
     res.status(201).send(newEvent);
   } catch (error) {
     next(error);
   }
 });
 
+//To edit event
 //PUT api/events/:userId/updateEvent/:eventId
-//host key
 router.put('/:userId/updateEvent/:eventId', async (req, res, next) => {
   try {
     const eventId = req.params.eventId;

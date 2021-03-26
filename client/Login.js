@@ -15,8 +15,6 @@ import { Formik } from 'formik';
 import { auth } from './store/user';
 
 const Login = (props) => {
-  console.log('PROPS --->', props);
-  console.log('ROUTE!! --->', props.route.name);
   return (
     <ScrollView>
       <Formik
@@ -25,8 +23,6 @@ const Login = (props) => {
           password: '',
         }}
         onSubmit={(values) => {
-          console.log('ROUTEEEEEE -->', props.route.name);
-          console.log('values --->', values);
           props.auth(values.email, values.password, props.route.name);
         }}
       >

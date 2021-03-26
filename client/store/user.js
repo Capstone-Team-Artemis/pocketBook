@@ -22,6 +22,7 @@ export const auth = (
   console.log('METHOD -->', method);
   try {
     if (method === 'SignUp') {
+      console.log('ITS A SIGN UP!');
       res = await axios.post('http://localhost:3000/auth/signup/', {
         email,
         password,
@@ -31,8 +32,6 @@ export const auth = (
       });
       // If method is 'Login':
     } else {
-      console.log('method -->', method);
-      console.log('email -->', email);
       res = await axios.post('http://localhost:3000/auth/login/', {
         email,
         password,

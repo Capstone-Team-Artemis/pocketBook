@@ -29,8 +29,8 @@ const SignUp = (props) => {
           props.auth(
             values.email,
             values.password,
-            values.username,
             props.route.name,
+            values.username,
             values.firstName,
             values.lastName
           );

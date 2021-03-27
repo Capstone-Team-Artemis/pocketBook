@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { User } = require('../db/models');
-module.exports = router;
 
 // POST auth/login
 router.post('/login', async (req, res, next) => {
@@ -44,3 +43,5 @@ router.post('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
 });
+
+module.exports = router;

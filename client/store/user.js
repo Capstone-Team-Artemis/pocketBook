@@ -10,27 +10,36 @@ const getUser = (user) => ({
 });
 
 // THUNK CREATORS
+export const me = () => async (dispatch) => {
+  try {
+    const res = await axios.get('/auth/me');
+    dispatch(getUser(res.data || defaultUser));
+  } catch {
+    console.error(err);
+  }
+};
+
 export const auth = (
-  firstName,
-  lastName,
-  username,
   email,
   password,
-  method
+  method,
+  username,
+  firstName,
+  lastName
 ) => async (dispatch) => {
   let res;
   try {
-    if (method === 'signup') {
-      res = await axios.post(`/auth/${method}`, {
-        firstName,
-        lastName,
-        username,
+    if (method === 'SignUp') {
+      res = await axios.post('http://localhost:3000/auth/signup/', {
         email,
         password,
+        username,
+        firstName,
+        lastName,
       });
-      // If method is 'login':
+      // If method is 'Login':
     } else {
-      res = await axios.post(`/auth/${method}`, {
+      res = await axios.post('http://localhost:3000/auth/login/', {
         email,
         password,
       });

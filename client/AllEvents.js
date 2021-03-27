@@ -1,111 +1,194 @@
-import { Text, TextInput, StyleSheet, View, FlatList, TouchableOpacity, SafeAreaView, StatusBar, Button, Select } from 'react-native';
-// import DropdownMenu from 'react-native-dropdown-menu';
+import {
+  Text,
+  StyleSheet,
+  View,
+  ScrollView,
+  SafeAreaView,
+  Button,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { connect } from 'react-redux';
+import React from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
+// import thunk creator
+import { fetchEvents } from './store/events';
 
-import React, { useState } from 'react';
-
-const DATA = [
-    {
-        id: 1,
-        eventTitle: "Welcome to Hogwarts!",
-        date: "04/08/21",
-        time: "06:00pm - 08:00pm",
-        description: "Muggles of pocketbook, finished reading the series? Let’s discuss our favorite scenes, characters, and more! If we have time, let’s take the Sorting Hat quiz in the end to find our houses!",
-        host: 1
-    },
-    {
-        id: 2,
-        eventTitle: "Book Writing Class for Kids!",
-        date: "04/09/21",
-        time: "02:00pm - 04:00pm",
-        description:"Enjoy this FREE virtual club for kids led by child authors & illustrators, Avery & Avion, along with author, educator and Luxe Library co-founder- Delicia B. Davis. We will work step by step to plan, create, design, and finish our books. You won’t want to miss this opportunity to engage with artistic youth while creating your own lasting work of art! Register NOW for your Free Spot!",
-        host: 2
+export class AllEvents extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      status: 'Upcoming'
     }
-]
+    //The controller property gives you full access to the DropDownPicker methods and properties
+    this.controller;
+  }
+  
+  componentDidMount() {
+    this.props.getEvents();
+  }
 
-const Item = ({eventTitle, date, time, description, onPress, style}) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-        <Text style={styles.eventTitle}>{eventTitle}</Text>
-        <Text style={styles.event}>Date: {date}</Text>
-        <Text style={styles.event}>Time: {time}</Text>
-        <Text style={styles.event}>Description: {description}</Text>
-        <View style={styles.attendingButtonContainer}>
-            <Button
-                title='Chat'
-                // onPress={() => }
-                color="#f194ff"
-                accessibilityLabel="Create Event"
-            />
-        </View>
-    </TouchableOpacity>
-)
-
-export default function AllEvents () {
-    const [selectedId, setSelectedId] = useState(null);
-
-    const renderItem = ({ item }) => {
-        const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-        return (
-            <Item eventTitle={item.eventTitle}
-                date={item.date}
-                time={item.time}
-                description={item.description}
-                onPress={() => setSelectedId(item.id)}
-                style={{backgroundColor}}
-            />
-        )
-    };
-
+  render() {
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.buttonContainer}>
-                <Button
-                title='Create Event'
-                // onPress={() => }
-                color="#f194ff"
-                accessibilityLabel="Create Event"
-                />
-            </View>
-            <View>
-                <FlatList
-                data={DATA}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                extraData={selectedId}
-                />
-            </View>
-        </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
+          {/* Adds Navbar */}
+          <TouchableOpacity
+            style={{ alignItems: 'flex-end', margin: 16 }}
+            onPress={this.props.navigation.openDrawer}
+          >
+            <Icon name="bars" size={24} color="#161924" />
+          </TouchableOpacity>
+          {/* Adds create event button */}
+          <View style={styles.createButtonContainer}>
+            <Button
+              title="Create Event"
+              onPress={() => {
+                this.props.navigation.navigate('CreateEvent');
+              }}
+              color="white"
+              accessibilityLabel="Create Event"
+            />
+          </View>
+          {/* Adds Dropdown menu */}
+          <DropDownPicker
+              style={{backgroundColor: '#fafafa'}}
+              itemStyle={{justifyContent: 'flex-start'}}
+              dropDownStyle={{backgroundColor: '#fafafa'}}
+              containerStyle={{ height: 40 }}
+              activeLabelStyle={{color: 'red'}}
+              controller={instance => this.controller = instance}
+              defaultValue={this.state.status}
+              onChangeItem={item => this.setState({
+                status: item.value
+              })}
+              items={[
+                { label: 'Upcoming Events', value: 'Upcoming' },
+                { label: 'Attending Events', value: 'Attending' },
+                { label: 'Created Events', value: 'Created' },
+              ]}
+          />
+          {/* Adds event list */}
+          <View>
+            {this.props.events === 'There are currently no upcoming events!' ? (
+              <Text style={styles.noEvents}>
+                There are currently no upcoming events!
+              </Text>
+            ) : (
+              this.props.events.map((event) => (
+                
+                <View style={styles.listContainer} key={event.id}>
+                  <Image
+                    source={{
+                      uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
+                    }}
+                    style={styles.image}
+                  />
+                  <View style={styles.eventData}>
+                    <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+                    <Text style={styles.date}>Date: {event.date}</Text>
+                    <Text style={styles.time}>Time: {event.time}</Text>
+                    <Text style={styles.description}>
+                      Description: {event.description}
+                    </Text>
+                    {/* Adds not/attending, edit/delete button */}
+                    <View style={styles.attendingButtonContainer}>
+                      <Button
+                        title={this.state.status === 'Upcoming' ? 'Attending' : this.state.status === 'Attending' ? 'Not Attending' : 'Edit/Delete'}
+                        onPress={() => {
+                          this.state.status === 'Created' ?
+                            this.props.navigation.navigate('CreateEvent') :
+                            null
+                        }}
+                        color="white"
+                        accessibilityLabel="Status"
+                      />
+                    </View>
+                  </View>
+                </View>
+              ))
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
+  }
 }
 
+const mapState = (state) => {
+  return {
+    events: state.events.all,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    getEvents: () => dispatch(fetchEvents()),
+  };
+};
+
+export default connect(mapState, mapDispatch)(AllEvents);
+
 const styles = StyleSheet.create({
-    container: {
+  container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-    },
-    item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    },
-    eventTitle: {
+  },
+  scrollView: {
+    marginHorizontal: 10,
+  },
+  image: {
+    padding: 0,
+    width: 100,
+    height: 100,
+    marginTop: 10,
+    marginLeft: 10,
+  },
+  eventTitle: {
     fontSize: 20,
-    },
-    event: {
+    marginBottom: 2,
+    fontWeight: 'bold',
+  },
+  date: {
     fontSize: 15,
-    },
-    buttonContainer: {
-    backgroundColor: '#808080',
+    marginBottom: 5,
+  },
+  time: {
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  description: {
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  createButtonContainer: {
+    backgroundColor: '#6475a5',
+    marginBottom: 20,
     borderRadius: 15,
-    padding: 1,
     width: 125,
-    height: 40
-    },
-    attendingButtonContainer: {
-    backgroundColor: '#808080',
+    height: 40,
+  },
+  listContainer: {
+    flexDirection: 'row',
+    borderStyle: 'solid',
+    borderColor: 'black',
+    borderWidth: 1,
+    marginBottom: 15,
+    marginTop: 15
+  },
+  eventData: {
+    padding: 10,
+    width: 250,
+  },
+  noEvents: {
+    fontSize: 20,
+  },
+  attendingButtonContainer: {
+    backgroundColor: '#6475a5',
     borderRadius: 15,
     padding: 0.8,
-    width: 100,
-    height: 40
+    width: 130,
+    height: 38,
+    marginLeft: 95
     }
 });

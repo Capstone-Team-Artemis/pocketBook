@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,14 +7,16 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
-import { auth } from './store/user';
+import { auth, me } from './store/user';
 
 const Login = (props) => {
+  const { user } = props;
   return (
     <ScrollView>
       <Formik
@@ -23,9 +25,16 @@ const Login = (props) => {
           password: '',
         }}
         onSubmit={(values) => {
-          const hello = props.auth(values.email, values.password, props.method);
-          console.log('HELLO!! -->', hello);
-          props.navigation.navigate('App');
+          props.auth(values.email, values.password, props.method);
+          console.log('USER --->', user);
+          if (Object.keys(user).length > 0) {
+            props.navigation.navigate('App');
+          } else {
+            Alert.alert(
+              'Error',
+              'Incorrect username or password. Please try again.'
+            );
+          }
         }}
       >
         {(props) => (
@@ -157,12 +166,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   method: 'Login',
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       auth,
+      me,
     },
     dispatch
   );

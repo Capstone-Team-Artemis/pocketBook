@@ -49,6 +49,7 @@ export const auth = (
   }
 
   try {
+    console.log('RES DATA --->', res.data);
     dispatch(getUser(res.data));
   } catch (dispatchErr) {
     console.error(dispatchErr);

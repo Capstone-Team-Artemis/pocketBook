@@ -16,6 +16,7 @@ import { Formik } from 'formik';
 import { auth, me } from './store/user';
 
 const Login = (props) => {
+  // Passing in state from store as props to here
   const { user } = props;
   return (
     <ScrollView>
@@ -26,9 +27,10 @@ const Login = (props) => {
         }}
         onSubmit={(values) => {
           props.auth(values.email, values.password, props.method);
-          console.log('USER --->', user);
+          // If 'user' props object gets updated with fetched info, then you can login
           if (Object.keys(user).length > 0) {
             props.navigation.navigate('App');
+            // Else, you get an alert
           } else {
             Alert.alert(
               'Error',

@@ -6,6 +6,7 @@ import {
     Image,
   } from 'react-native'; 
 import React from 'react';
+import axios from 'axios';
 
 export default class SingleEvent extends React.Component {
     constructor(props) {
@@ -13,24 +14,41 @@ export default class SingleEvent extends React.Component {
         this.unregister = this.unregister.bind(this);
         this.register = this.register.bind(this);
     }
-    // unregister the logged in user from a specific event
+    // UNREGISTER the logged in user from a specific event
     unregister = async () => {
-        await axios.delete(`http://localhost:3000/api/events/${this.props.user.id}/unregister/${this.props.event.id}`)
+        try {
+            // make call to update DB by unregistering user
+            await axios.delete(`http://localhost:3000/api/events/${this.props.user}/unregister/${this.props.event.id}`)
+            // if successful, need to update store so can trigger re-render -> do this by calling getEvents fx
+            console.log('getevents: ',this.props.getEvents)
+            const res = await this.props.getEvents();
+            console.log('RES: ', res)
+        } catch(error) {
+            console.log(error);
+        }
     };
 
-    // register the logged in user for a specific event
+    // REGISTER the logged in user for a specific event
     register = async () => {
-        await axios.post(`http://localhost:3000/api/events/${this.props.user.id}/register/${this.props.event.id}`);
+        try {
+            // make call to update DB by registering user 
+            await axios.post(`http://localhost:3000/api/events/${this.props.user}/register/${this.props.event.id}`);
+            // if successful, need to update store so can trigger re-render -> do this by calling getEvents fx
+            this.props.getEvents();
+        } catch(error) {
+            console.log((error))
+        }
     };
 
     render() {
-        const event = this.props.event;
-        const user = this.props.user;
+        // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
+        const {event, navigate, status} = this.props;
+        
         return (       
         <View style={styles.listContainer} key={event.id}>
         <Image
             source={{
-            uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
+            uri: 'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED',
             }}
             style={styles.image}
         />
@@ -41,34 +59,32 @@ export default class SingleEvent extends React.Component {
             <Text style={styles.description}>
             Description: {event.description}
             </Text>
-            {/* If dropdown statue is "Upcoming" -Or- "Attending", button should be 'Un/Register' */}
-            {/* If dropdown statue is "Created", button should be 'Edit/Delete' */}
-            {/* pass dropdown menu status from AllEvents component as props */}
+            {/* If dropdown status is "Upcoming" -Or- "Attending", button should be 'Un/Register' */}
+            {/* If dropdown status is "Created", button should be 'Edit/Delete' */}
             <View style={styles.registerButtonContainer}>
-            {this.props.status === 'Upcoming' || this.props.status === 'Attending' ?
-            <Button
-                // check the event obj to see if logged-in user exists in returned event obj
-                    // if user exists, that means user is attending and button should give unregister option
-                    // else the user isn't registered and should have the option to register for the event
-                title={this.props.event.users[0] ? 'Unregister' : 'Register'}
-                onPress={() => {
-                    this.props.event.users[0] ? this.unregister() : this.register()
-                }}
-                color="white"
-                accessibilityLabel="Status"
-            /> :
-            <Button
-                // check the event obj to see if logged-in user exists in returned event obj
-                    // if user exists, that means user is attending and button should give unregister option
-                    // else the user isn't registered and should have the option to register for the event
-                title={'Edit/Delete'}
-                onPress={() => {
-                    this.props.event.users[0] ? this.unregister() : this.register()
-                }}
-                color="white"
-                accessibilityLabel="Status"
-            />
-            }
+            {/* Dropdown menu is on either 'Upcoming' or 'Attending' */}
+            {status === 'Upcoming' || status === 'Attending' ?
+                <Button
+                    // check the event obj to see if logged-in user exists in the associated user array
+                        // if user exists, that means user is attending and button should give 'Unregister' option
+                        // else, the user isn't registered and should have the button option to 'Register' for the event
+                    title={event.users[0] ? 'Unregister' : 'Register'}
+                    onPress={() => {
+                        event.users[0] ? this.unregister() : this.register();
+                    }}
+                    color="white"
+                    accessibilityLabel="Status"
+                /> :
+                <Button
+                    // 'Edit/Delete' button takes you to EditEvent page
+                    title={'Edit/Delete'}
+                    onPress={() => {
+                        navigate.navigate('CreateEvent');  // needs to be switched to EditEvent once that page is created
+                    }}
+                    color="white"
+                    accessibilityLabel="Status"
+                />
+                }
             </View>
         </View>
         </View>

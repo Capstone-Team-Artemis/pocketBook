@@ -1,16 +1,18 @@
 const router = require('express').Router();
 const { Event, User, UserEvent } = require('../db/models');
 module.exports = router;
-//Events Routes
-// GET api/events --> get ALL events and only the logged in user's attending status
+// Events Routes
+// GET api/events/userId --> get ALL events, and include user info if it's the logged in user & she is attending the event
 router.get('/:userId', async (req, res, next) => {
   try {
     const events = await Event.findAll({
       include: {
-        model: User,  //  currently showing all users which is BAD
-        // where: {
-        //   id: req.params.userId
-        // }
+        model: User,  
+        where: {
+          id: req.params.userId,
+        },
+        required: false  // b/c value is false, it is a LEFT JOIN -> show all events no matter what,
+                              // and for each event only include logged-in user if attending
       }
     }
     );
@@ -91,7 +93,9 @@ router.delete('/:userId/delete/:eventId', async (req, res, next) => {
 router.delete('/:userId/unregister/:eventId', async (req, res, next) => {
   try {
     const userId = req.params.userId;
+    console.log('userid: ', userId)
     const eventId = req.params.eventId;
+    console.log('eventid: ', eventId)
     const result = await UserEvent.destroy({
       // only able to unregister your own attendance to an event
       // finds all rows (will only be 1 match b/c event ids are unique) where user id matches whoever is logged in & the event id matches what was submitted in the route

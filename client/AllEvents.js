@@ -5,7 +5,6 @@ import {
   ScrollView,
   SafeAreaView,
   Button,
-  Image,
   TouchableOpacity,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -81,43 +80,18 @@ export class AllEvents extends React.Component {
                 // if dropdown status is 'Attending' & logged in user's userId is in the userEvents array that is the specific event obj -OR-
                 // if dropdown status is 'Created & logged in user's userId is the same value as the hostId in the specific event obj
                 this.props.events.filter(event => {
-                  console.log('event obj: ', event)
-                return this.state.status === 'Upcoming' || 
-                (this.state.status === 'Attending' && event.users[0]) || 
-                (this.state.status === 'Created' && this.state.userId === event.hostId)
+                  return this.state.status === 'Upcoming' || 
+                  (this.state.status === 'Attending' && event.users[0]) || 
+                  (this.state.status === 'Created' && this.state.userId === event.hostId)
                 // then map to render out each filtered event
-              }).map((event) => (
-                <SingleEvent key={event.id} event={event} user={this.state.userId} status={this.state.status}/> 
-                // <View style={styles.listContainer} key={event.id}>
-                //   <Image
-                //     source={{
-                //       uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
-                //     }}
-                //     style={styles.image}
-                //   />
-                //   <View style={styles.eventData}>
-                //     <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-                //     <Text style={styles.date}>Date: {event.date}</Text>
-                //     <Text style={styles.time}>Time: {event.time}</Text>
-                //     <Text style={styles.description}>
-                //       Description: {event.description}
-                //     </Text>
-                //     {/* Adds not/attending, edit/delete button */}
-                //     <View style={styles.attendingButtonContainer}>
-                //       <Button
-                //         title={this.state.status === 'Upcoming' ? 'Attending' : this.state.status === 'Attending' ? 'Not Attending' : 'Edit/Delete'}
-                //         onPress={() => {
-                //           this.state.status === 'Created' ?
-                //           this.props.navigation.navigate('CreateEvent') :
-                //           null 
-
-                //         }}
-                //         color="white"
-                //         accessibilityLabel="Status"
-                //       />
-                //     </View>
-                //   </View>
-                // </View>
+                }).map((event) => (
+                <SingleEvent key={event.id} 
+                  event={event} 
+                  user={this.state.userId} 
+                  status={this.state.status} 
+                  navigate={this.props.navigation}
+                  getEvents={() => this.props.getEvents(this.state.userId)}
+                  /> 
               ))
             )}
           </View>

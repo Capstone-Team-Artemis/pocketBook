@@ -108,26 +108,28 @@ const SignUp = (props) => {
               style={styles.image}
             />
             <Text style={styles.heading}>Sign Up</Text>
-            <Text>Let's get you started!</Text>
+            <Text>to join the book lovers community!</Text>
 
-            {/* First Name Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputText}
-                placeholder={'First Name'}
-                onChangeText={props.handleChange('firstName')}
-                value={props.values.firstName}
-              />
-            </View>
+            <View style={styles.name}>
+              {/* First Name Input */}
+              <View style={styles.nameContainer}>
+                <TextInput
+                  style={styles.nameText}
+                  placeholder={'First Name'}
+                  onChangeText={props.handleChange('firstName')}
+                  value={props.values.firstName}
+                />
+              </View>
 
-            {/* Last Name Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputText}
-                placeholder={'Last Name'}
-                onChangeText={props.handleChange('lastName')}
-                value={props.values.lastName}
-              />
+              {/* Last Name Input */}
+              <View style={styles.nameContainer}>
+                <TextInput
+                  style={styles.nameText}
+                  placeholder={'Last Name'}
+                  onChangeText={props.handleChange('lastName')}
+                  value={props.values.lastName}
+                />
+              </View>
             </View>
 
             {/* Email Input */}
@@ -245,6 +247,16 @@ const styles = StyleSheet.create({
     margin: 0,
     fontSize: 40,
   },
+  name: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  nameText: {
+    fontWeight: 'bold',
+    marginLeft: 10,
+    marginTop: 8,
+    width: '80%',
+  },
   inputContainer: {
     marginTop: 20,
     flexDirection: 'row',
@@ -256,6 +268,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 5,
   },
+  nameContainer: {
+    marginTop: 20,
+    marginRight: 5,
+    width: 145,
+    height: 35,
+    borderRadius: 50,
+    borderWidth: 1.5,
+  },
   icon: {
     top: 5,
     left: 20,
@@ -265,7 +285,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
     marginLeft: 50,
-    width: '100%',
+    width: '80%',
   },
   submitContainer: {
     alignItems: 'center',

@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   inputText: {
     fontWeight: 'bold',
     marginLeft: 60,
-    width: '100%',
+    width: '80%',
   },
   submitContainer: {
     alignItems: 'center',

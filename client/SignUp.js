@@ -11,10 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Animatable from 'react-native-animatable';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
-// import user, { auth } from './store/user';
 import axios from 'axios';
 
 const SignUp = (props) => {
@@ -79,9 +76,10 @@ const SignUp = (props) => {
           lastName: '',
         }}
         onSubmit={async (values) => {
-          console.log('VALIDATE --->', validate);
+          // Adding user validation (>= 4 chars) and password validation (>= 8 chars)
           if (!validate.isValidUser || !validate.isValidPassword) {
             Alert.alert('Error', 'Please fix the error(s) and try again.');
+            // Once that's validated, axios runs call to signup and navigate to App screen
           } else {
             try {
               let res = await axios.post('http://localhost:3000/auth/signup/', {
@@ -92,7 +90,7 @@ const SignUp = (props) => {
                 lastName: values.lastName,
               });
               props.navigation.navigate('App', { user: res.data });
-              // if user info is invalid:
+              // If there was a problem signing up, display an alert error
             } catch (err) {
               alert(err);
               // Alert.alert('Error', 'Please fix the errors and try again.');
@@ -160,7 +158,7 @@ const SignUp = (props) => {
             {/* Username Input */}
             <View style={styles.inputContainer}>
               <Icon
-                name={'user-plus'}
+                name={'user'}
                 size={19}
                 color={'grey'}
                 style={styles.icon}

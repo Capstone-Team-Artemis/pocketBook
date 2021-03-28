@@ -27,7 +27,7 @@ const Login = (props) => {
         onSubmit={async (values) => {
           // If user didn't input anything:
           if (values.email === '' || values.password === '') {
-            Alert.alert('Error', 'Username and password cannot be empty.');
+            Alert.alert('Error', 'Username and/or password cannot be empty.');
           } else {
             // If user did, axios call to lookup user login info
             try {

@@ -20,6 +20,10 @@ const Event = db.define('event', {
     description: {
         type: Sequelize.TEXT,
         allowNull: false,
+    },
+    hostId: {
+        type:Sequelize.INTEGER,
+        allowNull: false
     }
 })
 

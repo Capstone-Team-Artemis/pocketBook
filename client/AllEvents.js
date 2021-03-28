@@ -21,12 +21,10 @@ export class AllEvents extends React.Component {
     this.state = {
       status: 'Upcoming'
     }
-    //The controller property gives you full access to the DropDownPicker methods and properties
-    this.controller;
   }
   
   componentDidMount() {
-    this.props.getEvents();
+    this.props.getEvents(1);  // hard coded 1 => userId (Selina)
   }
 
   render() {
@@ -58,7 +56,6 @@ export class AllEvents extends React.Component {
               dropDownStyle={{backgroundColor: '#fafafa'}}
               containerStyle={{ height: 40 }}
               activeLabelStyle={{color: 'red'}}
-              controller={instance => this.controller = instance}
               defaultValue={this.state.status}
               onChangeItem={item => this.setState({
                 status: item.value
@@ -98,8 +95,9 @@ export class AllEvents extends React.Component {
                         title={this.state.status === 'Upcoming' ? 'Attending' : this.state.status === 'Attending' ? 'Not Attending' : 'Edit/Delete'}
                         onPress={() => {
                           this.state.status === 'Created' ?
-                            this.props.navigation.navigate('CreateEvent') :
-                            null
+                          this.props.navigation.navigate('CreateEvent') :
+                          null 
+
                         }}
                         color="white"
                         accessibilityLabel="Status"
@@ -124,7 +122,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getEvents: () => dispatch(fetchEvents()),
+    getEvents: (userId) => dispatch(fetchEvents(userId)),
   };
 };
 

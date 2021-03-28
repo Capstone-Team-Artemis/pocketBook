@@ -12,12 +12,14 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { connect } from 'react-redux';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import SingleEvent from './SingleEvent';
 // import thunk creator
 import { fetchEvents } from './store/events';
 
 export class AllEvents extends React.Component {
   constructor() {
     super()
+    // state for the dropdown
     this.state = {
       status: 'Upcoming'
     }
@@ -74,37 +76,37 @@ export class AllEvents extends React.Component {
               </Text>
             ) : (
               this.props.events.map((event) => (
-                
-                <View style={styles.listContainer} key={event.id}>
-                  <Image
-                    source={{
-                      uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
-                    }}
-                    style={styles.image}
-                  />
-                  <View style={styles.eventData}>
-                    <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-                    <Text style={styles.date}>Date: {event.date}</Text>
-                    <Text style={styles.time}>Time: {event.time}</Text>
-                    <Text style={styles.description}>
-                      Description: {event.description}
-                    </Text>
-                    {/* Adds not/attending, edit/delete button */}
-                    <View style={styles.attendingButtonContainer}>
-                      <Button
-                        title={this.state.status === 'Upcoming' ? 'Attending' : this.state.status === 'Attending' ? 'Not Attending' : 'Edit/Delete'}
-                        onPress={() => {
-                          this.state.status === 'Created' ?
-                          this.props.navigation.navigate('CreateEvent') :
-                          null 
+                <SingleEvent event={event} user={1}/> // hard coded user ID
+                // <View style={styles.listContainer} key={event.id}>
+                //   <Image
+                //     source={{
+                //       uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
+                //     }}
+                //     style={styles.image}
+                //   />
+                //   <View style={styles.eventData}>
+                //     <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+                //     <Text style={styles.date}>Date: {event.date}</Text>
+                //     <Text style={styles.time}>Time: {event.time}</Text>
+                //     <Text style={styles.description}>
+                //       Description: {event.description}
+                //     </Text>
+                //     {/* Adds not/attending, edit/delete button */}
+                //     <View style={styles.attendingButtonContainer}>
+                //       <Button
+                //         title={this.state.status === 'Upcoming' ? 'Attending' : this.state.status === 'Attending' ? 'Not Attending' : 'Edit/Delete'}
+                //         onPress={() => {
+                //           this.state.status === 'Created' ?
+                //           this.props.navigation.navigate('CreateEvent') :
+                //           null 
 
-                        }}
-                        color="white"
-                        accessibilityLabel="Status"
-                      />
-                    </View>
-                  </View>
-                </View>
+                //         }}
+                //         color="white"
+                //         accessibilityLabel="Status"
+                //       />
+                //     </View>
+                //   </View>
+                // </View>
               ))
             )}
           </View>

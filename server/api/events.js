@@ -2,15 +2,15 @@ const router = require('express').Router();
 const { Event, User, UserEvent } = require('../db/models');
 module.exports = router;
 //Events Routes
-// GET api/events --> get ALL events  of the event
+// GET api/events --> get ALL events and only the logged in user's attending status
 router.get('/:userId', async (req, res, next) => {
   try {
     const events = await Event.findAll({
       include: {
-        model: User,
-        where: {
-          id: req.params.userId
-        }
+        model: User,  //  currently showing all users which is BAD
+        // where: {
+        //   id: req.params.userId
+        // }
       }
     }
     );
@@ -96,6 +96,22 @@ router.delete('/:userId/unregister/:eventId', async (req, res, next) => {
       // only able to unregister your own attendance to an event
       // finds all rows (will only be 1 match b/c event ids are unique) where user id matches whoever is logged in & the event id matches what was submitted in the route
       where: { userId: userId, eventId: eventId },
+    });
+    if (result) {
+      res.sendStatus(200);
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST api/events/register/eventId --> register for single event based on the event id and user id
+router.post('/:userId/register/:eventId', async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const eventId = req.params.eventId;
+    const result = await UserEvent.create({
+      userId: userId, eventId: eventId 
     });
     if (result) {
       res.sendStatus(200);

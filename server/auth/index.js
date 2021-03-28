@@ -4,7 +4,6 @@ const { User } = require('../db/models');
 // POST auth/login
 router.post('/login', async (req, res, next) => {
   try {
-    console.log('EMAIL --->', req.body.email);
     // Find user using the inputted email
     const user = await User.findOne({ where: { email: req.body.email } });
     // If can't find user, do this:

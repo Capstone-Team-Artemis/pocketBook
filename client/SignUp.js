@@ -14,13 +14,11 @@ import * as Animatable from 'react-native-animatable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
-import { auth } from './store/user';
+// import user, { auth } from './store/user';
+import axios from 'axios';
 
 const SignUp = (props) => {
-  const { user } = props;
   const [validate, setValidate] = React.useState({
-    isValidFirst: true,
-    isValidLast: true,
     isValidEmail: true,
     isValidUser: true,
     isValidPassword: true,
@@ -54,6 +52,22 @@ const SignUp = (props) => {
     }
   };
 
+  const handleEmail = (val) => {
+    // Using regex to check for possible valid email input
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (regex.test(val)) {
+      setValidate({
+        ...validate,
+        isValidEmail: true,
+      });
+    } else {
+      setValidate({
+        ...validate,
+        isValidEmail: false,
+      });
+    }
+  };
+
   return (
     <ScrollView>
       <Formik
@@ -64,20 +78,25 @@ const SignUp = (props) => {
           firstName: '',
           lastName: '',
         }}
-        onSubmit={(values) => {
-          props.auth(
-            values.email,
-            values.password,
-            props.method,
-            values.username,
-            values.firstName,
-            values.lastName
-          );
-          console.log('USER --->', user);
-          if (Object.keys(user).length > 0) {
-            props.navigation.navigate('App');
+        onSubmit={async (values) => {
+          console.log('VALIDATE --->', validate);
+          if (!validate.isValidUser || !validate.isValidPassword) {
+            Alert.alert('Error', 'Please fix the error(s) and try again.');
           } else {
-            Alert.alert('Error', 'Please enter a valid email.');
+            try {
+              let res = await axios.post('http://localhost:3000/auth/signup/', {
+                email: values.email,
+                password: values.password,
+                username: values.username,
+                firstName: values.firstName,
+                lastName: values.lastName,
+              });
+              props.navigation.navigate('App', { user: res.data });
+              // if user info is invalid:
+            } catch (err) {
+              alert(err);
+              // Alert.alert('Error', 'Please fix the errors and try again.');
+            }
           }
         }}
       >
@@ -128,9 +147,15 @@ const SignUp = (props) => {
                 autoCapitalize="none"
                 autoCorrect={false}
                 onChangeText={props.handleChange('email')}
+                onEndEditing={(e) => handleEmail(e.nativeEvent.text)}
                 value={props.values.email}
               />
             </View>
+            {validate.isValidEmail ? null : (
+              <Animatable.View animation="zoomIn" duration={500}>
+                <Text style={styles.errorMsg}>Please enter a valid email.</Text>
+              </Animatable.View>
+            )}
 
             {/* Username Input */}
             <View style={styles.inputContainer}>
@@ -143,6 +168,7 @@ const SignUp = (props) => {
               <TextInput
                 style={styles.inputText}
                 placeholder={'Username'}
+                autoCapitalize="none"
                 onChangeText={props.handleChange('username')}
                 onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
                 value={props.values.username}
@@ -268,17 +294,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  method: 'SignUp',
-  user: state.user,
-});
+// const mapStateToProps = (state) => ({
+//   method: 'SignUp',
+//   user: state.user,
+// });
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      auth,
-    },
-    dispatch
-  );
+// const mapDispatchToProps = (dispatch) =>
+//   bindActionCreators(
+//     {
+//       auth,
+//     },
+//     dispatch
+//   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default SignUp;
+
+// export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

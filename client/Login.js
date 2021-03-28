@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -10,14 +10,13 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// import { connect } from 'react-redux';
+// import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
-import { auth, me } from './store/user';
+// import { auth } from './store/user';
+import axios from 'axios';
 
 const Login = (props) => {
-  // Passing in state from store as props to here
-  const { user } = props;
   return (
     <ScrollView>
       <Formik
@@ -25,17 +24,25 @@ const Login = (props) => {
           email: '',
           password: '',
         }}
-        onSubmit={(values) => {
-          props.auth(values.email, values.password, props.method);
-          // If 'user' props object gets updated with fetched info, then you can login
-          if (Object.keys(user).length > 0) {
-            props.navigation.navigate('App');
-            // Else, you get an alert
+        onSubmit={async (values) => {
+          // If user didn't input anything:
+          if (values.email === '' || values.password === '') {
+            Alert.alert('Error', 'Username and password cannot be empty.');
           } else {
-            Alert.alert(
-              'Error',
-              'Incorrect username or password. Please try again.'
-            );
+            // If user did, axios call to lookup user login info
+            try {
+              let res = await axios.post('http://localhost:3000/auth/login/', {
+                email: values.email,
+                password: values.password,
+              });
+              props.navigation.navigate('App', res.data);
+              // if user info is invalid:
+            } catch {
+              Alert.alert(
+                'Error',
+                'Incorrect username or password. Please try again.'
+              );
+            }
           }
         }}
       >
@@ -166,18 +173,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  method: 'Login',
-  user: state.user,
-});
+// const mapStateToProps = (state) => ({
+//   method: 'Login',
+//   user: state.user,
+// });
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      auth,
-      me,
-    },
-    dispatch
-  );
+// const mapDispatchToProps = (dispatch) =>
+//   bindActionCreators(
+//     {
+//       auth,
+//     },
+//     dispatch
+//   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Login);

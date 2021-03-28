@@ -7,14 +7,53 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as Animatable from 'react-native-animatable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
 import { auth } from './store/user';
 
 const SignUp = (props) => {
+  const { user } = props;
+  const [validate, setValidate] = React.useState({
+    isValidFirst: true,
+    isValidLast: true,
+    isValidEmail: true,
+    isValidUser: true,
+    isValidPassword: true,
+  });
+
+  const handleValidUser = (val) => {
+    if (val.trim().length >= 4) {
+      setValidate({
+        ...validate,
+        isValidUser: true,
+      });
+    } else {
+      setValidate({
+        ...validate,
+        isValidUser: false,
+      });
+    }
+  };
+
+  const handleValidPassword = (val) => {
+    if (val.trim().length >= 8) {
+      setValidate({
+        ...validate,
+        isValidPassword: true,
+      });
+    } else {
+      setValidate({
+        ...validate,
+        isValidPassword: false,
+      });
+    }
+  };
+
   return (
     <ScrollView>
       <Formik
@@ -34,7 +73,12 @@ const SignUp = (props) => {
             values.firstName,
             values.lastName
           );
-          props.navigation.navigate('App');
+          console.log('USER --->', user);
+          if (Object.keys(user).length > 0) {
+            props.navigation.navigate('App');
+          } else {
+            Alert.alert('Error', 'Please enter a valid email.');
+          }
         }}
       >
         {(props) => (
@@ -47,6 +91,7 @@ const SignUp = (props) => {
               style={styles.image}
             />
             <Text style={styles.heading}>Sign Up</Text>
+            <Text>Let's get you started!</Text>
 
             {/* First Name Input */}
             <View style={styles.inputContainer}>
@@ -65,22 +110,6 @@ const SignUp = (props) => {
                 placeholder={'Last Name'}
                 onChangeText={props.handleChange('lastName')}
                 value={props.values.lastName}
-              />
-            </View>
-
-            {/* Username Input */}
-            <View style={styles.inputContainer}>
-              <Icon
-                name={'user-plus'}
-                size={19}
-                color={'grey'}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.inputText}
-                placeholder={'Username'}
-                onChangeText={props.handleChange('username')}
-                value={props.values.username}
               />
             </View>
 
@@ -103,6 +132,30 @@ const SignUp = (props) => {
               />
             </View>
 
+            {/* Username Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name={'user-plus'}
+                size={19}
+                color={'grey'}
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputText}
+                placeholder={'Username'}
+                onChangeText={props.handleChange('username')}
+                onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
+                value={props.values.username}
+              />
+            </View>
+            {validate.isValidUser ? null : (
+              <Animatable.View animation="zoomIn" duration={500}>
+                <Text style={styles.errorMsg}>
+                  Username must be 4 characters long.
+                </Text>
+              </Animatable.View>
+            )}
+
             {/* Password Input */}
             <View style={styles.inputContainer}>
               <Icon
@@ -116,9 +169,17 @@ const SignUp = (props) => {
                 secureTextEntry={true}
                 placeholder={'Password'}
                 onChangeText={props.handleChange('password')}
+                onEndEditing={(e) => handleValidPassword(e.nativeEvent.text)}
                 value={props.values.password}
               />
             </View>
+            {validate.isValidPassword ? null : (
+              <Animatable.View animation="zoomIn" duration={500}>
+                <Text style={styles.errorMsg}>
+                  Password must be 8 characters long.
+                </Text>
+              </Animatable.View>
+            )}
 
             {/* Sign Up Button */}
             <TouchableOpacity
@@ -200,10 +261,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  errorMsg: {
+    color: '#FF0000',
+    fontSize: 12,
+    marginBottom: -5,
+  },
 });
 
 const mapStateToProps = (state) => ({
   method: 'SignUp',
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) =>

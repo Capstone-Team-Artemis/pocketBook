@@ -3,33 +3,27 @@ const { User, Book, UserBook } = require('../db/models');
 module.exports = router;
 
 //GET api/users
-router.get('/:userId', async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.params.userId);
-    res.status(200).send(user);
-  } catch (error) {
-    next(error);
-  }
-});
+// router.get('/:userId', async (req, res, next) => {
+//   try {
+//     const user = await User.findByPk(req.params.userId, {
+//       include: Book
+//     });
+//     res.status(200).send(user);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 // Create GET route to generate books by status
-router.get('/:userId/:status', async (req, res, next) => {
+router.get('/:userId', async (req, res, next) => {
   try {
-    console.log('REQ PARAMS -->', req.params);
-    let userId = req.params.userId;
-    console.log('USERID -->', userId);
-    // status would be Currently Reading, To Read, or Completed
-    let status = req.params.status;
+    //find all books associated with the user in UserBook through table
     const myBooks = await UserBook.findAll({
-      where: { userId: userId, status: status },
+      where: { userId: userId},
       include: Book,
     });
-    //check if more than one book saved
-    if (myBooks.length >= 1) {
-      res.status(200).send(myBooks);
-    } else {
-      res.send(`No books saved in ${status}`);
-    }
+    res.status(200).send(myBooks);
+
   } catch (error) {
     next(error);
   }

@@ -19,14 +19,9 @@ const UserProfile = (props) => {
   //hardcode it to 1 since no user loged in
   let id = props.userId || 1;
   let mybooks = props.books || [];
-  //let currentBooks = props.books || []
-  const [user, setUser] = useState(id);
+  //const [user, setUser] = useState(id);
   const [books, setbooks] = useState(mybooks);
-  //console.log("****books****", mybooks)
-  //const [currentlyReading, setCurrentlyReading] = useState(mybooks)
-  const status = 'Currently Reading';
-  //const future = "To Read"
-  //const past = "Completed"
+  console.log("****books****", mybooks)
 
   //do not need this if we can get the user through props
   // useEffect(()=> {
@@ -37,10 +32,13 @@ const UserProfile = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBooks(id, status));
-  }, {});
+    dispatch(getBooks(id));
+  }, [books]);
 
-  //const title = books[0].book.title
+  let currentBooks = mybooks.filter((book) => (book.status==='Currently Reading'))
+  let futureRead = mybooks.filter((book) => (book.status==='To Read'))
+  let completed = mybooks.filter((book) => (book.status==='Completed'))
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,15 +53,33 @@ const UserProfile = (props) => {
         <View>
           <Text style={styles.text}>Currently Reading</Text>
           <View style={styles.bookContainer}>
-            {mybooks.map((book) => (
-              <View style={styles.bookData}>
-                <Text>{book.book.image}</Text>
-                <Text>{book.book.title}</Text>
-                <Text>{}</Text>
-              </View>
-            ))}
+            {currentBooks.length>0 ? currentBooks.map(book => <View style={styles.bookData} key={book.id}>
+              <Text>{book.book.image}</Text>
+              <Text>{book.book.title}</Text>
+            </View>) : <Text>No books</Text>}
           </View>
         </View>
+
+        <View>
+          <Text style={styles.text}>To Read</Text>
+          <View style={styles.bookContainer}>
+            {futureRead.length>0 ? futureRead.map(book => <View style={styles.bookData} key={book.id}>
+              <Text>{book.book.image}</Text>
+              <Text>{book.book.title}</Text>
+            </View>) : <Text>No books</Text>}
+          </View>
+        </View>
+
+        <View>
+          <Text style={styles.text}>Completed</Text>
+          <View style={styles.bookContainer}>
+            {completed.length>0 ? completed.map(book => <View style={styles.bookData} key={book.id}>
+              <Text>{book.book.image}</Text>
+              <Text>{book.book.title}</Text>
+            </View>) : <Text>No books</Text>}
+          </View>
+        </View>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -112,7 +128,7 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
   //getUser: (userId) => dispatch(getUserProfile(userId)),
-  getBooks: (userId, status) => dispatch(getBooks(userId, status)),
+  getBooks: (userId) => dispatch(getBooks(userId)),
 });
 
 export default connect(mapState, mapDispatch)(UserProfile);

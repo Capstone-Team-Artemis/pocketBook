@@ -4,6 +4,7 @@ import axios from 'axios';
 const GET_USER_PROFILE = 'GET_USER_PROFILE';
 const GET_BOOKS = 'GET_BOOKS';
 
+
 //ACTION CREATORS
 const gotUserProfile = (user) => ({
   type: GET_USER_PROFILE,
@@ -27,15 +28,14 @@ export const getUserProfile = (userId) => async (dispatch) => {
   }
 };
 
-export const getBooks = (userId, status) => async (dispatch) => {
+export const getBooks = (userId) => async (dispatch) => {
   try {
     console.log('GETBOOKS RAN!!');
     console.log('USERID --->', userId);
-    console.log('STATUS --->', status);
     const books = await axios.get(
-      `http://localhost:3000/api/users/${userId}/${status}`
+      `http://localhost:3000/api/users/${userId}`
     );
-    console.log('BOOKSSSS --->', books);
+    console.log('BOOKSSSS --->', books.data);
     dispatch(gotBooks(books.data));
   } catch (error) {
     console.error(error);

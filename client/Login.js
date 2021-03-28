@@ -40,7 +40,7 @@ const Login = (props) => {
                 email: values.email,
                 password: values.password,
               });
-              props.navigation.navigate('App', res.data);
+              props.navigation.navigate('LandingPage', { user: res.data });
               // if user info is invalid:
             } catch {
               Alert.alert(

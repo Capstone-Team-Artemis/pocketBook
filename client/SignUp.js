@@ -97,7 +97,7 @@ const SignUp = (props) => {
                 firstName: values.firstName,
                 lastName: values.lastName,
               });
-              props.navigation.navigate('App', { user: res.data });
+              props.navigation.navigate('LandingPage', { user: res.data });
               // If there was a problem signing up, display an alert error
             } catch (err) {
               alert(err);

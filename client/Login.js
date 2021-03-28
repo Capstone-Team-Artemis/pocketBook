@@ -17,6 +17,11 @@ import { Formik } from 'formik';
 import axios from 'axios';
 
 const Login = (props) => {
+  const [secureTextEntry, setSecure] = React.useState(true);
+
+  const updateSecureTextEntry = () => {
+    setSecure(!secureTextEntry);
+  };
   return (
     <ScrollView>
       <Formik
@@ -88,11 +93,21 @@ const Login = (props) => {
               />
               <TextInput
                 style={styles.inputText}
-                secureTextEntry={true}
+                secureTextEntry={secureTextEntry ? true : false}
                 placeholder={'Password'}
                 onChangeText={props.handleChange('password')}
                 value={props.values.password}
               />
+              <TouchableOpacity
+                style={styles.btnEye}
+                onPress={updateSecureTextEntry}
+              >
+                <Icon
+                  name={secureTextEntry ? 'eye-slash' : 'eye'}
+                  size={20}
+                  color={'grey'}
+                />
+              </TouchableOpacity>
             </View>
 
             {/* Login Button */}
@@ -170,6 +185,11 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  btnEye: {
+    position: 'absolute',
+    top: 12,
+    right: 20,
   },
 });
 

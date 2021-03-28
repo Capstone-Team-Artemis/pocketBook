@@ -6,7 +6,7 @@ import {
     Image,
   } from 'react-native'; 
 import React from 'react';
-  
+
 export default class SingleEvent extends React.Component {
     constructor(props) {
         super(props);
@@ -41,8 +41,11 @@ export default class SingleEvent extends React.Component {
             <Text style={styles.description}>
             Description: {event.description}
             </Text>
-            {/* Adds not/attending, edit/delete button */}
-            <View style={styles.attendingButtonContainer}>
+            {/* If dropdown statue is "Upcoming" -Or- "Attending", button should be 'Un/Register' */}
+            {/* If dropdown statue is "Created", button should be 'Edit/Delete' */}
+            {/* pass dropdown menu status from AllEvents component as props */}
+            <View style={styles.registerButtonContainer}>
+            {this.props.status === 'Upcoming' || this.props.status === 'Attending' ?
             <Button
                 // check the event obj to see if logged-in user exists in returned event obj
                     // if user exists, that means user is attending and button should give unregister option
@@ -53,7 +56,19 @@ export default class SingleEvent extends React.Component {
                 }}
                 color="white"
                 accessibilityLabel="Status"
+            /> :
+            <Button
+                // check the event obj to see if logged-in user exists in returned event obj
+                    // if user exists, that means user is attending and button should give unregister option
+                    // else the user isn't registered and should have the option to register for the event
+                title={'Edit/Delete'}
+                onPress={() => {
+                    this.props.event.users[0] ? this.unregister() : this.register()
+                }}
+                color="white"
+                accessibilityLabel="Status"
             />
+            }
             </View>
         </View>
         </View>
@@ -114,7 +129,7 @@ eventData: {
 noEvents: {
     fontSize: 20,
 },
-attendingButtonContainer: {
+registerButtonContainer: {
     backgroundColor: '#6475a5',
     borderRadius: 15,
     padding: 0.8,

@@ -17,16 +17,16 @@ import SingleEvent from './SingleEvent';
 import { fetchEvents } from './store/events';
 
 export class AllEvents extends React.Component {
-  constructor() {
-    super()
-    // state for the dropdown
+  constructor(props) {
+    super(props)
     this.state = {
-      status: 'Upcoming'
+      status: 'Upcoming', // state for dropdown menu
+      userId: 1  // hard coded 1 => userId (Selina)  ** need to change to be the variable representing the user Id
     }
   }
   
   componentDidMount() {
-    this.props.getEvents(1);  // hard coded 1 => userId (Selina)
+    this.props.getEvents(this.state.userId);  // hard coded above as 1 => userId (Selina)
   }
 
   render() {
@@ -75,8 +75,19 @@ export class AllEvents extends React.Component {
                 There are currently no upcoming events!
               </Text>
             ) : (
-              this.props.events.map((event) => (
-                <SingleEvent event={event} user={1}/> // hard coded user ID
+              // depending on the dropdown menu status and user id, the events displayed will vary
+              // a single event should be displayed:
+                // if dropdown status is 'Upcoming" -OR-
+                // if dropdown status is 'Attending' & logged in user's userId is in the userEvents array that is the specific event obj -OR-
+                // if dropdown status is 'Created & logged in user's userId is the same value as the hostId in the specific event obj
+                this.props.events.filter(event => {
+                  console.log('event obj: ', event)
+                return this.state.status === 'Upcoming' || 
+                (this.state.status === 'Attending' && event.users[0]) || 
+                (this.state.status === 'Created' && this.state.userId === event.hostId)
+                // then map to render out each filtered event
+              }).map((event) => (
+                <SingleEvent key={event.id} event={event} user={this.state.userId} status={this.state.status}/> 
                 // <View style={styles.listContainer} key={event.id}>
                 //   <Image
                 //     source={{

@@ -19,6 +19,7 @@ const SignUp = (props) => {
     isValidEmail: true,
     isValidUser: true,
     isValidPassword: true,
+    secureTextEntry: true,
   });
 
   const handleValidUser = (val) => {
@@ -63,6 +64,13 @@ const SignUp = (props) => {
         isValidEmail: false,
       });
     }
+  };
+
+  const updateSecureTextEntry = () => {
+    setValidate({
+      ...validate,
+      secureTextEntry: !validate.secureTextEntry,
+    });
   };
 
   return (
@@ -192,12 +200,22 @@ const SignUp = (props) => {
               />
               <TextInput
                 style={styles.inputText}
-                secureTextEntry={true}
+                secureTextEntry={validate.secureTextEntry ? true : false}
                 placeholder={'Password'}
                 onChangeText={props.handleChange('password')}
                 onEndEditing={(e) => handleValidPassword(e.nativeEvent.text)}
                 value={props.values.password}
               />
+              <TouchableOpacity
+                style={styles.btnEye}
+                onPress={updateSecureTextEntry}
+              >
+                <Icon
+                  name={validate.secureTextEntry ? 'eye-slash' : 'eye'}
+                  size={15}
+                  color={'grey'}
+                />
+              </TouchableOpacity>
             </View>
             {validate.isValidPassword ? null : (
               <Animatable.View animation="zoomIn" duration={500}>
@@ -309,6 +327,11 @@ const styles = StyleSheet.create({
     color: '#FF0000',
     fontSize: 12,
     marginBottom: -5,
+  },
+  btnEye: {
+    position: 'absolute',
+    top: 7,
+    right: 15,
   },
 });
 

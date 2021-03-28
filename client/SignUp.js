@@ -182,6 +182,7 @@ const SignUp = (props) => {
                 value={props.values.username}
               />
             </View>
+            {/* Text shows up if username is < 4 chars */}
             {validate.isValidUser ? null : (
               <Animatable.View animation="zoomIn" duration={500}>
                 <Text style={styles.errorMsg}>
@@ -206,6 +207,7 @@ const SignUp = (props) => {
                 onEndEditing={(e) => handleValidPassword(e.nativeEvent.text)}
                 value={props.values.password}
               />
+              {/* Adds eye button that toggles whether password input is hidden or not */}
               <TouchableOpacity
                 style={styles.btnEye}
                 onPress={updateSecureTextEntry}
@@ -217,6 +219,7 @@ const SignUp = (props) => {
                 />
               </TouchableOpacity>
             </View>
+            {/* Text shows up if password is < 8 chars */}
             {validate.isValidPassword ? null : (
               <Animatable.View animation="zoomIn" duration={500}>
                 <Text style={styles.errorMsg}>

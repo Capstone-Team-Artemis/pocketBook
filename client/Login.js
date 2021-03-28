@@ -98,6 +98,7 @@ const Login = (props) => {
                 onChangeText={props.handleChange('password')}
                 value={props.values.password}
               />
+              {/* Adds eye button that toggles whether password input is hidden or not */}
               <TouchableOpacity
                 style={styles.btnEye}
                 onPress={updateSecureTextEntry}

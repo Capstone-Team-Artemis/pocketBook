@@ -21,7 +21,6 @@ const UserProfile = (props) => {
   let mybooks = props.books || [];
   //const [user, setUser] = useState(id);
   const [books, setbooks] = useState(mybooks);
-  console.log("****books****", mybooks)
 
   //do not need this if we can get the user through props
   // useEffect(()=> {
@@ -35,6 +34,7 @@ const UserProfile = (props) => {
     dispatch(getBooks(id));
   }, [books]);
 
+  //filter the saved books by status 
   let currentBooks = mybooks.filter((book) => (book.status==='Currently Reading'))
   let futureRead = mybooks.filter((book) => (book.status==='To Read'))
   let completed = mybooks.filter((book) => (book.status==='Completed'))

@@ -18,6 +18,8 @@ module.exports = router;
 router.get('/:userId', async (req, res, next) => {
   try {
     //find all books associated with the user in UserBook through table
+    let userId = req.params.userId
+    console.log(userId)
     const myBooks = await UserBook.findAll({
       where: { userId: userId},
       include: Book,

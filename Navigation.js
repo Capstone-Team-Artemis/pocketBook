@@ -15,6 +15,13 @@ const Navigation = createDrawerNavigator(
         header: null,
       }),
     },
+    UserProfile: {
+      screen: UserProfile,
+      navigationOptions: () => ({
+        title: 'My Profile',
+        header: null,
+      }),
+    },
     AllEvents: {
       screen: AllEvents,
       navigationOptions: () => ({

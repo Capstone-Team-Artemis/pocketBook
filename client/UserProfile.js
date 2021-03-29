@@ -7,16 +7,18 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
+  TouchableOpacity
 } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { getUserProfile, getBooks } from './store/userProfile';
 
 const { width: WIDTH } = Dimensions.get('window');
 
 const UserProfile = (props) => {
-  //console.log("props in userprofile component", props)
+  console.log("props in userprofile component", props)
   //hardcode it to 1 since no user loged in
+
   let id = props.userId || 1;
   let mybooks = props.books || [];
   //const [user, setUser] = useState(id);
@@ -43,6 +45,16 @@ const UserProfile = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
+      <View style={styles.navbar}>
+          <TouchableOpacity
+            style={styles.navbar}
+            style={{ alignItems: 'flex-end', margin: 16 }}
+            onPress={props.navigation.openDrawer}
+          >
+            <Icon name="bars" size={24} color="#161924" />
+          </TouchableOpacity>
+        </View>
+
         <View>
           <Text style={styles.heading}>My Bookshelf</Text>
         </View>

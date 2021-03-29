@@ -14,7 +14,7 @@ const receivedEvents = (events) => ({
 export const fetchEvents = (userId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`http://localhost:3000/api/events/${userId}`); // this needs to be changed!!
+      const { data } = await axios.get(`http://localhost:3000/api/events/${userId}`); // this needs to be changed to reflect ngrok!!
       console.log('DATA: ', data)
       dispatch(receivedEvents(data));
     } catch (error) {

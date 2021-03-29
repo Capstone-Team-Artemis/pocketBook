@@ -54,7 +54,8 @@ export default class SingleEvent extends React.Component {
         <View style={styles.eventData}>
             <Text style={styles.eventTitle}>{event.eventTitle}</Text>
             <Text style={styles.date}>Date: {event.date}</Text>
-            <Text style={styles.time}>Time: {event.time}</Text>
+            <Text style={styles.time}>Start Time: {event.startTime}</Text>
+            <Text style={styles.time}>End Time: {event.endTime}</Text>
             <Text style={styles.description}>
             Description: {event.description}
             </Text>

@@ -1,3 +1,6 @@
+// Switch back to this button code if decide that Host can unregister/not attend an event she created!!!
+
+
 {/* If dropdown status is "Upcoming" -Or- "Attending", button should be 'Un/Register' 
                 If dropdown status is "Created", button should be 'Edit/Delete' */}
 

@@ -49,7 +49,8 @@ async function seed() {
   const events = [
     {
       eventTitle: 'Welcome to Hogwarts!',
-      date: '04/08/21',
+      date: '2021-04-08',
+      // date: '04/08/21',
       time: '06:00pm - 08:00pm',
       description:
         'Muggles of pocketbook, finished reading the series? Let’s discuss our favorite scenes, characters, and more! If we have time, let’s take the Sorting Hat quiz in the end to find our houses!',
@@ -57,7 +58,8 @@ async function seed() {
     },
     {
       eventTitle: 'Book Writing Class for Kids!',
-      date: '04/09/21',
+      date: '2021-04-09',
+      // date: '04/09/21',
       time: '02:00pm - 04:00pm',
       description:
         'Enjoy this FREE virtual club for kids led by child authors & illustrators, Avery & Avion, along with author, educator and Luxe Library co-founder- Delicia B. Davis. We will work step by step to plan, create, design, and finish our books. You won’t want to miss this opportunity to engage with artistic youth while creating your own lasting work of art! Register NOW for your Free Spot!',
@@ -65,7 +67,8 @@ async function seed() {
     },
     {
       eventTitle: 'Book Discussion: Women Talking by Miriam Toews',
-      date: '08/27/21',
+      date: '2021-09-27',
+      // date: '08/27/21',
       time: '06:30pm - 08:30pm',
       description:
         "Join the Mulberry Street Branch for a discussion of Miriam Toew's novel 'Women Talking.'",

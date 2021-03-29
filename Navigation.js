@@ -1,3 +1,4 @@
+import React from 'react';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
@@ -5,6 +6,7 @@ import UserProfile from './client/UserProfile';
 import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
 import Home from './client/Home';
+import Sidebar from './client/Sidebar';
 
 const Navigation = createDrawerNavigator(
   {
@@ -40,6 +42,7 @@ const Navigation = createDrawerNavigator(
   },
   {
     initialRouteName: 'LandingPage',
+    // contentComponent: Sidebar,
   }
 );
 

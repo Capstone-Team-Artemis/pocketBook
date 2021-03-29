@@ -17,6 +17,7 @@ import { Formik } from 'formik';
 import axios from 'axios';
 
 const Login = (props) => {
+  console.log('NAVIGATIONS -->', props);
   const [secureTextEntry, setSecure] = React.useState(true);
 
   const updateSecureTextEntry = () => {

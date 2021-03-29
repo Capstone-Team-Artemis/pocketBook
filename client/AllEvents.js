@@ -25,6 +25,7 @@ export class AllEvents extends React.Component {
   }
   
   componentDidMount() {
+    // get all events (regardless of upcoming/attending/created status) for a specific user
     this.props.getEvents(this.state.userId);  // hard coded above as 1 => userId (Selina)
   }
 
@@ -43,6 +44,7 @@ export class AllEvents extends React.Component {
           <View style={styles.createButtonContainer}>
             <Button
               title="Create Event"
+              // takes user to CreateEvents page
               onPress={() => {
                 this.props.navigation.navigate('CreateEvent');
               }}
@@ -74,24 +76,25 @@ export class AllEvents extends React.Component {
                 There are currently no upcoming events!
               </Text>
             ) : (
-              // depending on the dropdown menu status and user id, the events displayed will vary
-              // a single event should be displayed:
+              // depending on the dropdown menu status and user id, the event list displayed will vary
+              // a SINGLE event should be displayed:
                 // if dropdown status is 'Upcoming" -OR-
-                // if dropdown status is 'Attending' & logged in user's userId is in the userEvents array that is the specific event obj -OR-
-                // if dropdown status is 'Created & logged in user's userId is the same value as the hostId in the specific event obj
+                // if dropdown status is 'Attending' & logged in user's id is in the users array for that specific event obj -OR-
+                // if dropdown status is 'Created' & logged in user's userId is the same value as the hostId for that specific event obj
                 this.props.events.filter(event => {
                   return this.state.status === 'Upcoming' || 
                   (this.state.status === 'Attending' && event.users[0]) || 
                   (this.state.status === 'Created' && this.state.userId === event.hostId)
                 // then map to render out each filtered event
                 }).map((event) => (
-                <SingleEvent key={event.id} 
-                  event={event} 
-                  user={this.state.userId} 
-                  status={this.state.status} 
-                  navigate={this.props.navigation}
-                  getEvents={() => this.props.getEvents(this.state.userId)}
-                  /> 
+                // pass Props to SingleEvent component
+                  <SingleEvent key={event.id} 
+                    event={event} 
+                    user={this.state.userId} 
+                    status={this.state.status} 
+                    navigate={this.props.navigation}
+                    getEvents={() => this.props.getEvents(this.state.userId)}
+                    /> 
               ))
             )}
           </View>

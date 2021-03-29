@@ -45,49 +45,51 @@ export default class SingleEvent extends React.Component {
         
         return (       
         <View style={styles.listContainer} key={event.id}>
-        <Image
-            source={{
-            uri: 'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED',
-            }}
-            style={styles.image}
-        />
-        <View style={styles.eventData}>
-            <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-            <Text style={styles.date}>Date: {event.date}</Text>
-            <Text style={styles.time}>Start Time: {event.startTime}</Text>
-            <Text style={styles.time}>End Time: {event.endTime}</Text>
-            <Text style={styles.description}>
-            Description: {event.description}
-            </Text>
-            {/* if logged in user is the HOST, button can only say 'Edit/Delete'
-                else, button can also say 'Un/Register' */}
+            {/* Adds book image for each event */}
+            <Image
+                source={{
+                uri: 'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED',
+                }}
+                style={styles.image}
+            />
+            {/* Adds book info for each event */}
+            <View style={styles.eventData}>
+                <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+                <Text style={styles.date}>Date: {event.date}</Text>
+                <Text style={styles.time}>Start Time: {event.startTime}</Text>
+                <Text style={styles.time}>End Time: {event.endTime}</Text>
+                <Text style={styles.description}>
+                Description: {event.description}
+                </Text>
 
-            <View style={styles.registerButtonContainer}>
-                {user === event.hostId ? 
-                    <Button
-                    // 'Edit/Delete' button takes you to EditEvent page
-                        title={'Edit/Delete'}
+                {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                    if not host, button can also say 'Un/Register' */}
+                <View style={styles.registerButtonContainer}>
+                    {user === event.hostId ? 
+                        <Button
+                        // 'Edit/Delete' button takes you to EditEvent page
+                            title={'Edit/Delete'}
+                            onPress={() => {
+                                navigate.navigate('CreateEvent');  // needs to be switched to EditEvent once that page is created
+                            }}
+                            color="white"
+                            accessibilityLabel="Status"
+                        />
+                    : 
+                        <Button
+                        // check the event obj to see if logged-in user exists in the associated user array
+                            // if user exists, that means user is attending and button should give 'Unregister' option
+                            // else, the user isn't registered and should have the button option to 'Register' for the event
+                        title={event.users[0] ? 'Unregister' : 'Register'}
                         onPress={() => {
-                            navigate.navigate('CreateEvent');  // needs to be switched to EditEvent once that page is created
+                            event.users[0] ? this.unregister() : this.register();
                         }}
                         color="white"
                         accessibilityLabel="Status"
-                    />
-                : 
-                    <Button
-                    // check the event obj to see if logged-in user exists in the associated user array
-                        // if user exists, that means user is attending and button should give 'Unregister' option
-                        // else, the user isn't registered and should have the button option to 'Register' for the event
-                    title={event.users[0] ? 'Unregister' : 'Register'}
-                    onPress={() => {
-                        event.users[0] ? this.unregister() : this.register();
-                    }}
-                    color="white"
-                    accessibilityLabel="Status"
-                    /> 
-                }  
-            </View> 
-        </View>
+                        /> 
+                    }  
+                </View> 
+            </View>
         </View>
         );
     }
@@ -123,13 +125,6 @@ time: {
 description: {
     fontSize: 15,
     marginBottom: 5,
-},
-createButtonContainer: {
-    backgroundColor: '#6475a5',
-    marginBottom: 20,
-    borderRadius: 15,
-    width: 125,
-    height: 40,
 },
 listContainer: {
     flexDirection: 'row',

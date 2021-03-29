@@ -4,7 +4,7 @@ module.exports = router;
 
 // EVENT ROUTES
 
-// GET api/events/userId --> get ALL events, and for each event include user info if it's the logged in user & she is attending
+// GET api/events/userId --> get ALL events, and for each event include user info if it's the logged in user & she is attending the event
 router.get('/:userId', async (req, res, next) => {
   try {
     const events = await Event.findAll({
@@ -13,8 +13,9 @@ router.get('/:userId', async (req, res, next) => {
         where: {
           id: req.params.userId,
         },
-        required: false  // b/c value is false, it is a LEFT JOIN -> show all events no matter what,
-                              // and for each event only include logged-in user if attending
+        required: false  
+        // b/c value is false, it is a LEFT JOIN -> show ALL events no matter what, and for each event only include logged-in user if attending
+        // (vs Inner Join where an event displayed only if logged in user is attending)
       }
     }
     );
@@ -28,7 +29,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 });
 
-// ***Utilized .filter() on the events array returned from .getEvents() in the FE so don't need events attending/created routes***
+// ***Utilized .filter() on the events array returned from .getEvents() in the FE so DON'T need events attending/created routes***
 // so don't need to do 3 different axios calls (1 for all upcoming events, 1 for attending events, and 1 for created events)
 
     // GET api/events/attending --> get ALL events that you are attending

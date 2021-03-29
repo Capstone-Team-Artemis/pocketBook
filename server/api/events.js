@@ -1,6 +1,19 @@
 const router = require('express').Router();
 const { Event, User, UserEvent } = require('../db/models');
 module.exports = router;
+
+//get single event info 
+// GET api/event/eventId --> get ALL events  of the event
+router.get('/:eventId', async (req, res, next) => {
+  try {
+    const event = await Event.findByPk(req.params.eventId);
+    res.json(event);
+
+  } catch (err) {
+    next(err);
+  }
+});
+
 //Events Routes
 // GET api/events --> get ALL events  of the event
 router.get('/', async (req, res, next) => {
@@ -16,7 +29,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// GET api/events/attending --> get ALL events that you are attending
+// GET api/events/userId/attending --> get ALL events that you are attending
 router.get('/:userId/attending', async (req, res, next) => {
   try {
     const userId = req.params.userId;

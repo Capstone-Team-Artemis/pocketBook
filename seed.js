@@ -131,6 +131,10 @@ async function seed() {
       userId: 2,
       eventId: 2,
     },
+    {
+      userId: 1,
+      eventId: 3
+    }
   ];
 
   const [eventcase] = await UserEvent.bulkCreate(userEvents, {

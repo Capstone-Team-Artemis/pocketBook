@@ -1,3 +1,4 @@
+// SINGLE event component
 import {
     Text,
     StyleSheet,
@@ -20,9 +21,7 @@ export default class SingleEvent extends React.Component {
             // make call to update DB by unregistering user
             await axios.delete(`http://localhost:3000/api/events/${this.props.user}/unregister/${this.props.event.id}`)
             // if successful, need to update store so can trigger re-render -> do this by calling getEvents fx
-            console.log('getevents: ',this.props.getEvents)
             const res = await this.props.getEvents();
-            console.log('RES: ', res)
         } catch(error) {
             console.log(error);
         }
@@ -42,7 +41,7 @@ export default class SingleEvent extends React.Component {
 
     render() {
         // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
-        const {event, navigate, status} = this.props;
+        const {event, navigate, status, user} = this.props;
         
         return (       
         <View style={styles.listContainer} key={event.id}>
@@ -59,12 +58,22 @@ export default class SingleEvent extends React.Component {
             <Text style={styles.description}>
             Description: {event.description}
             </Text>
-            {/* If dropdown status is "Upcoming" -Or- "Attending", button should be 'Un/Register' */}
-            {/* If dropdown status is "Created", button should be 'Edit/Delete' */}
+            {/* if logged in user is the HOST, button can only say 'Edit/Delete'
+                else, button can also say 'Un/Register' */}
+
             <View style={styles.registerButtonContainer}>
-            {/* Dropdown menu is on either 'Upcoming' or 'Attending' */}
-            {status === 'Upcoming' || status === 'Attending' ?
-                <Button
+                {user === event.hostId ? 
+                    <Button
+                    // 'Edit/Delete' button takes you to EditEvent page
+                        title={'Edit/Delete'}
+                        onPress={() => {
+                            navigate.navigate('CreateEvent');  // needs to be switched to EditEvent once that page is created
+                        }}
+                        color="white"
+                        accessibilityLabel="Status"
+                    />
+                : 
+                    <Button
                     // check the event obj to see if logged-in user exists in the associated user array
                         // if user exists, that means user is attending and button should give 'Unregister' option
                         // else, the user isn't registered and should have the button option to 'Register' for the event
@@ -74,18 +83,9 @@ export default class SingleEvent extends React.Component {
                     }}
                     color="white"
                     accessibilityLabel="Status"
-                /> :
-                <Button
-                    // 'Edit/Delete' button takes you to EditEvent page
-                    title={'Edit/Delete'}
-                    onPress={() => {
-                        navigate.navigate('CreateEvent');  // needs to be switched to EditEvent once that page is created
-                    }}
-                    color="white"
-                    accessibilityLabel="Status"
-                />
-                }
-            </View>
+                    /> 
+                }  
+            </View> 
         </View>
         </View>
         );

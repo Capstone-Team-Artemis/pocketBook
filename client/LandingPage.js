@@ -76,6 +76,7 @@ export default function LandingPage({ navigation }) {
 
     setModalVisible(true);
   }
+  // console.log('navigation --->', navigation.state.params.user.firstName);
   return (
     <Formik>
       <View style={styles.container}>
@@ -104,6 +105,9 @@ export default function LandingPage({ navigation }) {
         {/* featureBook will only show up once the component mounts */}
         {featureBook.id && (
           <View>
+            {/* <Text style={{ textAlign: 'center', fontSize: 30 }}>
+              Hi, {navigation.state.params.user.firstName}!
+            </Text> */}
             <Text style={styles.published}>Newly Published</Text>
             <TouchableOpacity
               onPress={() => {

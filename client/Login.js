@@ -10,15 +10,15 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-// import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
-// import { auth } from './store/user';
 import axios from 'axios';
 
+import { AuthContext } from './context';
+
 const Login = (props) => {
-  console.log('NAVIGATIONS -->', props);
   const [secureTextEntry, setSecure] = React.useState(true);
+
+  const { logIn } = React.useContext(AuthContext);
 
   const updateSecureTextEntry = () => {
     setSecure(!secureTextEntry);
@@ -127,7 +127,9 @@ const Login = (props) => {
         <Text>Don't have an account?</Text>
         <Text
           style={[{ color: 'blue' }, { marginLeft: 3 }]}
-          onPress={() => props.navigation.navigate('SignUp')}
+          onPress={() =>
+            props.navigation.navigate('SignUp', { loggedIn: false })
+          }
         >
           Sign Up!
         </Text>

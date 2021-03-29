@@ -25,7 +25,7 @@ export class AllEvents extends React.Component {
   }
   
   componentDidMount() {
-    // get all events (regardless of upcoming/attending/created status) for a specific user
+    // get all events (regardless of attending/created status) for a specific user
     this.props.getEvents(this.state.userId);  // hard coded above as 1 => userId (Selina)
   }
 

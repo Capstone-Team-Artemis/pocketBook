@@ -1,3 +1,4 @@
+
 // SINGLE event component
 import {
     Text,
@@ -5,6 +6,7 @@ import {
     View,
     Button,
     Image,
+    TouchableOpacity,
   } from 'react-native'; 
 import React from 'react';
 import axios from 'axios';
@@ -43,7 +45,8 @@ export default class SingleEvent extends React.Component {
         // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
         const {event, navigate, status, user} = this.props;
         
-        return (       
+        return (     
+        <TouchableOpacity onPress={() => navigate.navigate('SingleEventPage', event)}>
         <View style={styles.listContainer} key={event.id}>
             {/* Adds book image for each event */}
             <Image
@@ -91,6 +94,7 @@ export default class SingleEvent extends React.Component {
                 </View> 
             </View>
         </View>
+        </TouchableOpacity> 
         );
     }
 }      

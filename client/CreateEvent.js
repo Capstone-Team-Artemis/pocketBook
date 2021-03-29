@@ -66,7 +66,7 @@ class CreateEvent extends Component {
           <TouchableOpacity
             style={styles.navbar}
             style={{ alignItems: 'flex-end', margin: 16 }}
-            onPress={this.props.navigation.openDrawer}
+            //onPress={this.props.navigation.openDrawer}
           >
             <Icon name="bars" size={24} color="#161924" />
           </TouchableOpacity>

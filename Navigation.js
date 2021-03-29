@@ -32,8 +32,9 @@ const Navigation = createDrawerNavigator(
     SingleBookView: {
       screen: SingleBookView,
       navigationOptions: () => ({
-        title: 'Single Book View',
-        header: null,
+        // title: 'Single Book View',
+        // header: null,
+        drawerLabel: () => null,
       }),
     },
   },

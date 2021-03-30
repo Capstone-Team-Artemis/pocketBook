@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Button,
+  Alert,
 } from 'react-native';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -43,12 +44,24 @@ class CreateEvent extends Component {
       })
     }
   }
-  handleSubmit() {
+ async handleSubmit() {
     //if event id exist then update the event otherwise create an event 
     let eventId = this.props.event.id
-    eventId? this.props.update(host, { ...this.state }, eventId) : this.props.create({ ...this.state });
-    this.props.navigation.navigate('AllEvents')
-  }
+    try {
+        eventId? await this.props.update(host, { ...this.state }, eventId) : await this.props.create({ ...this.state })
+        this.props.navigation.navigate('AllEvents')
+         
+      } catch (error) {
+        
+        Alert.alert("Error", "Please fill out all information") 
+      }
+
+    } 
+    //catch(error) {
+      
+    //}
+
+  
   handleDelete() {
     let eventId = this.props.event.id
     this.props.delete(host, eventId)

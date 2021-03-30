@@ -8,18 +8,30 @@ const Event = db.define('event', {
     eventTitle: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     date: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     time: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     description: {
         type: Sequelize.TEXT,
         allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     }
 })
 

@@ -28,7 +28,7 @@ export const getSingleEvent = (eventId) => async (dispatch) => {
       const singleEvent = await axios.get(`http://localhost:3000/api/events/${eventId}`)  
       dispatch(gotEvent(singleEvent.data))
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -38,7 +38,7 @@ export const postEvent = (newEventInfo) => async (dispatch) => {
         const newEvent = await axios.post(`http://localhost:3000/api/events/createEvent`, newEventInfo)
         dispatch(createdEvent(newEvent.data))
     } catch (error) {
-        console.log(error)
+        throw error
     }
 }
 
@@ -49,7 +49,7 @@ export const updateEvent = (userId, editedInfo, eventId) => async (dispatch) => 
         const newEvent = await axios.post(`http://localhost:3000/api/events/${userId}/updateEvent/${eventId}`, editedInfo)
         dispatch(updatedEvent(newEvent.data))
     } catch (error) {
-        console.log(error)
+        throw error
     }
 }
 
@@ -59,7 +59,7 @@ export const deleteEvent = (userId, eventId) => async (dispatch) => {
         const deletedEvent = await axios.delete(`http://localhost:3000/api/events/${userId}/delete/${eventId}`, editedInfo)
         console.log("deleted event thunk", deletedEvent)
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 

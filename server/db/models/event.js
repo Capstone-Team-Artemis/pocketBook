@@ -5,11 +5,15 @@ const Event = db.define('event', {
     eventTitle: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     date: {
         type: Sequelize.DATEONLY,
         allowNull: false,
         validate: {
+            notEmpty: true,
             isDate: true
         }
     },
@@ -20,10 +24,16 @@ const Event = db.define('event', {
     endTime: {
         type: Sequelize.TIME,
         allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     description: {
         type: Sequelize.TEXT,
         allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     hostId: {
         type:Sequelize.INTEGER,

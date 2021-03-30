@@ -30,8 +30,10 @@ export default function SingleBookView(route) {
     getStatus();
   }, [setStatus]);
 
+
   const bookPath = route.navigation.state.params.volumeInfo;
   // console.log("NAVIGATION?? -->", route.navigation);
+
 
   return (
     <View style={styles.container}>

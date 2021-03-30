@@ -10,6 +10,9 @@ import SingleBookView from './client/SingleBookView';
 import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
 
+import SingleEventPage from './client/SingleEventPage';
+
+
 // const Stack = createStackNavigator();
 
 const StackContainer = createStackNavigator(
@@ -36,6 +39,13 @@ const StackContainer = createStackNavigator(
       screen: CreateEvent,
       navigationOptions: {
         title: 'Create Event',
+      },
+    },
+
+    SingleEventPage: {
+      screen: SingleEventPage,
+      navigationOptions: {
+        title: 'Single Event Page',
       },
     },
   },

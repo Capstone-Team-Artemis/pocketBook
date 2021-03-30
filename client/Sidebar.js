@@ -7,7 +7,6 @@ import { AuthContext } from './context';
 
 export default Sidebar = (props) => {
   const { logOut } = React.useContext(AuthContext);
-  // console.log('propsssss---->', props);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -24,10 +23,8 @@ export default Sidebar = (props) => {
             }}
             style={styles.profile}
           />
-          <Text style={styles.name}>Test User</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.followers}>10 followers</Text>
-          </View>
+          <Text style={styles.name}>{props.userToken}</Text>
+          <View style={{ flexDirection: 'row' }}></View>
         </ImageBackground>
         <Drawer.Section style={styles.drawerSection}>
           <DrawerItem

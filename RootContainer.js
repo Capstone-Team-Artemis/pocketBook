@@ -23,6 +23,7 @@ const Drawer = createDrawerNavigator();
 const RootContainer = () => {
   const initialLoginState = {
     isLoading: true,
+    userId: 0,
     userToken: null,
   };
 
@@ -123,6 +124,8 @@ const RootContainer = () => {
     );
   }
 
+  console.log('USER TOKEN ---->', loginState.userToken);
+
   // If user is logged in (has a token attached), show DrawerNavigaton
   // Otherwise, show AuthNavigation
   return (
@@ -130,7 +133,9 @@ const RootContainer = () => {
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken !== null ? (
-            <Drawer.Navigator drawerContent={(props) => <Sidebar {...props} />}>
+            <Drawer.Navigator
+              drawerContent={(props) => <Sidebar {...props} {...loginState} />}
+            >
               <Drawer.Screen name="Home" component={StackContainer} />
               <Drawer.Screen name="LandingPage" component={LandingPage} />
               <Drawer.Screen name="SingleBookView" component={SingleBookView} />

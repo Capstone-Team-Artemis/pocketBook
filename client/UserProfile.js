@@ -53,6 +53,7 @@ const UserProfile = (props) => {
                 <Text style={styles.text}>My Bookshelf</Text>
                 </View> */}
         <View>
+          <Text>{props.id}</Text>
           <Text style={styles.text}>Currently Reading</Text>
           <View style={styles.bookContainer}>
             {mybooks.map((book) => (

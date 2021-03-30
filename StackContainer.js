@@ -9,7 +9,7 @@ import CreateEvent from './client/CreateEvent';
 
 const Stack = createStackNavigator();
 
-const StackContainer = ({ navigation }) => (
+const StackContainer = (props) => (
   <Stack.Navigator>
     <Stack.Screen
       name="LandingPage"

@@ -8,7 +8,7 @@ import {
     SafeAreaView,
     ScrollView,
     TouchableOpacity,
-    
+    Button
   } from 'react-native'; 
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -48,6 +48,13 @@ export default class SingleEventPage extends React.Component {
                         />
                     </View> 
                     <Text>*Live chat shows up below at the exact date and time of the event!</Text>
+                    <Button
+                        title={'Join Now'}
+                        style={styles.clickMe}
+                        onPress={() => {this.props.navigation.navigate('Chat')}}
+                        color= '#e9967a'
+                        accessibilityLabel="Join Now"
+                        /> 
             </ScrollView>
         </SafeAreaView>
         );
@@ -98,4 +105,12 @@ eventData: {
     padding: 10,
     width: 250,
 },
+clickMe: {
+    backgroundColor: '#ff00ff',
+    borderRadius: 15,
+    padding: 0.8,
+    width: 200,
+    height: 100,
+    marginLeft: 95
+    },
 });

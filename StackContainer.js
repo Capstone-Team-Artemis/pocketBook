@@ -11,6 +11,7 @@ import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
 import SingleEventPage from './client/SingleEventPage';
 import UserProfile from './client/UserProfile';
+import Chat from './client/Chat'
 
 // const Stack = createStackNavigator();
 
@@ -50,6 +51,12 @@ const StackContainer = createStackNavigator(
       screen: UserProfile,
       navigationOptions: {
         title: 'UserProfile',
+      },
+    },
+    Chat: {
+      screen: Chat,
+      navigationOptions: {
+        title: 'Chat',
       },
     },
   },

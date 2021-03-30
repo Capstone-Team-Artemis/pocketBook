@@ -6,6 +6,7 @@ import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
 import SingleEventPage from './client/SingleEventPage';
 import Home from './client/Home';
+import Chat from './client/Chat'
 
 
 const Navigation = createDrawerNavigator(
@@ -50,6 +51,13 @@ const Navigation = createDrawerNavigator(
       screen: SingleEventPage,
       navigationOptions: () => ({
         title: 'Single Event Page',
+        header: null,
+      }),
+    },
+    Chat: {
+      screen: Chat,
+      navigationOptions: () => ({
+        title: 'Chat',
         header: null,
       }),
     },

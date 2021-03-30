@@ -31,13 +31,13 @@ class CreateEvent extends Component {
   }
   handleSubmit() {
     let newEventInfo = this.state;
-    console.log('newEventInfo', newEventInfo);
+    // console.log('newEventInfo', newEventInfo);
     this.props.create({ ...this.state });
     this.props.navigation.navigate("AllEvents")
   }
 
   render() {
-    console.log('props in createEvent', this.props);
+    // console.log('props in createEvent', this.props);
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>

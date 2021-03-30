@@ -1,4 +1,3 @@
-
 // SINGLE event component
 import {
     Text,

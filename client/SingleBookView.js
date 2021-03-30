@@ -15,40 +15,40 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function SingleBookView(route) {
+export default function SingleBookView(props) {
   const [status, setStatus] = useState('Completed');
   useEffect(() => {
     const getStatus = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/api/books/${route.params.id}`
+          `http://localhost:3000/api/books/${props.route.params.id}`
         );
         setStatus(data);
       } catch (err) {}
     };
     getStatus();
   }, [setStatus]);
-  const bookPath = route.navigation.state.params;
+  const bookPath = props.route.params.volumeInfo;
   return (
     <View style={styles.container}>
       <SafeAreaView>
         <ScrollView>
           <TouchableOpacity
             style={{ alignItems: 'flex-end', margin: 16 }}
-            onPress={route.navigation.openDrawer}
+            onPress={props.navigation.openDrawer}
           >
             <Icon name="bars" size={24} color="#161924" />
           </TouchableOpacity>
           <Image
             style={{ width: 200, height: 300 }}
-            alt={bookPath.volumeInfo.title}
+            alt={bookPath.title}
             source={{
-              uri: bookPath.volumeInfo.imageLinks.thumbnail,
+              uri: bookPath.imageLinks.thumbnail,
             }}
           />
-          <Text style={styles.textTitle}>{bookPath.volumeInfo.title}</Text>
-          <Text>{bookPath.volumeInfo.authors}</Text>
-          <Text>{bookPath.volumeInfo.description}</Text>
+          <Text style={styles.textTitle}>{bookPath.title}</Text>
+          <Text>{bookPath.authors}</Text>
+          <Text>{bookPath.description}</Text>
           <Text>Book Status</Text>
           <DropDownPicker
             containerStyle={{ height: 40 }}

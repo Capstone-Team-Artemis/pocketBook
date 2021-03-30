@@ -23,7 +23,7 @@ const Drawer = createDrawerNavigator();
 const RootContainer = () => {
   const initialLoginState = {
     isLoading: true,
-    userId: 0,
+    userId: null,
     userToken: null,
   };
 
@@ -33,12 +33,14 @@ const RootContainer = () => {
       case 'GET_TOKEN':
         return {
           ...prevState,
+          userId: action.id,
           userToken: action.token,
           isLoading: false,
         };
       case 'LOGIN':
         return {
           ...prevState,
+          userId: action.id,
           userToken: action.token,
           isLoading: false,
         };
@@ -51,6 +53,7 @@ const RootContainer = () => {
       case 'SIGNUP':
         return {
           ...prevState,
+          userId: action.id,
           userToken: action.token,
           isLoading: false,
         };
@@ -72,11 +75,13 @@ const RootContainer = () => {
         try {
           // Set userToken to inputted user's username and store it in AsyncStorage
           userToken = res.user.username;
+          userId = res.user.id.toString();
           await AsyncStorage.setItem('userToken', userToken);
+          await AsyncStorage.setItem('userId', userId);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'LOGIN', token: userToken });
+        dispatch({ type: 'LOGIN', id: userId, token: userToken });
       },
       logOut: async () => {
         try {
@@ -89,11 +94,13 @@ const RootContainer = () => {
       signUp: async (res) => {
         try {
           userToken = res.user.username;
+          userId = res.user.id.toString();
           await AsyncStorage.setItem('userToken', userToken);
+          await AsyncStorage.setItem('userId', userId);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'SIGNUP', token: userToken });
+        dispatch({ type: 'SIGNUP', id: userId, token: userToken });
       },
     }),
     []
@@ -104,14 +111,15 @@ const RootContainer = () => {
       // Set userToken to null
       let userToken = null;
       try {
-        // Fetch userToken from AsyncStorage
+        // Fetch userId and userToken from AsyncStorage
+        userId = await AsyncStorage.getItem('userId');
         userToken = await AsyncStorage.getItem('userToken');
       } catch (err) {
         console.log(err);
       }
       // If token is found, dispatch for token
       // Otherwise, userToken stays null
-      dispatch({ type: 'GET_TOKEN', token: userToken });
+      dispatch({ type: 'GET_TOKEN', id: userId, token: userToken });
     }, 1000);
   }, []);
 
@@ -123,8 +131,6 @@ const RootContainer = () => {
       </View>
     );
   }
-
-  console.log('USER TOKEN ---->', loginState.userToken);
 
   // If user is logged in (has a token attached), show DrawerNavigaton
   // Otherwise, show AuthNavigation
@@ -139,7 +145,11 @@ const RootContainer = () => {
               <Drawer.Screen name="Home" component={StackContainer} />
               <Drawer.Screen name="LandingPage" component={LandingPage} />
               <Drawer.Screen name="SingleBookView" component={SingleBookView} />
-              <Drawer.Screen name="UserProfile" component={UserProfile} />
+              <Drawer.Screen
+                name="UserProfile"
+                component={UserProfile}
+                initialParams={{ userId: loginState.userId }}
+              />
               <Drawer.Screen name="AllEvents" component={AllEvents} />
               <Drawer.Screen name="CreateEvent" component={CreateEvent} />
             </Drawer.Navigator>

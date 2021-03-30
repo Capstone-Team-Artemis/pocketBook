@@ -204,19 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// const mapStateToProps = (state) => ({
-//   method: 'Login',
-//   user: state.user,
-// });
-
-// const mapDispatchToProps = (dispatch) =>
-//   bindActionCreators(
-//     {
-//       auth,
-//     },
-//     dispatch
-//   );
-
 export default Login;
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -7,7 +7,8 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -64,18 +65,26 @@ const UserProfile = (props) => {
                 </View> */}
         <View>
           <Text style={styles.text}>Currently Reading</Text>
-          <View style={styles.bookContainer}>
-            {currentBooks.length>0 ? currentBooks.map(book => <View style={styles.bookData} key={book.id}>
-              <Text>{book.book.image}</Text>
+          <ScrollView horizontal={true}>
+          <View style={styles.bookList}>
+            {currentBooks.length>0 ? currentBooks.map((book, idx)=> <View key={idx} style={styles.bookData} >
+              <Image 
+                alt={book.book.title}
+                style={{ width: 100, height: 150 }}
+                source={{
+                  uri: book.book.image,
+                }}
+              />
               <Text>{book.book.title}</Text>
             </View>) : <Text>No books</Text>}
           </View>
+          </ScrollView>
         </View>
 
         <View>
           <Text style={styles.text}>To Read</Text>
           <View style={styles.bookContainer}>
-            {futureRead.length>0 ? futureRead.map(book => <View style={styles.bookData} key={book.id}>
+            {futureRead.length>0 ? futureRead.map((book, idx)=> <View key={idx} style={styles.bookData}>
               <Text>{book.book.image}</Text>
               <Text>{book.book.title}</Text>
             </View>) : <Text>No books</Text>}
@@ -85,7 +94,7 @@ const UserProfile = (props) => {
         <View>
           <Text style={styles.text}>Completed</Text>
           <View style={styles.bookContainer}>
-            {completed.length>0 ? completed.map(book => <View style={styles.bookData} key={book.id}>
+            {completed.length>0 ? completed.map((book, idx)=> <View key={idx} style={styles.bookData}>
               <Text>{book.book.image}</Text>
               <Text>{book.book.title}</Text>
             </View>) : <Text>No books</Text>}
@@ -118,19 +127,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 5,
   },
+  bookList: {
+    flexDirection: 'row'
+  },
   text: {
     fontSize: 20,
   },
-  bookContainer: {},
   bookData: {},
   scrollView: {
     backgroundColor: '#f0f8ff',
     marginHorizontal: 1,
     width: WIDTH - 20,
   },
-  // bookList: {
-  //     flexDirection: 'row'
-  // }
+
 });
 
 const mapState = (state) => ({

@@ -20,7 +20,7 @@ const UserProfile = (props) => {
   console.log("props in userprofile component", props)
   //hardcode it to 1 since no user loged in
 
-  let id = props.userId || 1;
+  let id = props.userId || 4;
   let mybooks = props.books || [];
   //const [user, setUser] = useState(id);
   const [books, setbooks] = useState(mybooks);
@@ -38,10 +38,12 @@ const UserProfile = (props) => {
   }, [books]);
 
   //filter the saved books by status 
-  let currentBooks = mybooks.filter((book) => (book.status==='Currently Reading'))
+  let currentBooks = mybooks.filter((book) => 
+  (book.status==='Currently Reading'))
   let futureRead = mybooks.filter((book) => (book.status==='To Read'))
   let completed = mybooks.filter((book) => (book.status==='Completed'))
 
+  currentBooks.map(book=> console.log("***BOOK", book))
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,8 +69,28 @@ const UserProfile = (props) => {
           <Text style={styles.text}>Currently Reading</Text>
           <ScrollView horizontal={true}>
           <View style={styles.bookList}>
-            {currentBooks.length>0 ? currentBooks.map((book, idx)=> <View key={idx} style={styles.bookData} >
+            {currentBooks.length>0 ? currentBooks.map((book, idx)=> <TouchableOpacity onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
+              <View key={idx} style={styles.bookData} >
               <Image 
+                alt={book.book.title}
+                style={{ width: 100, height: 150 }}
+                source={{
+                  uri: book.book.image,
+                }}
+              /> 
+              <Text>{book.book.title}</Text>
+            </View>
+            </TouchableOpacity>)  : <Text>No books</Text>}
+          </View>
+          </ScrollView>
+        </View>
+
+        <View>
+          <Text style={styles.text}>To Read</Text>
+          <ScrollView horizontal={true}>
+          <View style={styles.bookList}>
+            {futureRead.length>0 ? futureRead.map((book, idx)=> <View key={idx} style={styles.bookData}>
+            <Image 
                 alt={book.book.title}
                 style={{ width: 100, height: 150 }}
                 source={{
@@ -77,28 +99,26 @@ const UserProfile = (props) => {
               />
               <Text>{book.book.title}</Text>
             </View>) : <Text>No books</Text>}
-          </View>
+            </View>
           </ScrollView>
         </View>
 
         <View>
-          <Text style={styles.text}>To Read</Text>
-          <View style={styles.bookContainer}>
-            {futureRead.length>0 ? futureRead.map((book, idx)=> <View key={idx} style={styles.bookData}>
-              <Text>{book.book.image}</Text>
-              <Text>{book.book.title}</Text>
-            </View>) : <Text>No books</Text>}
-          </View>
-        </View>
-
-        <View>
           <Text style={styles.text}>Completed</Text>
-          <View style={styles.bookContainer}>
+          <ScrollView horizontal={true}>
+          <View style={styles.bookList}>
             {completed.length>0 ? completed.map((book, idx)=> <View key={idx} style={styles.bookData}>
-              <Text>{book.book.image}</Text>
+            <Image 
+                alt={book.book.title}
+                style={{ width: 100, height: 150 }}
+                source={{
+                  uri: book.book.image,
+                }}
+              />
               <Text>{book.book.title}</Text>
             </View>) : <Text>No books</Text>}
-          </View>
+            </View>
+          </ScrollView>
         </View>
 
       </ScrollView>

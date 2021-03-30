@@ -5,14 +5,14 @@ import {
     Image,
     SafeAreaView,
     ScrollView,
+    TouchableOpacity,
+    
   } from 'react-native'; 
 import React from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 export default class SingleEventPage extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    // }
 
     render() {
         // console.log('props: ', this.props.navigation.state.params)
@@ -23,13 +23,20 @@ export default class SingleEventPage extends React.Component {
         return (     
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
+                              {/* Adds Navbar */}
+                    <TouchableOpacity
+                        style={{ alignItems: 'flex-end', margin: 16 }}
+                        onPress={this.props.navigation.openDrawer}
+                        >
+                        <Icon name="bars" size={24} color="#161924" />
+                    </TouchableOpacity>
                     <View style={styles.listContainer}>
                         {/* Adds book info for each event */}
                         <View style={styles.eventData}>
-                            <Text style={styles.date}>{eventTitle}</Text> 
+                            <Text style={styles.eventTitle}>{eventTitle}</Text> 
                             <Text style={styles.date}>Date: {date}</Text>
-                            <Text style={styles.time}>Start Time: {startTime}</Text>
-                            <Text style={styles.time}>End Time: {endTime}</Text>
+                            <Text style={styles.startTime}>Start Time: {startTime}</Text>
+                            <Text style={styles.endTime}>End Time: {endTime}</Text>
                             <Text style={styles.description}>{description}</Text>
                         </View> 
                         {/* Adds book image for each event */}
@@ -61,7 +68,7 @@ image: {
     marginLeft: 10,
 },
 eventTitle: {
-    fontSize: 20,
+    fontSize: 30,
     marginBottom: 2,
     fontWeight: 'bold',
 },
@@ -69,7 +76,11 @@ date: {
     fontSize: 15,
     marginBottom: 5,
 },
-time: {
+startTime: {
+    fontSize: 15,
+    marginBottom: 5,
+},
+endTime: {
     fontSize: 15,
     marginBottom: 5,
 },
@@ -79,9 +90,9 @@ description: {
 },
 listContainer: {
     flexDirection: 'row',
-    borderStyle: 'solid',
-    borderColor: 'black',
-    borderWidth: 1,
+    // borderStyle: 'solid',
+    // borderColor: 'black',
+    // borderWidth: 1,
     marginBottom: 15,
     marginTop: 15
 },
@@ -89,15 +100,4 @@ eventData: {
     padding: 10,
     width: 250,
 },
-noEvents: {
-    fontSize: 20,
-},
-registerButtonContainer: {
-    backgroundColor: '#6475a5',
-    borderRadius: 15,
-    padding: 0.8,
-    width: 130,
-    height: 38,
-    marginLeft: 95
-    }
-  });
+});

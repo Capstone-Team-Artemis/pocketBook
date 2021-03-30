@@ -24,7 +24,7 @@ const Login = (props) => {
     setSecure(!secureTextEntry);
   };
 
-  // If inputted Login info is correct, navigate user over to DrawerNavigator
+  // If inputted Login info is correct, navigate user info to RootNavigation's logIn function
   const handlePress = (user) => {
     logIn(user);
   };
@@ -47,7 +47,7 @@ const Login = (props) => {
                 email: values.email,
                 password: values.password,
               });
-              // handlePress --> passes user info to function that will navigate to DrawerNavigator
+              // handlePress = passes user info to function that will pass to RootNavigation's logIn function
               handlePress({ user: res.data });
               // If user info is invalid:
             } catch {

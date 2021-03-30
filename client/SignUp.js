@@ -14,7 +14,11 @@ import * as Animatable from 'react-native-animatable';
 import { Formik } from 'formik';
 import axios from 'axios';
 
+import { AuthContext } from './context';
+
 const SignUp = (props) => {
+  const { signUp } = React.useContext(AuthContext);
+
   const [validate, setValidate] = React.useState({
     isValidEmail: true,
     isValidUser: true,
@@ -73,6 +77,11 @@ const SignUp = (props) => {
     });
   };
 
+  // If inputted Signup info is valid, navigate user over to DrawerNavigaton
+  const handlePress = (user) => {
+    signUp(user);
+  };
+
   return (
     <ScrollView>
       <Formik
@@ -97,7 +106,8 @@ const SignUp = (props) => {
                 firstName: values.firstName,
                 lastName: values.lastName,
               });
-              props.navigation.navigate('LandingPage', { user: res.data });
+              // handlePress = passes user info to function that will navigate to DrawerNavigaton
+              handlePress({ user: res.data });
               // If there was a problem signing up, display an alert error
             } catch (err) {
               alert(err);

@@ -26,6 +26,7 @@ const RootContainer = () => {
     userToken: null,
   };
 
+  // Reducer for different case scenarios
   const loginReducer = (prevState, action) => {
     switch (action.type) {
       case 'GET_TOKEN':
@@ -68,6 +69,7 @@ const RootContainer = () => {
     () => ({
       logIn: async (res) => {
         try {
+          // Set userToken to inputted user's username and store it in AsyncStorage
           userToken = res.user.username;
           await AsyncStorage.setItem('userToken', userToken);
         } catch (err) {
@@ -112,7 +114,7 @@ const RootContainer = () => {
     }, 1000);
   }, []);
 
-  // Spinning icon during which user is determined to be logged in or not
+  // Spinning icon state, during which user is determined to be logged in or not
   if (loginState.isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -121,7 +123,7 @@ const RootContainer = () => {
     );
   }
 
-  // When loading, if user is logined (has a token attached), show DrawerNavigaton
+  // If user is logged in (has a token attached), show DrawerNavigaton
   // Otherwise, show AuthNavigation
   return (
     <Provider store={store}>

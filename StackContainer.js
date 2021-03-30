@@ -1,46 +1,52 @@
 import * as React from 'react';
-// Importing React libraries to help with navigating between screens
 // import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from 'react-navigation-stack';
 
-// import Login from "./client/Login";
-// import SignUp from "./client/SignUp";
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
 import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
 
-// const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 
-const StackContainer = createStackNavigator(
-  {
-    LandingPage: {
-      screen: LandingPage,
-      navigationOptions: {
-        title: 'Home',
-      },
-    },
-    SingleBookView: {
-      screen: SingleBookView,
-      navigationOptions: {
-        title: 'Single Book View',
-      },
-    },
-    AllEvents: {
-      screen: AllEvents,
-      navigationOptions: {
-        title: 'Events',
-      },
-    },
-    CreateEvent: {
-      screen: CreateEvent,
-      navigationOptions: {
-        title: 'Create Event',
-      },
-    },
-  },
-  { headerMode: 'none' }
+const StackContainer = ({ navigation }) => (
+  <Stack.Navigator>
+    <Stack.Screen name="LandingPage" component={LandingPage} />
+    <Stack.Screen name="SingleBookView" component={SingleBookView} />
+    <Stack.Screen name="AllEvents" component={AllEvents} />
+    <Stack.Screen name="CreateEvent" component={CreateEvent} />
+  </Stack.Navigator>
 );
+
+// const StackContainer = createStackNavigator(
+//   {
+//     LandingPage: {
+//       screen: LandingPage,
+//       navigationOptions: {
+//         title: 'Home',
+//       },
+//     },
+//     SingleBookView: {
+//       screen: SingleBookView,
+//       navigationOptions: {
+//         title: 'Single Book View',
+//       },
+//     },
+//     AllEvents: {
+//       screen: AllEvents,
+//       navigationOptions: {
+//         title: 'Events',
+//       },
+//     },
+//     CreateEvent: {
+//       screen: CreateEvent,
+//       navigationOptions: {
+//         title: 'Create Event',
+//       },
+//     },
+//   },
+//   { headerMode: 'none' }
+// );
 
 export default StackContainer;
 

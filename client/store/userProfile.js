@@ -21,7 +21,7 @@ const gotBooks = (books) => ({
 export const getUserProfile = (userId) => async (dispatch) => {
   try {
     const user = await axios.get(`http://localhost:3000/api/users/${userId}`);
-    console.log('user profile thunk', user.data);
+    // console.log('user profile thunk', user.data);
     dispatch(gotUserProfile(user.data));
   } catch (error) {
     console.error(error);

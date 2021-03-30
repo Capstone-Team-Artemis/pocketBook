@@ -1,14 +1,13 @@
-const router = require('express').Router();
-const { Event, User, UserEvent } = require('../db/models');
+const router = require("express").Router();
+const { Event, User, UserEvent } = require("../db/models");
 module.exports = router;
 
-//get single event info 
+//get single event info
 // GET api/event/eventId --> get ALL events  of the event
-router.get('/:eventId', async (req, res, next) => {
+router.get("/:eventId", async (req, res, next) => {
   try {
     const event = await Event.findByPk(req.params.eventId);
     res.json(event);
-
   } catch (err) {
     next(err);
   }
@@ -17,27 +16,31 @@ router.get('/:eventId', async (req, res, next) => {
 // EVENT ROUTES
 
 // GET api/events/userId --> get ALL events, and for each event include user info if it's the logged in user & she is attending the event
-router.get('/:userId', async (req, res, next) => {
+router.get("/:userId", async (req, res, next) => {
   try {
     const events = await Event.findAll({
       include: {
-        model: User,  
+        model: User,
         where: {
           id: req.params.userId,
         },
-        required: false  
+        required: false,
         // b/c value is false, it is a LEFT JOIN -> show ALL events no matter what, and for each event only include logged-in user if attending
         // (vs Inner Join where an event displayed only if logged in user is attending)
-      }
-    }
-    );
+      },
+    });
     if (events.length >= 1) {
       res.json(events);
     } else {
-      res.send('There are currently no upcoming events!');
+      res.send("There are currently no upcoming events!");
+    }
+  } catch (err) {
+    next(err);
+  }
+});
 
 // GET api/events/userId/attending --> get ALL events that you are attending
-router.get('/:userId/attending', async (req, res, next) => {
+router.get("/:userId/attending", async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const events = await Event.findAll({
@@ -52,7 +55,7 @@ router.get('/:userId/attending', async (req, res, next) => {
       console.log(events);
       res.json(events);
     } else {
-      res.send('Currently not attending any events!');
+      res.send("Currently not attending any events!");
     }
   } catch (err) {
     next(err);
@@ -60,7 +63,7 @@ router.get('/:userId/attending', async (req, res, next) => {
 });
 
 // GET api/events/created --> get ALL events that you CREATED (you are the HOST)
-router.get('/:userId/created', async (req, res, next) => {
+router.get("/:userId/created", async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const events = await Event.findAll({
@@ -72,7 +75,7 @@ router.get('/:userId/created', async (req, res, next) => {
       console.log(events);
       res.json(events);
     } else {
-      res.send('Currently have not created any events!');
+      res.send("Currently have not created any events!");
     }
   } catch (err) {
     next(err);
@@ -82,7 +85,7 @@ router.get('/:userId/created', async (req, res, next) => {
 // ***Utilized .filter() on the events array returned from .getEvents() in the FE so DON'T need events attending/created routes***
 // so don't need to do 3 different axios calls (1 for all upcoming events, 1 for attending events, and 1 for created events)
 
-    // GET api/events/attending --> get ALL events that you are attending
+// GET api/events/attending --> get ALL events that you are attending
 // router.get('/:userId/attending', async (req, res, next) => {
 //   try {
 //     const userId = req.params.userId;
@@ -125,9 +128,8 @@ router.get('/:userId/created', async (req, res, next) => {
 //   }
 // });
 
-
 // DELETE api/events/delete/eventId --> delete SINGLE event (if you are the host) based on the event id
-router.delete('/:userId/delete/:eventId', async (req, res, next) => {
+router.delete("/:userId/delete/:eventId", async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const eventId = req.params.eventId;
@@ -139,7 +141,7 @@ router.delete('/:userId/delete/:eventId', async (req, res, next) => {
     if (result) {
       res.sendStatus(200);
     } else {
-      res.send('You are not authorized to delete this event!');
+      res.send("You are not authorized to delete this event!");
     }
   } catch (err) {
     next(err);
@@ -147,7 +149,7 @@ router.delete('/:userId/delete/:eventId', async (req, res, next) => {
 });
 
 // DELETE api/events/unregister/eventId --> UNREGISTER from single event based on the event id and user id
-router.delete('/:userId/unregister/:eventId', async (req, res, next) => {
+router.delete("/:userId/unregister/:eventId", async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const eventId = req.params.eventId;
@@ -165,13 +167,14 @@ router.delete('/:userId/unregister/:eventId', async (req, res, next) => {
 });
 
 // POST api/events/register/eventId --> REGISTER for single event based on the event id and user id
-router.post('/:userId/register/:eventId', async (req, res, next) => {
+router.post("/:userId/register/:eventId", async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const eventId = req.params.eventId;
     // only able to register your own attendance to an event
     const result = await UserEvent.create({
-      userId: userId, eventId: eventId 
+      userId: userId,
+      eventId: eventId,
     });
     if (result) {
       res.sendStatus(200);
@@ -183,10 +186,15 @@ router.post('/:userId/register/:eventId', async (req, res, next) => {
 
 //To create event
 //POST api/events/createEvent
-router.post('/createEvent', async (req, res, next) => {
+router.post("/createEvent", async (req, res, next) => {
   try {
-    const newEvent = await Event.create(req.body);
-    console.log('newEvent', newEvent);
+    const newEvent = await Event.create({
+      ...req.body,
+      //when login is completed it should be
+      //hostId: req.user.id
+      hostId: 1,
+    });
+    console.log("newEvent", newEvent);
     res.status(201).send(newEvent);
   } catch (error) {
     next(error);
@@ -195,7 +203,7 @@ router.post('/createEvent', async (req, res, next) => {
 
 //To edit event
 //PUT api/events/:userId/updateEvent/:eventId
-router.put('/:userId/updateEvent/:eventId', async (req, res, next) => {
+router.put("/:userId/updateEvent/:eventId", async (req, res, next) => {
   try {
     const eventId = req.params.eventId;
     const event = await Event.findByPk(eventId);

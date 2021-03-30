@@ -23,7 +23,6 @@ const Drawer = createDrawerNavigator();
 const RootContainer = () => {
   const initialLoginState = {
     isLoading: true,
-    userId: null,
     userToken: null,
   };
 
@@ -38,30 +37,25 @@ const RootContainer = () => {
       case 'LOGIN':
         return {
           ...prevState,
-          userId: action.id,
           userToken: action.token,
           isLoading: false,
         };
       case 'LOGOUT':
         return {
           ...prevState,
-          userId: null,
           userToken: null,
           isLoading: false,
         };
       case 'SIGNUP':
         return {
           ...prevState,
-          userId: action.id,
           userToken: action.token,
           isLoading: false,
         };
     }
   };
 
-  //   const [isLoading, setIsLoading] = React.useState(true);
-  //   const [userToken, setUserToken] = React.useState(null);
-
+  // loginState = state object that consists of initialState Object
   const [loginState, dispatch] = React.useReducer(
     loginReducer,
     initialLoginState
@@ -73,16 +67,13 @@ const RootContainer = () => {
   const authContext = React.useMemo(
     () => ({
       logIn: async (res) => {
-        console.log('USER --->', res.user);
-        console.log('USER ID --->', res.user.id);
         try {
           userToken = res.user.username;
-          userId = res.user.id.toString();
           await AsyncStorage.setItem('userToken', userToken);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'LOGIN', id: userId, token: userToken });
+        dispatch({ type: 'LOGIN', token: userToken });
       },
       logOut: async () => {
         try {
@@ -95,12 +86,11 @@ const RootContainer = () => {
       signUp: async (res) => {
         try {
           userToken = res.user.username;
-          userId = res.user.id.toString();
           await AsyncStorage.setItem('userToken', userToken);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'SIGNUP', id: userId, token: userToken });
+        dispatch({ type: 'SIGNUP', token: userToken });
       },
     }),
     []
@@ -108,9 +98,8 @@ const RootContainer = () => {
 
   useEffect(() => {
     setTimeout(async () => {
-      let userToken;
       // Set userToken to null
-      userToken = null;
+      let userToken = null;
       try {
         // Fetch userToken from AsyncStorage
         userToken = await AsyncStorage.getItem('userToken');
@@ -118,10 +107,12 @@ const RootContainer = () => {
         console.log(err);
       }
       // If token is found, dispatch for token
+      // Otherwise, userToken stays null
       dispatch({ type: 'GET_TOKEN', token: userToken });
     }, 1000);
   }, []);
 
+  // Spinning icon during which user is determined to be logged in or not
   if (loginState.isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -130,15 +121,14 @@ const RootContainer = () => {
     );
   }
 
+  // When loading, if user is logined (has a token attached), show DrawerNavigaton
+  // Otherwise, show AuthNavigation
   return (
     <Provider store={store}>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken !== null ? (
-            <Drawer.Navigator
-              // initialRouteName="LandingPage"
-              drawerContent={(props) => <Sidebar {...props} />}
-            >
+            <Drawer.Navigator drawerContent={(props) => <Sidebar {...props} />}>
               <Drawer.Screen name="Home" component={StackContainer} />
               <Drawer.Screen name="LandingPage" component={LandingPage} />
               <Drawer.Screen name="SingleBookView" component={SingleBookView} />
@@ -155,32 +145,4 @@ const RootContainer = () => {
   );
 };
 
-// const mapDispatch = (dispatch) => {
-//   return {
-//     getToken: (token) => dispatch(getToken(token)),
-//     signIn: (id, token) => dispatch(signIn(id, token)),
-//     signOut: () => dispatch(signOut()),
-//     register: (id, token) => dispatch(register(id, token)),
-//   };
-// };
-
 export default RootContainer;
-
-// import { createSwitchNavigator, createAppContainer } from 'react-navigation';
-// import AuthNavigation from './AuthNavigation';
-// import Navigation from './AppNavigation';
-// import StackContainer from './StackContainer';
-
-// const SwitchNavigator = createSwitchNavigator(
-//   {
-//     Auth: AuthNavigation,
-//     App: Navigation,
-//   },
-//   {
-//     initialRouteName: 'Auth',
-//   }
-// );
-
-// const AppContainer = createAppContainer(SwitchNavigator);
-
-// export default AppContainer;

@@ -24,55 +24,55 @@ const App = () => {
   const [userToken, setUserToken] = React.useState(null);
 
   // We will be passing authContext throughout our app
-  // const authContext = React.useMemo(() => ({
-  //   logIn: () => {
-  //     setUserToken('hi');
-  //     setIsLoading(false);
-  //   },
-  //   logOut: () => {
-  //     setUserToken(null);
-  //     setIsLoading(false);
-  //   },
-  //   signUp: () => {
-  //     setUserToken('hi');
-  //     setIsLoading(false);
-  //   },
-  // }));
+  const authContext = React.useMemo(() => ({
+    logIn: () => {
+      setUserToken('hi');
+      setIsLoading(false);
+    },
+    logOut: () => {
+      setUserToken(null);
+      setIsLoading(false);
+    },
+    signUp: () => {
+      setUserToken('hi');
+      setIsLoading(false);
+    },
+  }));
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 1000);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
-  // if (isLoading) {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  //       <ActivityIndicator size="large" />
-  //     </View>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   return (
     <Provider store={store}>
-      {/* <AuthContext.Provider value={authContext}> */}
-      <NavigationContainer>
-        {/* {userToken !== null ? ( */}
-        <Drawer.Navigator
-          // initialRouteName="LandingPage"
-          drawerContent={(props) => <Sidebar {...props} />}
-        >
-          <Drawer.Screen name="Home" component={StackContainer} />
-          <Drawer.Screen name="LandingPage" component={LandingPage} />
-          <Drawer.Screen name="SingleBookView" component={SingleBookView} />
-          <Drawer.Screen name="UserProfile" component={UserProfile} />
-          <Drawer.Screen name="AllEvents" component={AllEvents} />
-          <Drawer.Screen name="CreateEvent" component={CreateEvent} />
-        </Drawer.Navigator>
-        {/* ) : ( */}
-        {/* <AuthNavigation /> */}
-        {/* )} */}
-      </NavigationContainer>
-      {/* </AuthContext.Provider> */}
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
+          {userToken !== null ? (
+            <Drawer.Navigator
+              // initialRouteName="LandingPage"
+              drawerContent={(props) => <Sidebar {...props} />}
+            >
+              <Drawer.Screen name="Home" component={StackContainer} />
+              <Drawer.Screen name="LandingPage" component={LandingPage} />
+              <Drawer.Screen name="SingleBookView" component={SingleBookView} />
+              <Drawer.Screen name="UserProfile" component={UserProfile} />
+              <Drawer.Screen name="AllEvents" component={AllEvents} />
+              <Drawer.Screen name="CreateEvent" component={CreateEvent} />
+            </Drawer.Navigator>
+          ) : (
+            <AuthNavigation />
+          )}
+        </NavigationContainer>
+      </AuthContext.Provider>
     </Provider>
   );
 };

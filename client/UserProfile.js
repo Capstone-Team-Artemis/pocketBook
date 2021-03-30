@@ -43,8 +43,6 @@ const UserProfile = (props) => {
   let futureRead = mybooks.filter((book) => (book.status==='To Read'))
   let completed = mybooks.filter((book) => (book.status==='Completed'))
 
-  currentBooks.map(book=> console.log("***BOOK", book))
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -69,8 +67,8 @@ const UserProfile = (props) => {
           <Text style={styles.text}>Currently Reading</Text>
           <ScrollView horizontal={true}>
           <View style={styles.bookList}>
-            {currentBooks.length>0 ? currentBooks.map((book, idx)=> <TouchableOpacity onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
-              <View key={idx} style={styles.bookData} >
+            {currentBooks.length>0 ? currentBooks.map((book, idx)=> <TouchableOpacity key={idx} onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
+              <View style={styles.bookData} >
               <Image 
                 alt={book.book.title}
                 style={{ width: 100, height: 150 }}
@@ -89,8 +87,8 @@ const UserProfile = (props) => {
           <Text style={styles.text}>To Read</Text>
           <ScrollView horizontal={true}>
           <View style={styles.bookList}>
-            {futureRead.length>0 ? futureRead.map((book, idx)=> <TouchableOpacity onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
-              <View key={idx} style={styles.bookData} >
+            {futureRead.length>0 ? futureRead.map((book, idx)=> <TouchableOpacity key={idx} onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
+              <View style={styles.bookData} >
               <Image 
                 alt={book.book.title}
                 style={{ width: 100, height: 150 }}
@@ -109,8 +107,8 @@ const UserProfile = (props) => {
           <Text style={styles.text}>Completed</Text>
           <ScrollView horizontal={true}>
           <View style={styles.bookList}>
-            {completed.length>0 ? completed.map((book, idx)=> <TouchableOpacity onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
-              <View key={idx} style={styles.bookData} >
+            {completed.length>0 ? completed.map((book, idx)=> <TouchableOpacity key={idx} onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
+              <View style={styles.bookData} >
               <Image 
                 alt={book.book.title}
                 style={{ width: 100, height: 150 }}

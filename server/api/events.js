@@ -179,13 +179,15 @@ router.post("/:userId/register/:eventId", async (req, res, next) => {
 //POST api/events/createEvent
 router.post("/createEvent", async (req, res, next) => {
   try {
-    const newEvent = await Event.create({
-      ...req.body,
-      //when login is completed it should be
-      //hostId: req.user.id
-      hostId: 1,
-    });
-    console.log("newEvent", newEvent);
+    console.log("REQ.BODY***",req.body)
+    const newEvent = await Event.create(req.body)
+    // ({
+    //   ...req.body,
+    //   //when login is completed it should be
+    //   //hostId: req.user.id
+    //   hostId: 1,
+    // });
+    //console.log("newEvent", newEvent);
     res.status(201).send(newEvent);
   } catch (error) {
     next(error);

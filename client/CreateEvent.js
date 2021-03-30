@@ -35,7 +35,7 @@ class CreateEvent extends Component {
       endDate: this.props.event.id ? this.props.event.date : new Date(),
       // time: this.props.event.id ? this.props.event.time : new Date(),
       description: this.props.event.id ? this.props.event.description : "",
-      host: this.props.user.id ? this.props.user.id : 1,
+      hostId: this.props.user.id ? this.props.user.id : 1,
     };
     this.handleSubmit.bind(this);
     this.handleDelete.bind(this);

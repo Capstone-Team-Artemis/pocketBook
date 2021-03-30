@@ -49,7 +49,6 @@ const Login = (props) => {
               });
               // handlePress --> passes user info to function that will navigate to DrawerNavigator
               handlePress({ user: res.data });
-              // props.navigation.navigate('LandingPage', { user: res.data });
               // If user info is invalid:
             } catch {
               Alert.alert(

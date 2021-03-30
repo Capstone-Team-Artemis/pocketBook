@@ -21,7 +21,7 @@ const Book = db.define('book', {
     },
     image: {
         type: Sequelize.TEXT,
-        defaultValue: 'placeholder.jpg'
+        defaultValue: 'https://picsum.photos/200/300'
     }
 
 })

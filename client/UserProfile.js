@@ -7,26 +7,23 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { getUserProfile, getBooks } from './store/userProfile';
 
 const { width: WIDTH } = Dimensions.get('window');
 
 const UserProfile = (props) => {
-  //console.log("props in userprofile component", props)
+  console.log("props in userprofile component", props)
   //hardcode it to 1 since no user loged in
+
   let id = props.userId || 1;
   let mybooks = props.books || [];
-  //let currentBooks = props.books || []
-  const [user, setUser] = useState(id);
+  //const [user, setUser] = useState(id);
   const [books, setbooks] = useState(mybooks);
-  //console.log("****books****", mybooks)
-  //const [currentlyReading, setCurrentlyReading] = useState(mybooks)
-  const status = 'Currently Reading';
-  //const future = "To Read"
-  //const past = "Completed"
 
   //do not need this if we can get the user through props
   // useEffect(()=> {
@@ -37,14 +34,28 @@ const UserProfile = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBooks(id, status));
-  }, {});
+    dispatch(getBooks(id));
+  }, [books]);
 
-  //const title = books[0].book.title
+  //filter the saved books by status 
+  let currentBooks = mybooks.filter((book) => (book.status==='Currently Reading'))
+  let futureRead = mybooks.filter((book) => (book.status==='To Read'))
+  let completed = mybooks.filter((book) => (book.status==='Completed'))
+
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
+      <View style={styles.navbar}>
+          <TouchableOpacity
+            style={styles.navbar}
+            style={{ alignItems: 'flex-end', margin: 16 }}
+            onPress={props.navigation.openDrawer}
+          >
+            <Icon name="bars" size={24} color="#161924" />
+          </TouchableOpacity>
+        </View>
+
         <View>
           <Text style={styles.heading}>My Bookshelf</Text>
         </View>
@@ -54,16 +65,42 @@ const UserProfile = (props) => {
                 </View> */}
         <View>
           <Text style={styles.text}>Currently Reading</Text>
+          <ScrollView horizontal={true}>
+          <View style={styles.bookList}>
+            {currentBooks.length>0 ? currentBooks.map((book, idx)=> <View key={idx} style={styles.bookData} >
+              <Image 
+                alt={book.book.title}
+                style={{ width: 100, height: 150 }}
+                source={{
+                  uri: book.book.image,
+                }}
+              />
+              <Text>{book.book.title}</Text>
+            </View>) : <Text>No books</Text>}
+          </View>
+          </ScrollView>
+        </View>
+
+        <View>
+          <Text style={styles.text}>To Read</Text>
           <View style={styles.bookContainer}>
-            {mybooks.map((book) => (
-              <View style={styles.bookData}>
-                <Text>{book.book.image}</Text>
-                <Text>{book.book.title}</Text>
-                <Text>{}</Text>
-              </View>
-            ))}
+            {futureRead.length>0 ? futureRead.map((book, idx)=> <View key={idx} style={styles.bookData}>
+              <Text>{book.book.image}</Text>
+              <Text>{book.book.title}</Text>
+            </View>) : <Text>No books</Text>}
           </View>
         </View>
+
+        <View>
+          <Text style={styles.text}>Completed</Text>
+          <View style={styles.bookContainer}>
+            {completed.length>0 ? completed.map((book, idx)=> <View key={idx} style={styles.bookData}>
+              <Text>{book.book.image}</Text>
+              <Text>{book.book.title}</Text>
+            </View>) : <Text>No books</Text>}
+          </View>
+        </View>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -90,19 +127,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 5,
   },
+  bookList: {
+    flexDirection: 'row'
+  },
   text: {
     fontSize: 20,
   },
-  bookContainer: {},
   bookData: {},
   scrollView: {
     backgroundColor: '#f0f8ff',
     marginHorizontal: 1,
     width: WIDTH - 20,
   },
-  // bookList: {
-  //     flexDirection: 'row'
-  // }
+
 });
 
 const mapState = (state) => ({
@@ -112,7 +149,7 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
   //getUser: (userId) => dispatch(getUserProfile(userId)),
-  getBooks: (userId, status) => dispatch(getBooks(userId, status)),
+  getBooks: (userId) => dispatch(getBooks(userId)),
 });
 
 export default connect(mapState, mapDispatch)(UserProfile);

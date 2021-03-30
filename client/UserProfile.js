@@ -17,7 +17,7 @@ import { getUserProfile, getBooks } from './store/userProfile';
 const { width: WIDTH } = Dimensions.get('window');
 
 const UserProfile = (props) => {
-  console.log("props in userprofile component", props)
+  // console.log("props in userprofile component", props)
   //hardcode it to 1 since no user loged in
 
   let id = props.userId || 4;

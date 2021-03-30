@@ -7,11 +7,13 @@ import {
   Dimensions,
   TouchableHighlight,
   TouchableOpacity,
+  Button,
+  Alert,
 } from 'react-native';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { postEvent } from './store/event';
+import { postEvent, getSingleEvent, updateEvent, deletedEvent} from './store/event';
 
 //import GoogleAPI from '../test/GoogleAPI';
 
@@ -21,22 +23,57 @@ class CreateEvent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      eventTitle: '',
-      date: '',
-      time: '',
-      description: '',
-      host: 1,
+      eventTitle: this.props.event.id ? this.props.event.eventTitle : '',
+      date: this.props.event.id ? this.props.event.date : '',
+      time: this.props.event.id ? this.props.event.time : '',
+      description: this.props.event.id ? this.props.event.description : '',
+      host: this.props.user.id ? this.props.user.id : 1,
     };
     this.handleSubmit.bind(this);
+    this.handleDelete.bind(this);
+    this.handleGoBack.bind(this);
   }
-  handleSubmit() {
-    let newEventInfo = this.state;
-    console.log('newEventInfo', newEventInfo);
-    this.props.create({ ...this.state });
+
+  componentDidUpdate(prevProps) {
+    if(!prevProps.event.id && this.props.event.id) {
+      this.setState({
+      eventTitle: this.props.event.eventTitle,
+      date: this.props.event.eventTitle,
+      time: this.props.event.eventTitle,
+      description: this.props.event.eventTitle,
+      host: this.props.user.id,
+      })
+    }
+  }
+ async handleSubmit() {
+    //if event id exist then update the event otherwise create an event 
+    let eventId = this.props.event.id
+    try {
+        eventId? await this.props.update(host, { ...this.state }, eventId) : await this.props.create({ ...this.state })
+        this.props.navigation.navigate('AllEvents')
+         
+      } catch (error) {
+        
+        Alert.alert("Error", "Please fill out all information") 
+      }
+
+    } 
+    //catch(error) {
+      
+    //}
+
+  
+  handleDelete() {
+    let eventId = this.props.event.id
+    this.props.delete(host, eventId)
+    this.props.navigation.navigate('AllEvents')
+  }
+
+  handleGoBack() {
+    this.props.navigation.navigate('AllEvents')
   }
 
   render() {
-    console.log('props in createEvent', this.props);
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>
@@ -48,7 +85,7 @@ class CreateEvent extends Component {
             <Icon name="bars" size={24} color="#161924" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.heading}>CreateEvent</Text>
+        <Text style={styles.heading}>{this.props.event.id ? 'Update Event' : 'Create Event'}</Text>
         <View style={styles.inputContainer}>
           {/* <GoogleAPI /> */}
           <TextInput
@@ -91,6 +128,8 @@ class CreateEvent extends Component {
           >
             <Text style={styles.submitText}>Submit</Text>
           </TouchableHighlight>
+
+          {this.props.event.id ? <Button title="Delete Event" opPress={()=> this.handleDelete()}/> : <Button title="Go Back" onPress={()=> this.handleGoBack()}/>}
         </View>
       </SafeAreaView>
     );
@@ -138,13 +177,18 @@ const styles = StyleSheet.create({
     paddingLeft: 300,
   },
 });
-// const mapState = (state) => {
-//     console.log("map state", state)
-// }
+const mapState = (state) => {
+    return {
+      event: state.event,
+      user: state.user
+    }
+}
 
 const mapDispatch = (dispatch) => {
   return {
     create: (newEventInfo) => dispatch(postEvent(newEventInfo)),
+    update: (userId, editedInfo, eventId) => dispatch(updateEvent(userId, editedInfo, eventId)),
+    delete: (userId, eventId) => dispatch(deletedEvent(userId, eventId))
   };
 };
-export default connect(null, mapDispatch)(CreateEvent);
+export default connect(mapState, mapDispatch)(CreateEvent);

@@ -4,7 +4,10 @@ import SingleBookView from './client/SingleBookView';
 import UserProfile from './client/UserProfile';
 import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
+import SingleEventPage from './client/SingleEventPage';
 import Home from './client/Home';
+import Chat from './client/Chat'
+
 
 const Navigation = createDrawerNavigator(
   {
@@ -43,6 +46,21 @@ const Navigation = createDrawerNavigator(
         header: null,
       }),
     },
+    // NEED TO REMOVE SINGLE EVENT PAGE FROM NAV BAR W/O BREAKING EVERYTHING!!!!
+    SingleEventPage: {
+      screen: SingleEventPage,
+      navigationOptions: () => ({
+        title: 'Single Event Page',
+        header: null,
+      }),
+    },
+    Chat: {
+      screen: Chat,
+      navigationOptions: () => ({
+        title: 'Chat',
+        header: null,
+      }),
+    },
   },
   {
     initialRouteName: 'LandingPage',
@@ -52,3 +70,6 @@ const Navigation = createDrawerNavigator(
 export default Navigation;
 
 // SingleBookView: { screen: SingleBookView },
+
+// SingleBookView: { screen: SingleBookView },
+

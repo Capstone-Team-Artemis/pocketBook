@@ -3,8 +3,10 @@ import { View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { Text, Drawer } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { AuthContext } from './context';
 
 export default Sidebar = (props) => {
+  const { logOut } = React.useContext(AuthContext);
   // console.log('propsssss---->', props);
   return (
     <View style={{ flex: 1 }}>
@@ -60,7 +62,9 @@ export default Sidebar = (props) => {
               <Icon name="sign-out" color={color} size={size} />
             )}
             label="Sign Out"
-            onPress={() => {}}
+            onPress={() => {
+              logOut();
+            }}
           />
         </Drawer.Section>
       </DrawerContentScrollView>

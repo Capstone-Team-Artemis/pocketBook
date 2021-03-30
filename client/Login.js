@@ -19,11 +19,16 @@ const Login = (props) => {
   const [secureTextEntry, setSecure] = React.useState(true);
 
   const { logIn } = React.useContext(AuthContext);
-  console.log('LOGINNNNN', logIn());
 
   const updateSecureTextEntry = () => {
     setSecure(!secureTextEntry);
   };
+
+  // If inputted Login info is correct, navigate user over to DrawerNavigator
+  const handlePress = (user) => {
+    logIn(user);
+  };
+
   return (
     <ScrollView>
       <Formik
@@ -42,10 +47,10 @@ const Login = (props) => {
                 email: values.email,
                 password: values.password,
               });
-              console.log('LOGINNNN --->', logIn);
-              logIn(res.data);
+              // handlePress --> passes user info to function that will navigate to DrawerNavigator
+              handlePress({ user: res.data });
               // props.navigation.navigate('LandingPage', { user: res.data });
-              // if user info is invalid:
+              // If user info is invalid:
             } catch {
               Alert.alert(
                 'Error',

@@ -45,7 +45,7 @@ const Navigation = createDrawerNavigator(
         header: null,
       }),
     },
-
+    // NEED TO REMOVE SINGLE EVENT PAGE FROM NAV BAR W/O BREAKING EVERYTHING!!!!
     SingleEventPage: {
       screen: SingleEventPage,
       navigationOptions: () => ({

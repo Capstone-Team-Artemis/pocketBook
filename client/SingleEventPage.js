@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 export default class SingleEventPage extends React.Component {
 
     render() {
-        // console.log('props: ', this.props.navigation.state.params)
+        console.log('props in singleeventpage: ', this.props.navigation.state.params)
         const {eventTitle, date, description, startTime, endTime, hostId} = this.props.navigation.state.params
         
         return (     

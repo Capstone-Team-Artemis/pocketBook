@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
@@ -11,10 +11,26 @@ const Stack = createStackNavigator();
 
 const StackContainer = ({ navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen name="LandingPage" component={LandingPage} />
-    <Stack.Screen name="SingleBookView" component={SingleBookView} />
-    <Stack.Screen name="AllEvents" component={AllEvents} />
-    <Stack.Screen name="CreateEvent" component={CreateEvent} />
+    <Stack.Screen
+      name="LandingPage"
+      component={LandingPage}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="SingleBookView"
+      component={SingleBookView}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="AllEvents"
+      component={AllEvents}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="CreateEvent"
+      component={CreateEvent}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 

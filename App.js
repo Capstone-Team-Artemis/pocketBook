@@ -54,25 +54,25 @@ const App = () => {
   // }
   return (
     <Provider store={store}>
-      <AuthContext.Provider value={authContext}>
-        <NavigationContainer>
-          {/* {userToken !== null ? ( */}
-          <Drawer.Navigator
-            // initialRouteName="LandingPage"
-            drawerContent={(props) => <Sidebar {...props} />}
-          >
-            <Drawer.Screen name="Home" component={StackContainer} />
-            <Drawer.Screen name="LandingPage" component={LandingPage} />
-            <Drawer.Screen name="SingleBookView" component={SingleBookView} />
-            <Drawer.Screen name="UserProfile" component={UserProfile} />
-            <Drawer.Screen name="AllEvents" component={AllEvents} />
-            <Drawer.Screen name="CreateEvent" component={CreateEvent} />
-          </Drawer.Navigator>
-          {/* ) : ( */}
-          <AuthNavigation />
-          {/* )} */}
-        </NavigationContainer>
-      </AuthContext.Provider>
+      {/* <AuthContext.Provider value={authContext}> */}
+      <NavigationContainer>
+        {/* {userToken !== null ? ( */}
+        <Drawer.Navigator
+          // initialRouteName="LandingPage"
+          drawerContent={(props) => <Sidebar {...props} />}
+        >
+          <Drawer.Screen name="Home" component={StackContainer} />
+          <Drawer.Screen name="LandingPage" component={LandingPage} />
+          <Drawer.Screen name="SingleBookView" component={SingleBookView} />
+          <Drawer.Screen name="UserProfile" component={UserProfile} />
+          <Drawer.Screen name="AllEvents" component={AllEvents} />
+          <Drawer.Screen name="CreateEvent" component={CreateEvent} />
+        </Drawer.Navigator>
+        {/* ) : ( */}
+        {/* <AuthNavigation /> */}
+        {/* )} */}
+      </NavigationContainer>
+      {/* </AuthContext.Provider> */}
     </Provider>
   );
 };

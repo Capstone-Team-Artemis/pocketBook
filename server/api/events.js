@@ -2,16 +2,6 @@ const router = require("express").Router();
 const { Event, User, UserEvent } = require("../db/models");
 module.exports = router;
 
-//get single event info
-// GET api/event/eventId --> get ALL events  of the event
-router.get("/:eventId", async (req, res, next) => {
-  try {
-    const event = await Event.findByPk(req.params.eventId);
-    res.json(event);
-  } catch (err) {
-    next(err);
-  }
-});
 
 // EVENT ROUTES
 
@@ -33,6 +23,7 @@ router.get("/:userId", async (req, res, next) => {
       res.json(events);
     } else {
       res.send("There are currently no upcoming events!");
+
     }
   } catch (err) {
     next(err);

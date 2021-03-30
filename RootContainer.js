@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { connect } from 'react-redux';
 import store from './client/store';
 import { AuthContext } from './client/context';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // Import Screens:
 import Sidebar from './client/Sidebar';
@@ -16,10 +17,6 @@ import CreateEvent from './client/CreateEvent';
 import UserProfile from './client/UserProfile';
 import AuthNavigation from './AuthNavigation';
 import StackContainer from './StackContainer';
-
-// Import Redux:
-import { loginReducer } from './client/store';
-import { getToken, signIn, signOut, register } from './client/store/login';
 
 const Drawer = createDrawerNavigator();
 
@@ -75,27 +72,53 @@ const RootContainer = () => {
   // We will be passing authContext throughout our app
   const authContext = React.useMemo(
     () => ({
-      logIn: (user) => {
-        let userToken;
-        userId = user.id;
-        // setUserToken('hi');
-        // setIsLoading(false);
+      logIn: async (res) => {
+        console.log('USER --->', res.user);
+        console.log('USER ID --->', res.user.id);
+        try {
+          userToken = res.user.username;
+          userId = res.user.id.toString();
+          await AsyncStorage.setItem('userToken', userToken);
+        } catch (err) {
+          console.log(err);
+        }
         dispatch({ type: 'LOGIN', id: userId, token: userToken });
       },
-      logOut: () => {
+      logOut: async () => {
+        try {
+          await AsyncStorage.removeItem('userToken');
+        } catch (err) {
+          console.log(err);
+        }
         dispatch({ type: 'LOGOUT' });
       },
-      signUp: () => {
-        setUserToken('hi');
-        setIsLoading(false);
+      signUp: async (res) => {
+        try {
+          userToken = res.user.username;
+          userId = res.user.id.toString();
+          await AsyncStorage.setItem('userToken', userToken);
+        } catch (err) {
+          console.log(err);
+        }
+        dispatch({ type: 'SIGNUP', id: userId, token: userToken });
       },
     }),
     []
   );
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch({ type: 'GET_TOKEN', token: 'fsg' });
+    setTimeout(async () => {
+      let userToken;
+      // Set userToken to null
+      userToken = null;
+      try {
+        // Fetch userToken from AsyncStorage
+        userToken = await AsyncStorage.getItem('userToken');
+      } catch (err) {
+        console.log(err);
+      }
+      // If token is found, dispatch for token
+      dispatch({ type: 'GET_TOKEN', token: userToken });
     }, 1000);
   }, []);
 

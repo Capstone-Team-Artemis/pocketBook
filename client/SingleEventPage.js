@@ -1,3 +1,5 @@
+// SINGLE EVENT PAGE COMPONENT w/CHAT COMPONENT
+
 import {
     Text,
     StyleSheet,
@@ -18,12 +20,10 @@ export default class SingleEventPage extends React.Component {
         // console.log('props: ', this.props.navigation.state.params)
         const {eventTitle, date, description, startTime, endTime, hostId} = this.props.navigation.state.params
         
-        console.log(description)
-        
         return (     
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
-                              {/* Adds Navbar */}
+                    {/* Adds Navbar */}
                     <TouchableOpacity
                         style={{ alignItems: 'flex-end', margin: 16 }}
                         onPress={this.props.navigation.openDrawer}
@@ -31,7 +31,7 @@ export default class SingleEventPage extends React.Component {
                         <Icon name="bars" size={24} color="#161924" />
                     </TouchableOpacity>
                     <View style={styles.listContainer}>
-                        {/* Adds book info for each event */}
+                        {/* Adds event info */}
                         <View style={styles.eventData}>
                             <Text style={styles.eventTitle}>{eventTitle}</Text> 
                             <Text style={styles.date}>Date: {date}</Text>
@@ -47,6 +47,7 @@ export default class SingleEventPage extends React.Component {
                             style={styles.image}
                         />
                     </View> 
+                    <Text>*Live chat shows up below at the exact date and time of the event!</Text>
             </ScrollView>
         </SafeAreaView>
         );
@@ -65,11 +66,11 @@ image: {
     width: 100,
     height: 100,
     marginTop: 10,
-    marginLeft: 10,
+    marginLeft: 8,
 },
 eventTitle: {
     fontSize: 30,
-    marginBottom: 2,
+    marginBottom: 5,
     fontWeight: 'bold',
 },
 date: {
@@ -90,9 +91,6 @@ description: {
 },
 listContainer: {
     flexDirection: 'row',
-    // borderStyle: 'solid',
-    // borderColor: 'black',
-    // borderWidth: 1,
     marginBottom: 15,
     marginTop: 15
 },

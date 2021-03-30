@@ -1,4 +1,4 @@
-// SINGLE event component
+// SINGLE event component (child component of AllEvents component)
 import {
     Text,
     StyleSheet,
@@ -54,7 +54,7 @@ export default class SingleEvent extends React.Component {
                 }}
                 style={styles.image}
             />
-            {/* Adds book info for each event */}
+            {/* Adds event info for each event */}
             <View style={styles.eventData}>
                 <Text style={styles.eventTitle}>{event.eventTitle}</Text>
                 <Text style={styles.date}>Date: {event.date}</Text>

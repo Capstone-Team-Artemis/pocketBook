@@ -9,7 +9,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { DrawerItems } from 'react-navigation';
-import { DrawerNavigationItems } from 'react-navigation-drawer';
+// import { DrawerNavigationItems } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default Sidebar = (props) => {
@@ -33,7 +33,6 @@ export default Sidebar = (props) => {
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.followers}>10 followers</Text>
         </View>
-        <DrawerItems {...props} />
       </ImageBackground>
     </ScrollView>
   );

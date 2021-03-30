@@ -19,6 +19,7 @@ const Login = (props) => {
   const [secureTextEntry, setSecure] = React.useState(true);
 
   const { logIn } = React.useContext(AuthContext);
+  console.log('LOGINNNNN', logIn());
 
   const updateSecureTextEntry = () => {
     setSecure(!secureTextEntry);
@@ -41,7 +42,9 @@ const Login = (props) => {
                 email: values.email,
                 password: values.password,
               });
-              props.navigation.navigate('LandingPage', { user: res.data });
+              console.log('LOGINNNN --->', logIn);
+              logIn(res.data);
+              // props.navigation.navigate('LandingPage', { user: res.data });
               // if user info is invalid:
             } catch {
               Alert.alert(

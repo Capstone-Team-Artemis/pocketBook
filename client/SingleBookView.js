@@ -29,7 +29,11 @@ export default function SingleBookView(route) {
     getStatus();
   }, [setStatus]);
   const bookPath = route.navigation.state.params;
+
+  // console.log('NAVIGATION?? -->', route.navigation);
+
   console.log('NAVIGATION?? -->', route.navigation);
+
   return (
     <View style={styles.container}>
       <SafeAreaView>

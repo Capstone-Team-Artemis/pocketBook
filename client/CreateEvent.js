@@ -33,6 +33,7 @@ class CreateEvent extends Component {
     this.handleDelete.bind(this);
     this.handleGoBack.bind(this);
   }
+
   componentDidUpdate(prevProps) {
     if(!prevProps.event.id && this.props.event.id) {
       this.setState({

@@ -1,9 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
-//import the built in data types 
-const { DataTypes } = require('sequelize')
-//later think about having the calender dropdown
-// Sequalize.TIME? Sequalize.DATE?
+
 const Event = db.define('event', {
     eventTitle: {
         type: Sequelize.STRING,
@@ -13,14 +10,19 @@ const Event = db.define('event', {
         }
     },
     date: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATEONLY,
         allowNull: false,
         validate: {
-            notEmpty: true
+            notEmpty: true,
+            isDate: true
         }
     },
-    time: {
-        type: DataTypes.STRING,
+    startTime: {
+        type: Sequelize.TIME,
+        allowNull: false,
+    },
+    endTime: {
+        type: Sequelize.TIME,
         allowNull: false,
         validate: {
             notEmpty: true
@@ -32,6 +34,10 @@ const Event = db.define('event', {
         validate: {
             notEmpty: true
         }
+    },
+    hostId: {
+        type:Sequelize.INTEGER,
+        allowNull: false
     }
 })
 

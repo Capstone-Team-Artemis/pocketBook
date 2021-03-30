@@ -24,7 +24,11 @@ const Login = (props) => {
         }}
         onSubmit={(values) => {
           const hello = props.auth(values.email, values.password, props.method);
+
           //console.log('HELLO!! -->', hello);
+
+          console.log('HELLO!! -->', hello);
+
           props.navigation.navigate('App');
         }}
       >

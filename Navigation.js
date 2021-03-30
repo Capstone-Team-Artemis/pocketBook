@@ -1,4 +1,3 @@
-
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
@@ -7,6 +6,7 @@ import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
 import SingleEventPage from './client/SingleEventPage';
 import Home from './client/Home';
+
 
 const Navigation = createDrawerNavigator(
   {
@@ -38,6 +38,7 @@ const Navigation = createDrawerNavigator(
         header: null,
       }),
     },
+
     SingleEventPage: {
       screen: SingleEventPage,
       navigationOptions: () => ({
@@ -54,3 +55,6 @@ const Navigation = createDrawerNavigator(
 export default Navigation;
 
 // SingleBookView: { screen: SingleBookView },
+
+// SingleBookView: { screen: SingleBookView },
+

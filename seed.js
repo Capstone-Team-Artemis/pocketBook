@@ -124,7 +124,6 @@ async function seed() {
     {
       userId: 1,
       eventId: 1,
-      
     },
     {
       userId: 2,

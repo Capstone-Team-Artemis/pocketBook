@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { Event, User, UserEvent } = require('../db/models');
 module.exports = router;
 
+
 // EVENT ROUTES
 
 // GET api/events/userId --> get ALL events, and for each event include user info if it's the logged in user & she is attending the event
@@ -23,6 +24,44 @@ router.get('/:userId', async (req, res, next) => {
       res.json(events);
     } else {
       res.send('There are currently no upcoming events!');
+
+// GET api/events/attending --> get ALL events that you are attending
+router.get('/:userId/attending', async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const events = await Event.findAll({
+      include: {
+        model: User,
+        where: {
+          id: userId,
+        },
+      },
+    });
+    if (events.length >= 1) {
+      console.log(events);
+      res.json(events);
+    } else {
+      res.send('Currently not attending any events!');
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET api/events/created --> get ALL events that you CREATED (you are the HOST)
+router.get('/:userId/created', async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const events = await Event.findAll({
+      where: {
+        host: userId,
+      },
+    });
+    if (events.length >= 1) {
+      console.log(events);
+      res.json(events);
+    } else {
+      res.send('Currently have not created any events!');
     }
   } catch (err) {
     next(err);
@@ -74,6 +113,7 @@ router.get('/:userId', async (req, res, next) => {
 //     next(err);
 //   }
 // });
+
 
 // DELETE api/events/delete/eventId --> delete SINGLE event (if you are the host) based on the event id
 router.delete('/:userId/delete/:eventId', async (req, res, next) => {

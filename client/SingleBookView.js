@@ -29,7 +29,9 @@ export default function SingleBookView(route) {
     getStatus();
   }, [setStatus]);
   const bookPath = route.navigation.state.params;
-  console.log('NAVIGATION?? -->', route.navigation);
+
+  //console.log('NAVIGATION?? -->', route.navigation);
+
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -42,14 +44,14 @@ export default function SingleBookView(route) {
           </TouchableOpacity>
           <Image
             style={{ width: 200, height: 300 }}
-            alt={bookPath.volumeInfo.title}
+            alt={bookPath.volumeInfo? bookPath.volumeInfo.title : bookPath.book.title}
             source={{
-              uri: bookPath.volumeInfo.imageLinks.thumbnail,
+              uri: bookPath.volumeInfo ? bookPath.volumeInfo.imageLinks.thumbnail : bookPath.book.image
             }}
           />
-          <Text style={styles.textTitle}>{bookPath.volumeInfo.title}</Text>
-          <Text>{bookPath.volumeInfo.authors}</Text>
-          <Text>{bookPath.volumeInfo.description}</Text>
+          <Text style={styles.textTitle}>{bookPath.volumeInfo? bookPath.volumeInfo.title : bookPath.book.title}</Text>
+          <Text>{bookPath.volumeInfo? bookPath.volumeInfo.authors: bookPath.book.authors}</Text>
+          <Text>{bookPath.volumeInfo? bookPath.volumeInfo.description: bookPath.book.description}</Text>
           <Text>Book Status</Text>
           <DropDownPicker
             containerStyle={{ height: 40 }}

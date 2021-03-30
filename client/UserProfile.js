@@ -89,17 +89,19 @@ const UserProfile = (props) => {
           <Text style={styles.text}>To Read</Text>
           <ScrollView horizontal={true}>
           <View style={styles.bookList}>
-            {futureRead.length>0 ? futureRead.map((book, idx)=> <View key={idx} style={styles.bookData}>
-            <Image 
+            {futureRead.length>0 ? futureRead.map((book, idx)=> <TouchableOpacity onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
+              <View key={idx} style={styles.bookData} >
+              <Image 
                 alt={book.book.title}
                 style={{ width: 100, height: 150 }}
                 source={{
                   uri: book.book.image,
                 }}
-              />
+              /> 
               <Text>{book.book.title}</Text>
-            </View>) : <Text>No books</Text>}
             </View>
+            </TouchableOpacity>)  : <Text>No books</Text>}
+          </View>
           </ScrollView>
         </View>
 
@@ -107,20 +109,21 @@ const UserProfile = (props) => {
           <Text style={styles.text}>Completed</Text>
           <ScrollView horizontal={true}>
           <View style={styles.bookList}>
-            {completed.length>0 ? completed.map((book, idx)=> <View key={idx} style={styles.bookData}>
-            <Image 
+            {completed.length>0 ? completed.map((book, idx)=> <TouchableOpacity onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
+              <View key={idx} style={styles.bookData} >
+              <Image 
                 alt={book.book.title}
                 style={{ width: 100, height: 150 }}
                 source={{
                   uri: book.book.image,
                 }}
-              />
+              /> 
               <Text>{book.book.title}</Text>
-            </View>) : <Text>No books</Text>}
             </View>
+            </TouchableOpacity>)  : <Text>No books</Text>}
+          </View>
           </ScrollView>
         </View>
-
       </ScrollView>
     </SafeAreaView>
   );

@@ -72,7 +72,7 @@ export default class SingleEvent extends React.Component {
                         // 'Edit/Delete' button takes you to EditEvent page
                             title={'Edit/Delete'}
                             onPress={() => {
-                                navigate.navigate('CreateEvent');  // needs to be switched to EditEvent once that page is created
+                                navigate.navigate('CreateEvent', event);  // needs to be switched to EditEvent once that page is created
                             }}
                             color="white"
                             accessibilityLabel="Status"

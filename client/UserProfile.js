@@ -8,7 +8,7 @@ import {
   StatusBar,
   Dimensions,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,6 +17,7 @@ import { getUserProfile, getBooks } from './store/userProfile';
 const { width: WIDTH } = Dimensions.get('window');
 
 const UserProfile = (props) => {
+  console.log('PROPS --->', props.route.params.userId);
   // console.log("props in userprofile component", props)
   //hardcode it to 1 since no user loged in
 
@@ -37,16 +38,17 @@ const UserProfile = (props) => {
     dispatch(getBooks(id));
   }, [books]);
 
-  //filter the saved books by status 
-  let currentBooks = mybooks.filter((book) => 
-  (book.status==='Currently Reading'))
-  let futureRead = mybooks.filter((book) => (book.status==='To Read'))
-  let completed = mybooks.filter((book) => (book.status==='Completed'))
+  //filter the saved books by status
+  let currentBooks = mybooks.filter(
+    (book) => book.status === 'Currently Reading'
+  );
+  let futureRead = mybooks.filter((book) => book.status === 'To Read');
+  let completed = mybooks.filter((book) => book.status === 'Completed');
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-      <View style={styles.navbar}>
+        <View style={styles.navbar}>
           <TouchableOpacity
             style={styles.navbar}
             style={{ alignItems: 'flex-end', margin: 16 }}
@@ -67,60 +69,93 @@ const UserProfile = (props) => {
           <Text>{props.id}</Text>
           <Text style={styles.text}>Currently Reading</Text>
           <ScrollView horizontal={true}>
-          <View style={styles.bookList}>
-            {currentBooks.length>0 ? currentBooks.map((book, idx)=> <TouchableOpacity key={idx} onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
-              <View style={styles.bookData} >
-              <Image 
-                alt={book.book.title}
-                style={{ width: 100, height: 150 }}
-                source={{
-                  uri: book.book.image,
-                }}
-              /> 
-              <Text>{book.book.title}</Text>
+            <View style={styles.bookList}>
+              {currentBooks.length > 0 ? (
+                currentBooks.map((book, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => {
+                      props.navigation.navigate('SingleBookView', book);
+                    }}
+                  >
+                    <View style={styles.bookData}>
+                      <Image
+                        alt={book.book.title}
+                        style={{ width: 100, height: 150 }}
+                        source={{
+                          uri: book.book.image,
+                        }}
+                      />
+                      <Text>{book.book.title}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <Text>No books</Text>
+              )}
             </View>
-            </TouchableOpacity>)  : <Text>No books</Text>}
-          </View>
           </ScrollView>
         </View>
 
         <View>
           <Text style={styles.text}>To Read</Text>
           <ScrollView horizontal={true}>
-          <View style={styles.bookList}>
-            {futureRead.length>0 ? futureRead.map((book, idx)=> <TouchableOpacity key={idx} onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
-              <View style={styles.bookData} >
-              <Image 
-                alt={book.book.title}
-                style={{ width: 100, height: 150 }}
-                source={{
-                  uri: book.book.image,
-                }}
-              /> 
-              <Text>{book.book.title}</Text>
+            <View style={styles.bookList}>
+              {futureRead.length > 0 ? (
+                futureRead.map((book, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => {
+                      props.navigation.navigate('SingleBookView', book);
+                    }}
+                  >
+                    <View style={styles.bookData}>
+                      <Image
+                        alt={book.book.title}
+                        style={{ width: 100, height: 150 }}
+                        source={{
+                          uri: book.book.image,
+                        }}
+                      />
+                      <Text>{book.book.title}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <Text>No books</Text>
+              )}
             </View>
-            </TouchableOpacity>)  : <Text>No books</Text>}
-          </View>
           </ScrollView>
         </View>
 
         <View>
           <Text style={styles.text}>Completed</Text>
           <ScrollView horizontal={true}>
-          <View style={styles.bookList}>
-            {completed.length>0 ? completed.map((book, idx)=> <TouchableOpacity key={idx} onPress={() => {props.navigation.navigate('SingleBookView', book)}}>
-              <View style={styles.bookData} >
-              <Image 
-                alt={book.book.title}
-                style={{ width: 100, height: 150 }}
-                source={{
-                  uri: book.book.image,
-                }}
-              /> 
-              <Text>{book.book.title}</Text>
+            <View style={styles.bookList}>
+              {completed.length > 0 ? (
+                completed.map((book, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => {
+                      props.navigation.navigate('SingleBookView', book);
+                    }}
+                  >
+                    <View style={styles.bookData}>
+                      <Image
+                        alt={book.book.title}
+                        style={{ width: 100, height: 150 }}
+                        source={{
+                          uri: book.book.image,
+                        }}
+                      />
+                      <Text>{book.book.title}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <Text>No books</Text>
+              )}
             </View>
-            </TouchableOpacity>)  : <Text>No books</Text>}
-          </View>
           </ScrollView>
         </View>
       </ScrollView>
@@ -150,7 +185,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   bookList: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   text: {
     fontSize: 20,
@@ -161,7 +196,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 1,
     width: WIDTH - 20,
   },
-
 });
 
 const mapState = (state) => ({

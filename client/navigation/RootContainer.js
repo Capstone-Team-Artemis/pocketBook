@@ -143,19 +143,36 @@ const RootContainer = () => {
             >
               <Drawer.Screen name="Home" component={StackContainer} />
               <Drawer.Screen name="LandingPage" component={LandingPage} />
-              <Drawer.Screen name="SingleBookView" component={SingleBookView} />
+              <Drawer.Screen
+                name="SingleBookView"
+                component={SingleBookView}
+                initialParams={{ userId: loginState.userId }}
+              />
               <Drawer.Screen
                 name="UserProfile"
                 component={UserProfile}
                 initialParams={{ userId: loginState.userId }}
               />
-              <Drawer.Screen name="AllEvents" component={AllEvents} />
-              <Drawer.Screen name="CreateEvent" component={CreateEvent} />
+              <Drawer.Screen
+                name="AllEvents"
+                component={AllEvents}
+                initialParams={{ userId: loginState.userId }}
+              />
+              <Drawer.Screen
+                name="CreateEvent"
+                component={CreateEvent}
+                initialParams={{ userId: loginState.userId }}
+              />
               <Drawer.Screen
                 name="SingleEventView"
                 component={SingleEventView}
+                initialParams={{ userId: loginState.userId }}
               />
-              <Drawer.Screen name="Chat" component={Chat} />
+              <Drawer.Screen
+                name="Chat"
+                component={Chat}
+                initialParams={{ userId: loginState.userId }}
+              />
             </Drawer.Navigator>
           ) : (
             <AuthNavigation />

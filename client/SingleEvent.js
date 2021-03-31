@@ -9,6 +9,7 @@ import {
   } from 'react-native'; 
 import React from 'react';
 import axios from 'axios';
+const { DateTime } = require("luxon");
 
 export default class SingleEvent extends React.Component {
     constructor(props) {
@@ -41,8 +42,13 @@ export default class SingleEvent extends React.Component {
     };
 
     render() {
+        
         // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
         const {event, navigate, status, user} = this.props;
+        // create DateTime instance so can covert to properly formatted string
+        const formattedStartTime= DateTime.fromISO(event.startTime).toLocaleString(DateTime.TIME_SIMPLE);
+        const formattedEndTime= DateTime.fromISO(event.endTime).toLocaleString(DateTime.TIME_SIMPLE);
+        const formattedDate = DateTime.fromISO(event.date).toLocaleString(DateTime.DATE_FULL);
         
         return (     
         <TouchableOpacity onPress={() => navigate.navigate('SingleEventPage', event)}>
@@ -57,9 +63,9 @@ export default class SingleEvent extends React.Component {
             {/* Adds event info for each event */}
             <View style={styles.eventData}>
                 <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-                <Text style={styles.date}>Date: {event.date}</Text>
-                <Text style={styles.time}>Start Time: {event.startTime}</Text>
-                <Text style={styles.time}>End Time: {event.endTime}</Text>
+                <Text style={styles.date}>Date: {formattedDate}</Text>
+                <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
+                <Text style={styles.time}>End Time: {formattedEndTime}</Text>
                 <Text style={styles.description}>
                 Description: {event.description}
                 </Text>

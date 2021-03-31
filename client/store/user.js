@@ -10,51 +10,13 @@ const getUser = (user) => ({
 });
 
 // THUNK CREATORS
-// export const me = () => async (dispatch) => {
-//   try {
-//     const res = await axios.get('/auth/me');
-//     dispatch(getUser(res.data || defaultUser));
-//   } catch {
-//     console.error(err);
-//   }
-// };
-
-export const auth = (
-  email,
-  password,
-  method,
-  username,
-  firstName,
-  lastName
-) => async (dispatch) => {
-  let res;
+export const me = () => async (dispatch) => {
   try {
-    if (method === 'SignUp') {
-      res = await axios.post('http://localhost:3000/auth/signup/', {
-        email,
-        password,
-        username,
-        firstName,
-        lastName,
-      });
-      // If method is 'Login':
-    } else {
-      res = await axios.post('http://localhost:3000/auth/login/', {
-        email,
-        password,
-      });
-      return dispatch(getUser(res.data));
-    }
-  } catch (authError) {
-    console.error(authError);
-    return dispatch(getUser({ error: authError }));
+    const res = await axios.get('/auth/me');
+    dispatch(getUser(res.data || defaultUser));
+  } catch (err) {
+    console.error(err);
   }
-
-  // try {
-  //   dispatch(getUser(res.data));
-  // } catch (dispatchErr) {
-  //   console.error(dispatchErr);
-  // }
 };
 
 // INITIAL STATE

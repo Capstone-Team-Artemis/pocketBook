@@ -76,7 +76,6 @@ export default function LandingPage({ navigation }) {
 
     setModalVisible(true);
   }
-  console.log('NAVIGATION --->', navigation);
   return (
     <SafeAreaView>
       <ScrollView style={styles.scrollView}>

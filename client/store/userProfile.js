@@ -30,12 +30,9 @@ export const getUserProfile = (userId) => async (dispatch) => {
 
 export const getBooks = (userId) => async (dispatch) => {
   try {
-    console.log('GETBOOKS RAN!!');
-    console.log('USERID --->', userId);
     const books = await axios.get(
       `http://localhost:3000/api/users/${userId}`
     );
-    console.log('BOOKSSSS --->', books.data);
     dispatch(gotBooks(books.data));
   } catch (error) {
     console.error(error);

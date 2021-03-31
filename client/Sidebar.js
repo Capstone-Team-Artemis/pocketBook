@@ -68,9 +68,9 @@ export default Sidebar = (props) => {
           />
           <DrawerItem
             icon={({ color, size }) => (
-              <Icon name="user-circle" color={color} size={size} />
+              <Icon name="book" color={color} size={size} />
             )}
-            label="My Profile"
+            label="My Bookshelf"
             onPress={() => {
               props.navigation.navigate('UserProfile');
             }}

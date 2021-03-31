@@ -30,6 +30,9 @@ export class AllEvents extends React.Component {
   }
 
   render() {
+    console.log('all events array: ', this.props.events)
+    const dateArr = this.props.events.date
+  
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>

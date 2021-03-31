@@ -59,6 +59,7 @@ export default class SingleEventView extends React.Component {
                       color= '#e9967a'
                       accessibilityLabel="Join Now"
                       /> 
+                  <Button title="Go Back" onPress={() => {this.props.navigation.navigate('AllEvents')}} />
           </ScrollView>
       </SafeAreaView>
       );

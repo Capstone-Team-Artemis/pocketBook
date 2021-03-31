@@ -1,12 +1,40 @@
-import React from 'react';
-import { View, StyleSheet, Image, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import { Text, Drawer } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from './context';
 
 export default Sidebar = (props) => {
+  // Set custom image state
+  const [image, setImage] = useState(
+    'https://cdn.nohat.cc/thumb/f/720/comvecteezy268447.jpg'
+  );
   const { logOut } = React.useContext(AuthContext);
+
+  // Allows user to custom pick an image from camera roll
+  const pickImage = async () => {
+    let { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permission to make this work!');
+      return;
+    } else {
+      const pickImage = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+      });
+      if (!pickImage.cancelled) {
+        setImage(pickImage.uri);
+      }
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -17,12 +45,14 @@ export default Sidebar = (props) => {
           }}
           style={{ width: undefined, padding: 20, paddingTop: 50 }}
         >
-          <Image
-            source={{
-              uri: 'https://cdn.nohat.cc/thumb/f/720/comvecteezy268447.jpg',
-            }}
-            style={styles.profile}
-          />
+          <TouchableOpacity onPress={pickImage}>
+            <Image
+              source={{
+                uri: image,
+              }}
+              style={styles.profile}
+            />
+          </TouchableOpacity>
           <Text style={styles.name}>{props.userToken}</Text>
           <View style={{ flexDirection: 'row' }}></View>
         </ImageBackground>

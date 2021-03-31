@@ -31,7 +31,7 @@ export default Sidebar = (props) => {
             icon={({ color, size }) => (
               <Icon name="search" color={color} size={size} />
             )}
-            label="Search For Book"
+            label="Find a Book"
             onPress={() => {
               props.navigation.navigate('LandingPage');
             }}

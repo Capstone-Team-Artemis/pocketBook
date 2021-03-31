@@ -20,15 +20,18 @@ export default function SingleBookView(props) {
   useEffect(() => {
     const getStatus = async () => {
       try {
+        // MADE URL DYNAMIC TO TAKE INTO ACCOUNT NAVIGATING FROM PROFILE TO SINGLEBOOKVIEW
         const { data } = await axios.get(
-          `http://localhost:3000/api/books/${props.route.params.id}`
+          `http://localhost:3000/api/books/${
+            props.route.book ? props.route.book.googleId : props.route.params.id
+          }`
         );
         setStatus(data);
       } catch (err) {}
     };
     getStatus();
   }, [setStatus]);
-  const bookPath = props.route.params.volumeInfo;
+  const bookPath = props.route.params;
 
   return (
     <View style={styles.container}>
@@ -42,14 +45,32 @@ export default function SingleBookView(props) {
           </TouchableOpacity>
           <Image
             style={{ width: 200, height: 300 }}
-            alt={bookPath.title}
+            alt={
+              bookPath.volumeInfo
+                ? bookPath.volumeInfo.title
+                : bookPath.book.title
+            }
             source={{
-              uri: bookPath.imageLinks.thumbnail,
+              uri: bookPath.volumeInfo
+                ? bookPath.volumeInfo.imageLinks.thumbnail
+                : bookPath.book.image,
             }}
           />
-          <Text style={styles.textTitle}>{bookPath.textTitle}</Text>
-          <Text>{bookPath.authors}</Text>
-          <Text>{bookPath.description}</Text>
+          <Text style={styles.textTitle}>
+            {bookPath.volumeInfo
+              ? bookPath.volumeInfo.title
+              : bookPath.book.title}
+          </Text>
+          <Text>
+            {bookPath.volumeInfo
+              ? bookPath.volumeInfo.authors
+              : bookPath.book.authors}
+          </Text>
+          <Text>
+            {bookPath.volumeInfo
+              ? bookPath.volumeInfo.description
+              : bookPath.book.description}
+          </Text>
           <Text>Book Status</Text>
           <DropDownPicker
             containerStyle={{ height: 40 }}
@@ -61,17 +82,28 @@ export default function SingleBookView(props) {
               { label: 'To Read', value: 'To Read' },
             ]}
           />
+          {/* CHANGE BELOW CODE TOO */}
           <Button
             title="Add to Bookshelf"
             onPress={() => {
               axios.post('http://localhost:3000/api/books', {
                 status,
                 book: {
-                  title: bookPath.title,
-                  image: bookPath.imageLinks.thumbnail,
-                  authors: bookPath.authors,
-                  rating: bookPath.averageRating,
-                  description: bookPath.description,
+                  title: bookPath.volumeInfo
+                    ? bookPath.volumeInfo.title
+                    : bookPath.book.title,
+                  image: bookPath.volumeInfo
+                    ? bookPath.volumeInfo.imageLinks.thumbnail
+                    : bookPath.book.image,
+                  authors: bookPath.volumeInfo
+                    ? bookPath.volumeInfo.authors
+                    : bookPath.book.authors,
+                  rating: bookPath.volumeInfo
+                    ? bookPath.volumeInfo.averageRating
+                    : bookPath.book.rating,
+                  description: bookPath.volumeInfo
+                    ? bookPath.volumeInfo.description
+                    : bookPath.book.description,
                   googleId: props.route.params.id,
                 },
               });

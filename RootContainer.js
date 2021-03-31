@@ -13,7 +13,7 @@ import Sidebar from './client/Sidebar';
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
 import AllEvents from './client/AllEvents';
-import SingleEventPage from './client/SingleEventPage';
+import SingleEventView from './client/SingleEventView';
 import CreateEvent from './client/CreateEvent';
 import UserProfile from './client/UserProfile';
 import Chat from './client/Chat';
@@ -155,8 +155,8 @@ const RootContainer = () => {
               <Drawer.Screen name="AllEvents" component={AllEvents} />
               <Drawer.Screen name="CreateEvent" component={CreateEvent} />
               <Drawer.Screen
-                name="SingleEventPage"
-                component={SingleEventPage}
+                name="SingleEventView"
+                component={SingleEventView}
               />
               <Drawer.Screen name="Chat" component={Chat} />
             </Drawer.Navigator>

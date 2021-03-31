@@ -5,7 +5,7 @@ import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
 import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
-import SingleEventPage from './client/SingleEventPage';
+import SingleEventView from './client/SingleEventView';
 import UserProfile from './client/UserProfile';
 import Chat from './client/Chat';
 
@@ -34,8 +34,8 @@ const StackContainer = (props) => (
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="SingleEventPage"
-      component={SingleEventPage}
+      name="SingleEventView"
+      component={SingleEventView}
       options={{ headerShown: false }}
     />
     <Stack.Screen
@@ -52,5 +52,3 @@ const StackContainer = (props) => (
 );
 
 export default StackContainer;
-
-// MIGHT NOT NEED USERPROFILE

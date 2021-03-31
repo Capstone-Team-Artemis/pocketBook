@@ -28,7 +28,7 @@ export default function SingleBookView(props) {
     };
     getStatus();
   }, [setStatus]);
-  const bookPath = route.navigation.state.params;
+  const bookPath = props.route.params.volumeInfo;
 
   return (
     <View style={styles.container}>
@@ -42,32 +42,14 @@ export default function SingleBookView(props) {
           </TouchableOpacity>
           <Image
             style={{ width: 200, height: 300 }}
-            alt={
-              bookPath.volumeInfo
-                ? bookPath.volumeInfo.title
-                : bookPath.book.title
-            }
+            alt={bookPath.title}
             source={{
-              uri: bookPath.volumeInfo
-                ? bookPath.volumeInfo.imageLinks.thumbnail
-                : bookPath.book.image,
+              uri: bookPath.imageLinks.thumbnail,
             }}
           />
-          <Text style={styles.textTitle}>
-            {bookPath.volumeInfo
-              ? bookPath.volumeInfo.title
-              : bookPath.book.title}
-          </Text>
-          <Text>
-            {bookPath.volumeInfo
-              ? bookPath.volumeInfo.authors
-              : bookPath.book.authors}
-          </Text>
-          <Text>
-            {bookPath.volumeInfo
-              ? bookPath.volumeInfo.description
-              : bookPath.book.description}
-          </Text>
+          <Text style={styles.textTitle}>{bookPath.textTitle}</Text>
+          <Text>{bookPath.authors}</Text>
+          <Text>{bookPath.description}</Text>
           <Text>Book Status</Text>
           <DropDownPicker
             containerStyle={{ height: 40 }}
@@ -85,12 +67,12 @@ export default function SingleBookView(props) {
               axios.post('http://localhost:3000/api/books', {
                 status,
                 book: {
-                  title: bookPath.volumeInfo.title,
-                  image: bookPath.volumeInfo.imageLinks.thumbnail,
-                  authors: bookPath.volumeInfo.authors,
-                  rating: bookPath.volumeInfo.averageRating,
-                  description: bookPath.volumeInfo.description,
-                  googleId: bookPath.id,
+                  title: bookPath.title,
+                  image: bookPath.imageLinks.thumbnail,
+                  authors: bookPath.authors,
+                  rating: bookPath.averageRating,
+                  description: bookPath.description,
+                  googleId: props.route.params.id,
                 },
               });
             }}

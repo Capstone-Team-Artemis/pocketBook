@@ -1,10 +1,10 @@
-import axios from 'axios'
+import axios from 'axios';
 
 //ACTION TYPE
 //const GET_EVENT = 'GET_EVENT'
 
-const CREATE_EVENT = 'CREATE_EVENT'
-const UPDATE_EVENT = 'UPDATE_EVENT'
+const CREATE_EVENT = 'CREATE_EVENT';
+const UPDATE_EVENT = 'UPDATE_EVENT';
 
 //ACTION CREATOR 
 // const gotEvent = (singleEvent) => ({
@@ -12,14 +12,14 @@ const UPDATE_EVENT = 'UPDATE_EVENT'
 //     singleEvent
 // })
 const createdEvent = (newEvent) => ({
-    type: CREATE_EVENT,
-    newEvent
-})
+  type: CREATE_EVENT,
+  newEvent,
+});
 
 const updatedEvent = (updatedEvent) => ({
-    type: UPDATE_EVENT,
-    updatedEvent
-})
+  type: UPDATE_EVENT,
+  updatedEvent,
+});
 
 //THUNK CREATOR
 //GET api/events/eventId
@@ -34,13 +34,16 @@ const updatedEvent = (updatedEvent) => ({
 
 //POST api/events/createEvent
 export const postEvent = (newEventInfo) => async (dispatch) => {
-    try {
-        const newEvent = await axios.post(`http://localhost:3000/api/events/createEvent`, newEventInfo)
-        dispatch(createdEvent(newEvent.data))
-    } catch (error) {
-        throw error
-    }
-}
+  try {
+    const newEvent = await axios.post(
+      `http://localhost:3000/api/events/createEvent`,
+      newEventInfo
+    );
+    dispatch(createdEvent(newEvent.data));
+  } catch (error) {
+    throw error;
+  }
+};
 
 //PUT api/events/:userId/updateEvent/:eventId
 
@@ -64,15 +67,13 @@ export const deleteEvent = (userId, eventId) => async (dispatch) => {
 }
 
 //INITIAL STATE
-const initialState = []
+const initialState = [];
 
 //REDUCER   
 const event = (state=initialState, action) => {
     switch(action.type){
         default:
             return state
-
     }
-}
-
-export default event
+  }
+export default event;

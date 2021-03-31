@@ -10,14 +10,14 @@ const getUser = (user) => ({
 });
 
 // THUNK CREATORS
-export const me = () => async (dispatch) => {
-  try {
-    const res = await axios.get('/auth/me');
-    dispatch(getUser(res.data || defaultUser));
-  } catch {
-    console.error(err);
-  }
-};
+// export const me = () => async (dispatch) => {
+//   try {
+//     const res = await axios.get('/auth/me');
+//     dispatch(getUser(res.data || defaultUser));
+//   } catch {
+//     console.error(err);
+//   }
+// };
 
 export const auth = (
   email,
@@ -43,16 +43,18 @@ export const auth = (
         email,
         password,
       });
+      return dispatch(getUser(res.data));
     }
   } catch (authError) {
+    console.error(authError);
     return dispatch(getUser({ error: authError }));
   }
 
-  try {
-    dispatch(getUser(res.data));
-  } catch (dispatchErr) {
-    console.error(dispatchErr);
-  }
+  // try {
+  //   dispatch(getUser(res.data));
+  // } catch (dispatchErr) {
+  //   console.error(dispatchErr);
+  // }
 };
 
 // INITIAL STATE
@@ -62,6 +64,7 @@ const defaultUser = {};
 export default function (state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
+      console.log('ACTION.USER --->', action.user);
       return action.user;
     default:
       return state;

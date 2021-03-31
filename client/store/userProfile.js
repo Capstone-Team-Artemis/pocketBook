@@ -4,7 +4,6 @@ import axios from 'axios';
 const GET_USER_PROFILE = 'GET_USER_PROFILE';
 const GET_BOOKS = 'GET_BOOKS';
 
-
 //ACTION CREATORS
 const gotUserProfile = (user) => ({
   type: GET_USER_PROFILE,

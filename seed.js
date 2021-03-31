@@ -15,28 +15,28 @@ async function seed() {
     {
       firstName: 'Selina',
       lastName: 'Byeon',
-      username: 'Selina',
+      username: 'byeonse',
       email: 'selina@pocketbook.com',
       password: 'password',
     },
     {
       firstName: 'Catherine',
       lastName: 'Martin',
-      username: 'Catherine',
+      username: 'csmart1986',
       email: 'catherine@pocketbook.com',
       password: 'password',
     },
     {
       firstName: 'Sandy',
       lastName: 'Dai',
-      username: 'Sandy',
+      username: 'sandaiiyahh',
       email: 'sandy@pocketbook.com',
       password: 'password',
     },
     {
       firstName: 'Kay',
       lastName: 'XiongPachay',
-      username: 'Kay',
+      username: 'hellokay27',
       email: 'kay@pocketbook.com',
       password: 'password',
     },
@@ -145,8 +145,8 @@ async function seed() {
     },
     {
       userId: 1,
-      eventId: 3
-    }
+      eventId: 3,
+    },
   ];
 
   const [eventcase] = await UserEvent.bulkCreate(userEvents, {

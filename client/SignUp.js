@@ -7,14 +7,81 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import * as Animatable from 'react-native-animatable';
 import { Formik } from 'formik';
-import { auth } from './store/user';
+import axios from 'axios';
+
+import { AuthContext } from './context';
 
 const SignUp = (props) => {
+  const { signUp } = React.useContext(AuthContext);
+
+  const [validate, setValidate] = React.useState({
+    isValidEmail: true,
+    isValidUser: true,
+    isValidPassword: true,
+    secureTextEntry: true,
+  });
+
+  const handleValidUser = (val) => {
+    if (val.trim().length >= 4) {
+      setValidate({
+        ...validate,
+        isValidUser: true,
+      });
+    } else {
+      setValidate({
+        ...validate,
+        isValidUser: false,
+      });
+    }
+  };
+
+  const handleValidPassword = (val) => {
+    if (val.trim().length >= 8) {
+      setValidate({
+        ...validate,
+        isValidPassword: true,
+      });
+    } else {
+      setValidate({
+        ...validate,
+        isValidPassword: false,
+      });
+    }
+  };
+
+  const handleEmail = (val) => {
+    // Using regex to check for possible valid email input
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (regex.test(val)) {
+      setValidate({
+        ...validate,
+        isValidEmail: true,
+      });
+    } else {
+      setValidate({
+        ...validate,
+        isValidEmail: false,
+      });
+    }
+  };
+
+  const updateSecureTextEntry = () => {
+    setValidate({
+      ...validate,
+      secureTextEntry: !validate.secureTextEntry,
+    });
+  };
+
+  // If inputted Signup info is valid, navigate user over to DrawerNavigaton
+  const handlePress = (user) => {
+    signUp(user);
+  };
+
   return (
     <ScrollView>
       <Formik
@@ -25,16 +92,28 @@ const SignUp = (props) => {
           firstName: '',
           lastName: '',
         }}
-        onSubmit={(values) => {
-          props.auth(
-            values.email,
-            values.password,
-            props.method,
-            values.username,
-            values.firstName,
-            values.lastName
-          );
-          props.navigation.navigate('App');
+        onSubmit={async (values) => {
+          // Adding user validation (>= 4 chars) and password validation (>= 8 chars)
+          if (!validate.isValidUser || !validate.isValidPassword) {
+            Alert.alert('Error', 'Please fix the error(s) and try again.');
+            // Once that's validated, axios runs call to signup and navigate to App screen
+          } else {
+            try {
+              let res = await axios.post('http://localhost:3000/auth/signup/', {
+                email: values.email,
+                password: values.password,
+                username: values.username,
+                firstName: values.firstName,
+                lastName: values.lastName,
+              });
+              // handlePress = passes user info to function that will navigate to DrawerNavigaton
+              handlePress({ user: res.data });
+              // If there was a problem signing up, display an alert error
+            } catch (err) {
+              alert(err);
+              // Alert.alert('Error', 'Please fix the errors and try again.');
+            }
+          }
         }}
       >
         {(props) => (
@@ -47,41 +126,28 @@ const SignUp = (props) => {
               style={styles.image}
             />
             <Text style={styles.heading}>Sign Up</Text>
+            <Text>to join the book lovers community!</Text>
 
-            {/* First Name Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputText}
-                placeholder={'First Name'}
-                onChangeText={props.handleChange('firstName')}
-                value={props.values.firstName}
-              />
-            </View>
+            <View style={styles.name}>
+              {/* First Name Input */}
+              <View style={styles.nameContainer}>
+                <TextInput
+                  style={styles.nameText}
+                  placeholder={'First Name'}
+                  onChangeText={props.handleChange('firstName')}
+                  value={props.values.firstName}
+                />
+              </View>
 
-            {/* Last Name Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputText}
-                placeholder={'Last Name'}
-                onChangeText={props.handleChange('lastName')}
-                value={props.values.lastName}
-              />
-            </View>
-
-            {/* Username Input */}
-            <View style={styles.inputContainer}>
-              <Icon
-                name={'user-plus'}
-                size={19}
-                color={'grey'}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.inputText}
-                placeholder={'Username'}
-                onChangeText={props.handleChange('username')}
-                value={props.values.username}
-              />
+              {/* Last Name Input */}
+              <View style={styles.nameContainer}>
+                <TextInput
+                  style={styles.nameText}
+                  placeholder={'Last Name'}
+                  onChangeText={props.handleChange('lastName')}
+                  value={props.values.lastName}
+                />
+              </View>
             </View>
 
             {/* Email Input */}
@@ -99,9 +165,41 @@ const SignUp = (props) => {
                 autoCapitalize="none"
                 autoCorrect={false}
                 onChangeText={props.handleChange('email')}
+                onEndEditing={(e) => handleEmail(e.nativeEvent.text)}
                 value={props.values.email}
               />
             </View>
+            {validate.isValidEmail ? null : (
+              <Animatable.View animation="zoomIn" duration={500}>
+                <Text style={styles.errorMsg}>Please enter a valid email.</Text>
+              </Animatable.View>
+            )}
+
+            {/* Username Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name={'user'}
+                size={19}
+                color={'grey'}
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputText}
+                placeholder={'Username'}
+                autoCapitalize="none"
+                onChangeText={props.handleChange('username')}
+                onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
+                value={props.values.username}
+              />
+            </View>
+            {/* Text shows up if username is < 4 chars */}
+            {validate.isValidUser ? null : (
+              <Animatable.View animation="zoomIn" duration={500}>
+                <Text style={styles.errorMsg}>
+                  Username must be 4 characters long.
+                </Text>
+              </Animatable.View>
+            )}
 
             {/* Password Input */}
             <View style={styles.inputContainer}>
@@ -113,12 +211,32 @@ const SignUp = (props) => {
               />
               <TextInput
                 style={styles.inputText}
-                secureTextEntry={true}
+                secureTextEntry={validate.secureTextEntry ? true : false}
                 placeholder={'Password'}
                 onChangeText={props.handleChange('password')}
+                onEndEditing={(e) => handleValidPassword(e.nativeEvent.text)}
                 value={props.values.password}
               />
+              {/* Adds eye button that toggles whether password input is hidden or not */}
+              <TouchableOpacity
+                style={styles.btnEye}
+                onPress={updateSecureTextEntry}
+              >
+                <Icon
+                  name={validate.secureTextEntry ? 'eye-slash' : 'eye'}
+                  size={15}
+                  color={'grey'}
+                />
+              </TouchableOpacity>
             </View>
+            {/* Text shows up if password is < 8 chars */}
+            {validate.isValidPassword ? null : (
+              <Animatable.View animation="zoomIn" duration={500}>
+                <Text style={styles.errorMsg}>
+                  Password must be 8 characters long.
+                </Text>
+              </Animatable.View>
+            )}
 
             {/* Sign Up Button */}
             <TouchableOpacity
@@ -160,6 +278,16 @@ const styles = StyleSheet.create({
     margin: 0,
     fontSize: 40,
   },
+  name: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  nameText: {
+    fontWeight: 'bold',
+    marginLeft: 10,
+    marginTop: 8,
+    width: '80%',
+  },
   inputContainer: {
     marginTop: 20,
     flexDirection: 'row',
@@ -171,6 +299,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 5,
   },
+  nameContainer: {
+    marginTop: 20,
+    marginRight: 5,
+    width: 145,
+    height: 35,
+    borderRadius: 50,
+    borderWidth: 1.5,
+  },
   icon: {
     top: 5,
     left: 20,
@@ -180,7 +316,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
     marginLeft: 50,
-    width: '100%',
+    width: '80%',
   },
   submitContainer: {
     alignItems: 'center',
@@ -200,18 +336,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  errorMsg: {
+    color: '#FF0000',
+    fontSize: 12,
+    marginBottom: -5,
+  },
+  btnEye: {
+    position: 'absolute',
+    top: 7,
+    right: 15,
+  },
 });
 
-const mapStateToProps = (state) => ({
-  method: 'SignUp',
-});
+// const mapStateToProps = (state) => ({
+//   method: 'SignUp',
+//   user: state.user,
+// });
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      auth,
-    },
-    dispatch
-  );
+// const mapDispatchToProps = (dispatch) =>
+//   bindActionCreators(
+//     {
+//       auth,
+//     },
+//     dispatch
+//   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default SignUp;
+
+// export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

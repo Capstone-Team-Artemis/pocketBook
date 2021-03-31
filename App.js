@@ -1,15 +1,15 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './client/store';
-import AppContainer from './AppContainer';
 
-//import your component
-// import Navigation from "./Navigation";
+import RootContainer from './client/navigation/RootContainer';
 
-export default function App() {
+const App = () => {
   return (
     <Provider store={store}>
-      <AppContainer />
+      <RootContainer />
     </Provider>
   );
-}
+};
+
+export default App;

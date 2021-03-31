@@ -77,126 +77,149 @@ export default function LandingPage({ navigation }) {
     setModalVisible(true);
   }
   return (
-    <Formik>
-      <View style={styles.container}>
-        <Image
-          source={{
-            uri: "https://i.ibb.co/rpJ7vjb/signupbook.png",
-          }}
-          style={styles.image}
-        />
-        <Text style={styles.heading}>Find a Book</Text>
-        <View style={styles.inputContainer}>
-          {/* <Icon name={"search"} size={30} color={"grey"} style={styles.icon} /> */}
-          <TextInput
-            style={styles.inputText}
-            // placeholder='Search by Title, Author, or Keyword'
-            onChangeText={handleChange}
-          />
-        </View>
-        <TouchableOpacity
-          style={[styles.inputContainer, styles.submitContainer]}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.submitText}>SUBMIT</Text>
-        </TouchableOpacity>
-        {/* <Button title='Submit' onPress={handleSubmit} /> */}
-        {/* featureBook will only show up once the component mounts */}
-        {featureBook.id && (
-          <View>
-            <Text style={styles.published}>Newly Published</Text>
+    <SafeAreaView>
+      <ScrollView style={styles.scrollView}>
+        <Formik>
+          <View style={styles.container}>
             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("SingleBookView", featureBook);
-              }}
+              style={{ alignItems: "flex-end", margin: 16 }}
+              onPress={navigation.openDrawer}
             >
-              <Image
-                alt={featureBook.volumeInfo.title}
-                source={{ uri: featureBook.volumeInfo.imageLinks.thumbnail }}
-                style={{ width: 200, height: 300, margin: "auto" }}
-              />
+              <Icon name='bars' size={24} color='#161924' />
             </TouchableOpacity>
-            {/* <Text>{featureBook.volumeInfo.description}</Text> */}
-          </View>
-        )}
-        <View style={styles.centeredView}>
-          <Modal
-            animationType='slide'
-            transparent={false}
-            visible={modalVisible}
-          >
-            <SafeAreaView>
-              <ScrollView>
-                {/* CSS on View to have books render left to right */}
-                <View style={styles.bookList} style={styles.centeredView}>
-                  {/* Map over "result" state and render each book object details */}
-                  {result.map((book, idx) => {
-                    // console.log('book in map: ', book.volumeInfo);
-                    return (
-                      <View key={idx}>
-                        {/* Render book cover image first, with styling */}
-                        {/* <TouchableOpacity onPress={() => }> */}
-                        <TouchableOpacity
-                          onPress={() => {
-                            setModalVisible(false);
-                            navigation.navigate("SingleBookView", book);
-                          }}
-                        >
-                          <Image
-                            // put react navigation here
-                            alt={book.volumeInfo.title}
-                            style={{ width: 100, height: 150 }}
-                            source={{
-                              uri: book.volumeInfo.imageLinks.smallThumbnail,
-                            }}
-                          />
-                          {/* </TouchableOpacity> */}
-                          {/* Render book title, authors array, rating */}
-                          <Text style={styles.bookInfo}>
-                            {book.volumeInfo.title}
-                          </Text>
-                          <Text style={styles.bookInfo}>
-                            {book.volumeInfo.authors}
-                          </Text>
-                          <Text style={styles.bookInfo}>
-                            {book.volumeInfo.averageRating}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  })}
+            <View style={styles.center}>
+              <Image
+                source={{
+                  uri: "https://i.ibb.co/rpJ7vjb/signupbook.png",
+                }}
+                style={styles.image}
+              />
+              <Text style={styles.heading}>Find a Book</Text>
+              <View style={styles.inputContainer}>
+                {/* <Icon name={"search"} size={30} color={"grey"} style={styles.icon} /> */}
+                <TextInput
+                  style={styles.inputText}
+                  // placeholder='Search by Title, Author, or Keyword'
+                  onChangeText={handleChange}
+                />
+              </View>
+              <TouchableOpacity
+                style={[styles.inputContainer, styles.submitContainer]}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.submitText}>SUBMIT</Text>
+              </TouchableOpacity>
+              {/* <Button title='Submit' onPress={handleSubmit} /> */}
+              {/* featureBook will only show up once the component mounts */}
+              {featureBook.id && (
+                <View>
+                  {/* <Text style={{ textAlign: 'center', fontSize: 30 }}>
+              Hi, {navigation.state.params.user.firstName}!
+            </Text> */}
+                  <Text style={styles.published}>Newly Published</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("SingleBookView", featureBook);
+                    }}
+                  >
+                    <Image
+                      alt={featureBook.volumeInfo.title}
+                      source={{
+                        uri: featureBook.volumeInfo.imageLinks.thumbnail,
+                      }}
+                      style={{ width: 200, height: 300, margin: "auto" }}
+                    />
+                  </TouchableOpacity>
+                  {/* <Text>{featureBook.volumeInfo.description}</Text> */}
                 </View>
-                <TouchableOpacity
-                  style={[
-                    styles.inputContainer,
-                    styles.submitContainer,
-                    styles.button,
-                  ]}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.submitText}>DONE</Text>
-                </TouchableOpacity>
-                {/* <Button
+              )}
+            </View>
+            <View style={styles.centeredView}>
+              <Modal
+                animationType='slide'
+                transparent={false}
+                visible={modalVisible}
+              >
+                <SafeAreaView>
+                  <ScrollView>
+                    {/* CSS on View to have books render left to right */}
+                    <View style={styles.bookList} style={styles.centeredView}>
+                      {/* Map over "result" state and render each book object details */}
+                      {result.map((book, idx) => {
+                        // console.log('book in map: ', book.volumeInfo);
+                        return (
+                          <View key={idx}>
+                            {/* Render book cover image first, with styling */}
+                            {/* <TouchableOpacity onPress={() => }> */}
+                            <TouchableOpacity
+                              onPress={() => {
+                                setModalVisible(false);
+                                navigation.navigate("SingleBookView", book);
+                              }}
+                            >
+                              <Image
+                                // put react navigation here
+                                alt={book.volumeInfo.title}
+                                style={{ width: 100, height: 150 }}
+                                source={{
+                                  uri:
+                                    book.volumeInfo.imageLinks.smallThumbnail,
+                                }}
+                              />
+                              {/* </TouchableOpacity> */}
+                              {/* Render book title, authors array, rating */}
+                              <Text style={styles.bookInfo}>
+                                {book.volumeInfo.title}
+                              </Text>
+                              <Text style={styles.bookInfo}>
+                                {book.volumeInfo.authors}
+                              </Text>
+                              <Text style={styles.bookInfo}>
+                                {book.volumeInfo.averageRating}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        );
+                      })}
+                    </View>
+                    <TouchableOpacity
+                      style={[
+                        styles.inputContainer,
+                        styles.submitContainer,
+                        styles.button,
+                      ]}
+                      onPress={() => setModalVisible(false)}
+                    >
+                      <Text style={styles.submitText}>DONE</Text>
+                    </TouchableOpacity>
+                    {/* <Button
                   style={styles.published}
                   title='DONE'
                   onPress={() => setModalVisible(false)}
                 > */}
-                {/* Done
+                    {/* Done
                 </Button> */}
-              </ScrollView>
-            </SafeAreaView>
-          </Modal>
-        </View>
-      </View>
-    </Formik>
+                  </ScrollView>
+                </SafeAreaView>
+              </Modal>
+            </View>
+          </View>
+        </Formik>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  center: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  scrollView: {
+    marginHorizontal: 10,
   },
   image: {
     marginTop: 40,

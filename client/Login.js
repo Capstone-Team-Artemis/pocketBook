@@ -7,14 +7,28 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
-import { auth } from './store/user';
+import axios from 'axios';
+
+import { AuthContext } from './context';
 
 const Login = (props) => {
+  const [secureTextEntry, setSecure] = React.useState(true);
+
+  const { logIn } = React.useContext(AuthContext);
+
+  const updateSecureTextEntry = () => {
+    setSecure(!secureTextEntry);
+  };
+
+  // If inputted Login info is correct, navigate user info to RootNavigation's logIn function
+  const handlePress = (user) => {
+    logIn(user);
+  };
+
   return (
     <ScrollView>
       <Formik
@@ -22,14 +36,27 @@ const Login = (props) => {
           email: '',
           password: '',
         }}
-        onSubmit={(values) => {
-          const hello = props.auth(values.email, values.password, props.method);
-
-          //console.log('HELLO!! -->', hello);
-
-          console.log('HELLO!! -->', hello);
-
-          props.navigation.navigate('App');
+        onSubmit={async (values) => {
+          // If user didn't input anything:
+          if (values.email === '' || values.password === '') {
+            Alert.alert('Error', 'Username and/or password cannot be empty.');
+          } else {
+            // If user did, axios call to lookup user login info
+            try {
+              let res = await axios.post('http://localhost:3000/auth/login/', {
+                email: values.email,
+                password: values.password,
+              });
+              // handlePress = passes user info to function that will pass to RootNavigation's logIn function
+              handlePress({ user: res.data });
+              // If user info is invalid:
+            } catch {
+              Alert.alert(
+                'Error',
+                'Incorrect username or password. Please try again.'
+              );
+            }
+          }
         }}
       >
         {(props) => (
@@ -43,6 +70,7 @@ const Login = (props) => {
               style={styles.image}
             />
             <Text style={styles.heading}>Login</Text>
+            <Text>Welcome to Pocketbook!</Text>
 
             {/* Email Address Input */}
             <View style={styles.inputContainer}>
@@ -73,11 +101,22 @@ const Login = (props) => {
               />
               <TextInput
                 style={styles.inputText}
-                secureTextEntry={true}
+                secureTextEntry={secureTextEntry ? true : false}
                 placeholder={'Password'}
                 onChangeText={props.handleChange('password')}
                 value={props.values.password}
               />
+              {/* Adds eye button that toggles whether password input is hidden or not */}
+              <TouchableOpacity
+                style={styles.btnEye}
+                onPress={updateSecureTextEntry}
+              >
+                <Icon
+                  name={secureTextEntry ? 'eye-slash' : 'eye'}
+                  size={20}
+                  color={'grey'}
+                />
+              </TouchableOpacity>
             </View>
 
             {/* Login Button */}
@@ -95,7 +134,9 @@ const Login = (props) => {
         <Text>Don't have an account?</Text>
         <Text
           style={[{ color: 'blue' }, { marginLeft: 3 }]}
-          onPress={() => props.navigation.navigate('SignUp')}
+          onPress={() =>
+            props.navigation.navigate('SignUp', { loggedIn: false })
+          }
         >
           Sign Up!
         </Text>
@@ -136,7 +177,7 @@ const styles = StyleSheet.create({
   inputText: {
     fontWeight: 'bold',
     marginLeft: 60,
-    width: '100%',
+    width: '80%',
   },
   submitContainer: {
     alignItems: 'center',
@@ -156,18 +197,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnEye: {
+    position: 'absolute',
+    top: 12,
+    right: 20,
+  },
 });
 
-const mapStateToProps = (state) => ({
-  method: 'Login',
-});
-
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      auth,
-    },
-    dispatch
-  );
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

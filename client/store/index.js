@@ -1,5 +1,4 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 import user from './user';
 import events from './events';
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
   events,
   userProfile,
   user,
-  form: formReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

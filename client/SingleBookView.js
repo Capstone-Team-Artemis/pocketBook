@@ -43,35 +43,37 @@ export default function SingleBookView(props) {
           >
             <Icon name="bars" size={24} color="#161924" />
           </TouchableOpacity>
-          <Image
-            style={{ width: 200, height: 300 }}
-            alt={
-              bookPath.volumeInfo
+          <View style={styles.center}>
+            <Image
+              style={{ width: 200, height: 300 }}
+              alt={
+                bookPath.volumeInfo
+                  ? bookPath.volumeInfo.title
+                  : bookPath.book.title
+              }
+              source={{
+                uri: bookPath.volumeInfo
+                  ? bookPath.volumeInfo.imageLinks.thumbnail
+                  : bookPath.book.image,
+              }}
+            />
+            <Text style={styles.textTitle}>
+              {bookPath.volumeInfo
                 ? bookPath.volumeInfo.title
-                : bookPath.book.title
-            }
-            source={{
-              uri: bookPath.volumeInfo
-                ? bookPath.volumeInfo.imageLinks.thumbnail
-                : bookPath.book.image,
-            }}
-          />
-          <Text style={styles.textTitle}>
-            {bookPath.volumeInfo
-              ? bookPath.volumeInfo.title
-              : bookPath.book.title}
-          </Text>
-          <Text>
-            {bookPath.volumeInfo
-              ? bookPath.volumeInfo.authors
-              : bookPath.book.authors}
-          </Text>
-          <Text>
-            {bookPath.volumeInfo
-              ? bookPath.volumeInfo.description
-              : bookPath.book.description}
-          </Text>
-          <Text>Book Status</Text>
+                : bookPath.book.title}
+            </Text>
+            <Text>
+              {bookPath.volumeInfo
+                ? bookPath.volumeInfo.authors
+                : bookPath.book.authors}
+            </Text>
+            <Text>
+              {bookPath.volumeInfo
+                ? bookPath.volumeInfo.description
+                : bookPath.book.description}
+            </Text>
+          </View>
+          <Text style={styles.textTitle}>Book Status</Text>
           <DropDownPicker
             containerStyle={{ height: 40 }}
             defaultValue={status}
@@ -122,6 +124,8 @@ export default function SingleBookView(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  center: {
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -129,5 +133,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignContent: 'center',
     width: '100%',
+    textAlign: 'center',
   },
 });

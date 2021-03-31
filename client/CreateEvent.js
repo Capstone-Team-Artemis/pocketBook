@@ -30,15 +30,15 @@ class CreateEvent extends Component {
     super(props);
     //assign variable path to get event information
     const path = this.props.route.params
-    let formatDate = DateTime.fromISO(path.startTime).toLocaleString(DateTime.DATE_FULL)
-    let time = new Date()
+    //let formatDate = DateTime.fromISO(path.startTime).toLocaleString(DateTime.DATE_FULL)
+    // let time = new Date()
     this.state = {
       //if event has id, then we are updating the event, if not we are creating event!
       eventTitle: path.id ? path.eventTitle : "",
       //update parent component to use start and end date
-      date: path.id ? formatDate : new Date(),
-      startTime: path.id ? path.startTime : time.getTime(),
-      endTime: path.id ? path.endTime : time.getTime(),
+      date: path.id ? path.date : new Date(),
+      startTime: path.id ? path.startTime : new Date(),
+      endTime: path.id ? path.endTime : new Date(),
       // time: this.props.event.id ? this.props.event.time : new Date(),
       description: path.id ? path.description : "",
       hostId: path.hostId ?  path.hostId : path.userId,
@@ -49,21 +49,21 @@ class CreateEvent extends Component {
   }
 
   //component did update to update auto populate as well.  
-  componentDidUpdate(prevProps) {
-    console.log("PREV PROPS event Id?", prevProps)
-    let path = this.props.route.params
-    //console.log("PREV PROPS. navigation.navigate?", prevProps.navigation.state.params.eventTitle)
-    if (prevProps.route.params.id !== this.props.route.params.id) {
-      console.log("component did update")
-      this.setState({
-        eventTitle: path.eventTitle,
-        date: path.date,
-        startTime: path.startTime,
-        endTime: path.endTime,
-        description: path.description,
-      });
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   console.log("PREV PROPS event Id?", prevProps)
+  //   let path = this.props.route.params
+  //   //console.log("PREV PROPS. navigation.navigate?", prevProps.navigation.state.params.eventTitle)
+  //   if (prevProps.route.params.id !== this.props.route.params.id) {
+  //     console.log("component did update")
+  //     this.setState({
+  //       eventTitle: this.state.eventTitle,
+  //       date: this.state.date,
+  //       startTime: this.state.startTime,
+  //       endTime: this.state.endTime,
+  //       description: path.description,
+  //     });
+  //   }
+  // }
   async handleSubmit() {
     //if event id exist then update the event otherwise create an event
     let eventId = this.props.route.params.id;
@@ -75,8 +75,8 @@ class CreateEvent extends Component {
         ? await this.props.update(hostId, eventId, { ...this.state })
         : await this.props.create({
             ...this.state,
-            date: this.state.date,
-            startTime: this.state.startDate.toLocaleTimeString("en", {
+            date: this.state.startDate,
+            startTime: this.state.startTime.toLocaleTimeString("en", {
               hour: "2-digit",
               minute: "2-digit",
               hour12: false,
@@ -109,6 +109,7 @@ class CreateEvent extends Component {
   render() {
     const {eventTitle, date, description, startTime, endTime, hostId} = this.props.route.params;
 
+    console.log("***PROPS***", this.props.route.params)
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>
@@ -140,8 +141,7 @@ class CreateEvent extends Component {
             display='default'
             onChange={(event, selectedDate) =>
               this.setState({
-                startDate: selectedDate,
-                endDate: selectedDate,
+                date: selectedDate,
               })
             }
           />
@@ -152,7 +152,7 @@ class CreateEvent extends Component {
             display='default'
             onChange={(event, selectedTime) =>
               this.setState({
-                startDate: selectedTime,
+                startTime: selectedTime,
               })
             }
           />
@@ -162,7 +162,7 @@ class CreateEvent extends Component {
             display='default'
             onChange={(event, selectedTime) =>
               this.setState({
-                endDate: selectedTime,
+                endTime: selectedTime,
               })
             }
           />

@@ -72,16 +72,16 @@ export default class SingleEvent extends React.Component {
                     <Text style={styles.description}>
                     Description: {event.description}
                     </Text>
-                </View>
+                
                 {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
                         if not host, button can also say 'Un/Register' */}
                 <View style={styles.registerButtonContainer}>
                     {user === event.hostId ? (
                     <Button
-                        // 'Edit/Delete' button takes you to EditEvent page
+                        // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
                         title={'Edit/Delete'}
                         onPress={() => {
-                        navigate.navigate('CreateEvent', event); // needs to be switched to EditEvent once that page is created
+                        navigate.navigate('CreateEvent', event); 
                         }}
                         color="white"
                         accessibilityLabel="Status"
@@ -99,6 +99,7 @@ export default class SingleEvent extends React.Component {
                         accessibilityLabel="Status"
                     />
                     )}       
+                </View>
                 </View>
             </View>
         </TouchableOpacity>

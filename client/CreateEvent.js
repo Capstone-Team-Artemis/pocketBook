@@ -19,6 +19,7 @@ import {
   updateEvent,
   deleteEvent,
 } from "./store/event";
+import {DateTime} from 'luxon';
 
 //import GoogleAPI from '../test/GoogleAPI';
 
@@ -27,40 +28,47 @@ const { width: WIDTH } = Dimensions.get('window');
 class CreateEvent extends Component {
   constructor(props) {
     super(props);
+    //assign variable path to get event information
+    const path = this.props.route.params
+    let formatDate = DateTime.fromISO(path.startTime).toLocaleString(DateTime.DATE_FULL)
+    let time = new Date()
     this.state = {
-      eventTitle: this.props.navigation.state.params.id ? this.props.navigation.state.params.eventTitle : "",
+      //if event has id, then we are updating the event, if not we are creating event!
+      eventTitle: path.id ? path.eventTitle : "",
       //update parent component to use start and end date
-      date: this.props.event.id ? this.props.navigation.state.params.date : new Date(),
-      startTime: this.props.event.id ? this.props.event.date : new Date(),
-      endTime: this.props.event.id ? this.props.event.date : new Date(),
+      date: path.id ? formatDate : new Date(),
+      startTime: path.id ? path.startTime : time.getTime(),
+      endTime: path.id ? path.endTime : time.getTime(),
       // time: this.props.event.id ? this.props.event.time : new Date(),
-      description: this.props.navigation.state.params.id ? this.props.navigation.state.params.description : "",
-      hostId: this.props.navigation.state.params.hostId ?  this.props.navigation.state.params.hostId : this.props.navigation.state.params.users.id,
+      description: path.id ? path.description : "",
+      hostId: path.hostId ?  path.hostId : path.userId,
     };
     this.handleSubmit.bind(this);
     this.handleDelete.bind(this);
     this.handleGoBack.bind(this);
   }
 
-  // componentDidUpdate(prevProps) {
-  //   console.log("PREV PROPS event Id?", prevProps.navigation.state.params.id)
-  //   console.log("PREV PROPS. navigation.navigate?", prevProps.navigation.state.params.eventTitle)
-    // if (!prevProps.navigation.state.params.id && this.props.navigation.state.params.id) {
-    //   console.log("component did update")
-    //   // this.setState({
-    //   //   eventTitle: this.props.navigation.state.params.eventTitle,
-    //   //   date: this.props.event.eventTitle,
-    //   //   time: this.props.event.eventTitle,
-    //   //   description: prevProps.navigation.state.params.description,
-    //   //   host: this.props.navigation.state.params.hostId,
-    //   // });
-    // }
-  //}
+  //component did update to update auto populate as well.  
+  componentDidUpdate(prevProps) {
+    console.log("PREV PROPS event Id?", prevProps)
+    let path = this.props.route.params
+    //console.log("PREV PROPS. navigation.navigate?", prevProps.navigation.state.params.eventTitle)
+    if (prevProps.route.params.id !== this.props.route.params.id) {
+      console.log("component did update")
+      this.setState({
+        eventTitle: path.eventTitle,
+        date: path.date,
+        startTime: path.startTime,
+        endTime: path.endTime,
+        description: path.description,
+      });
+    }
+  }
   async handleSubmit() {
     //if event id exist then update the event otherwise create an event
-    let eventId = this.props.navigation.state.params.id;
+    let eventId = this.props.route.params.id;
     let hostId = this.state.hostId
-    console.log("date", this.props.navigation.state.params.date)
+    console.log("props", this.props)
     console.log("this.state", this.state)
     try {
       eventId
@@ -87,10 +95,10 @@ class CreateEvent extends Component {
   }
 
   handleDelete() {
-    let eventId = this.props.navigation.state.params.id;
+    let eventId = this.props.route.params.id;
     let hostId = this.state.hostId
-    console.log("hostid",hostId)
     this.props.delete(hostId, eventId);
+    //after delete, go back to All event page 
     this.props.navigation.navigate("AllEvents");
   }
 
@@ -99,9 +107,8 @@ class CreateEvent extends Component {
   }
 
   render() {
-    //const eventPath = this.props.navigation.state.params.eventTitle || !1;
-    console.log("***EVENT PATH***", this.props.navigation.state.params.id)
-    console.log("***Event ID ***", this.props.navigation.state.params.id )
+    const {eventTitle, date, description, startTime, endTime, hostId} = this.props.route.params;
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>
@@ -114,18 +121,18 @@ class CreateEvent extends Component {
           </TouchableOpacity>
         </View>
         <Text style={styles.heading}>
-          {this.props.navigation.state.params.id ? "Update Event" : "Create Event"}
+          {eventTitle ? "Update Event" : "Create Event"}
         </Text>
 
         <View style={styles.inputContainer}>
           {/* <GoogleAPI /> */}
           <TextInput
             style={styles.input}
-            placeholder={this.props.navigation.state.params.id? "this.state.eventTitle" : "Title"}
+            placeholder={"Title"}
             onChangeText={(eventTitle) => {
               this.setState({ eventTitle });
             }}
-          >{this.props.navigation.state.params.id? `${this.state.eventTitle}` : "" }</TextInput>
+          >{eventTitle? `${this.state.eventTitle}` : "" }</TextInput>
 
           <DateTimePicker
             value={this.state.date}
@@ -139,14 +146,6 @@ class CreateEvent extends Component {
             }
           />
 
-          {/* <TextInput
-            style={styles.input}
-            placeholder={"Date (mm/dd/yy)"}
-            value={this.state.date}
-            onChangeText={(date) => {
-              this.setState({ date });
-            }}
-          ></TextInput> */}
           <DateTimePicker
             value={this.state.startTime}
             mode='time'
@@ -168,22 +167,13 @@ class CreateEvent extends Component {
             }
           />
 
-          {/* <TextInput
-            style={styles.input}
-            placeholder={"Time (00:00Am - 00:00pm)"}
-            value={this.state.time}
-            onChangeText={(time) => {
-              this.setState({ time });
-            }}
-          ></TextInput> */}
-
           <TextInput
             style={[styles.input, description]}
             placeholder={'Description'}
             onChangeText={(description) => {
               this.setState({ description });
             }}
-          >{this.props.navigation.state.params.id? `${this.state.description}` : "" }</TextInput>
+          >{eventTitle? `${this.state.description}` : "" }</TextInput>
 
           <TouchableHighlight
             style={styles.button}
@@ -192,7 +182,7 @@ class CreateEvent extends Component {
             <Text style={styles.submitText}>Submit</Text>
           </TouchableHighlight>
 
-          {this.props.navigation.state.params.id ? (
+          {eventTitle ? (
             <Button title='Delete Event' onPress={() => this.handleDelete()} />
           ) : (
             <Button title="Go Back" onPress={() => this.handleGoBack()} />

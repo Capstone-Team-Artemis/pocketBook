@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -9,16 +9,16 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Formik } from 'formik';
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { Formik } from "formik";
 // import GOOGLE_API from "../secrets";
-import axios from 'axios';
+import axios from "axios";
 // import SingleBookView from "./SingleBookView";
-const GOOGLE_API = 'AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg';
+const GOOGLE_API = "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg";
 
 export default function LandingPage({ navigation }) {
-  const [book, setBook] = useState('');
+  const [book, setBook] = useState("");
   const [result, setResult] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [featureBook, setFeatureBook] = useState({});
@@ -27,13 +27,13 @@ export default function LandingPage({ navigation }) {
     //makes an axios call to fetch all books with query of "book" & ordered by newest published books
     const getRandomBook = async () => {
       const { data } = await axios.get(
-        'https://www.googleapis.com/books/v1/volumes',
+        "https://www.googleapis.com/books/v1/volumes",
         {
           //breaking up params can help with entering in different inputs for keys below and easier to see the params
           params: {
-            q: 'book',
+            q: "puppies",
             key: GOOGLE_API,
-            orderBy: 'newest',
+            orderBy: "relevance",
           },
         }
       );
@@ -57,12 +57,12 @@ export default function LandingPage({ navigation }) {
     // Axios runs, passing in "book" & our Google Books API key
     axios
       .get(
-        'https://www.googleapis.com/books/v1/volumes?q=' +
+        "https://www.googleapis.com/books/v1/volumes?q=" +
           book +
-          '&key=' +
-          'AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg' +
+          "&key=" +
+          "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg" +
           // GOOGLE_API +
-          '&maxResults=5'
+          "&maxResults=5"
       )
       // Axios retrieves max list of 10 results
       .then((data) => {
@@ -81,7 +81,7 @@ export default function LandingPage({ navigation }) {
       <View style={styles.container}>
         <Image
           source={{
-            uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
+            uri: "https://i.ibb.co/rpJ7vjb/signupbook.png",
           }}
           style={styles.image}
         />
@@ -107,13 +107,13 @@ export default function LandingPage({ navigation }) {
             <Text style={styles.published}>Newly Published</Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('SingleBookView', featureBook);
+                navigation.navigate("SingleBookView", featureBook);
               }}
             >
               <Image
                 alt={featureBook.volumeInfo.title}
                 source={{ uri: featureBook.volumeInfo.imageLinks.thumbnail }}
-                style={{ width: 200, height: 300, margin: 'auto' }}
+                style={{ width: 200, height: 300, margin: "auto" }}
               />
             </TouchableOpacity>
             {/* <Text>{featureBook.volumeInfo.description}</Text> */}
@@ -121,7 +121,7 @@ export default function LandingPage({ navigation }) {
         )}
         <View style={styles.centeredView}>
           <Modal
-            animationType="slide"
+            animationType='slide'
             transparent={false}
             visible={modalVisible}
           >
@@ -139,7 +139,7 @@ export default function LandingPage({ navigation }) {
                         <TouchableOpacity
                           onPress={() => {
                             setModalVisible(false);
-                            navigation.navigate('SingleBookView', book);
+                            navigation.navigate("SingleBookView", book);
                           }}
                         >
                           <Image
@@ -195,8 +195,8 @@ export default function LandingPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {
     marginTop: 40,
@@ -216,49 +216,49 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
   },
   inputText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
     marginLeft: 50,
-    width: '100%',
+    width: "100%",
   },
   inputContainer: {
     marginTop: 20,
-    flexDirection: 'row',
-    width: '80%',
+    flexDirection: "row",
+    width: "80%",
     height: 35,
     borderRadius: 50,
     borderWidth: 1.5,
     // justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
     paddingTop: 5,
   },
   submitContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#6475a5',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#6475a5",
   },
   submitText: {
-    color: 'white',
+    color: "white",
     fontSize: 15,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     bottom: 2,
   },
 
   //CSS for Modal
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 0,
     padding: 35,
     opacity: 0,
-    alignItems: 'center',
+    alignItems: "center",
     shadowOpacity: 100,
     shadowRadius: 4,
     elevation: 5,
@@ -267,8 +267,8 @@ const styles = StyleSheet.create({
     marginLeft: 35,
   },
   bookInfo: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
-    width: '100%',
+    width: "100%",
   },
 });

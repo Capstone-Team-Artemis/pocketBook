@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import LandingPage from './client/LandingPage';
-import SingleBookView from './client/SingleBookView';
-import AllEvents from './client/AllEvents';
-import CreateEvent from './client/CreateEvent';
-import SingleEventView from './client/SingleEventView';
-import UserProfile from './client/UserProfile';
-import Chat from './client/Chat';
+import LandingPage from '../LandingPage';
+import SingleBookView from '../SingleBookView';
+import AllEvents from '../AllEvents';
+import CreateEvent from '../CreateEvent';
+import SingleEventView from '../SingleBookView';
+import UserProfile from '../SingleBookView';
+import Chat from '../Chat';
 
 const Stack = createStackNavigator();
 

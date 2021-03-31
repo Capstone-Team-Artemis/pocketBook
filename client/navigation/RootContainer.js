@@ -1,22 +1,21 @@
-import React, { useEffect, useImperativeHandle } from 'react';
+import React, { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { connect } from 'react-redux';
-import store from './client/store';
-import { AuthContext } from './client/context';
+import store from '../store';
+import { AuthContext } from '../context';
 import AsyncStorage from '@react-native-community/async-storage';
 
 // Import Screens:
-import Sidebar from './client/Sidebar';
-import LandingPage from './client/LandingPage';
-import SingleBookView from './client/SingleBookView';
-import AllEvents from './client/AllEvents';
-import SingleEventView from './client/SingleEventView';
-import CreateEvent from './client/CreateEvent';
-import UserProfile from './client/UserProfile';
-import Chat from './client/Chat';
+import Sidebar from '../Sidebar';
+import LandingPage from '../LandingPage';
+import SingleBookView from '../SingleBookView';
+import AllEvents from '../AllEvents';
+import SingleEventView from '../SingleEventView';
+import CreateEvent from '../CreateEvent';
+import UserProfile from '../UserProfile';
+import Chat from '../Chat';
 import AuthNavigation from './AuthNavigation';
 import StackContainer from './StackContainer';
 

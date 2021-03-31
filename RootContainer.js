@@ -68,8 +68,6 @@ const RootContainer = () => {
     initialLoginState
   );
 
-  console.log('LOGIN STATE --->', loginState);
-
   // We will be passing authContext throughout our app
   const authContext = React.useMemo(
     () => ({

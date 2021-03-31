@@ -1,11 +1,13 @@
 import * as React from 'react';
-// import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import LandingPage from './client/LandingPage';
 import SingleBookView from './client/SingleBookView';
 import AllEvents from './client/AllEvents';
 import CreateEvent from './client/CreateEvent';
+import SingleEventPage from './client/SingleEventPage';
+import UserProfile from './client/UserProfile';
+import Chat from './client/Chat';
 
 const Stack = createStackNavigator();
 
@@ -31,56 +33,24 @@ const StackContainer = (props) => (
       component={CreateEvent}
       options={{ headerShown: false }}
     />
+    <Stack.Screen
+      name="SingleEventPage"
+      component={SingleEventPage}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="UserProfile"
+      component={UserProfile}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Chat"
+      component={Chat}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 
-// const StackContainer = createStackNavigator(
-//   {
-//     LandingPage: {
-//       screen: LandingPage,
-//       navigationOptions: {
-//         title: 'Home',
-//       },
-//     },
-//     SingleBookView: {
-//       screen: SingleBookView,
-//       navigationOptions: {
-//         title: 'Single Book View',
-//       },
-//     },
-//     AllEvents: {
-//       screen: AllEvents,
-//       navigationOptions: {
-//         title: 'Events',
-//       },
-//     },
-//     CreateEvent: {
-//       screen: CreateEvent,
-//       navigationOptions: {
-//         title: 'Create Event',
-//       },
-//     },
-//   },
-//   { headerMode: 'none' }
-// );
-
 export default StackContainer;
 
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator>
-//         {/* You can have as many Stack.Screen as you want */}
-//         {/* Each Screen takes a React "component" prop */}
-//         <Stack.Screen
-//           name="LandingPage"
-//           component={LandingPage}
-//           options={{ headerShown: false }}
-//         />
-//         <Stack.Screen
-//           name="SingleBookView"
-//           component={SingleBookView}
-//           options={{ headerShown: false }}
-//         />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
+// MIGHT NOT NEED USERPROFILE

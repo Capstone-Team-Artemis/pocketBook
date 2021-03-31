@@ -1,10 +1,16 @@
 import axios from 'axios';
 
 //ACTION TYPE
+const GET_EVENT = 'GET_EVENT';
+
 const CREATE_EVENT = 'CREATE_EVENT';
 const UPDATE_EVENT = 'UPDATE_EVENT';
 
 //ACTION CREATOR
+const gotEvent = (singleEvent) => ({
+  type: GET_EVENT,
+  singleEvent,
+});
 const createdEvent = (newEvent) => ({
   type: CREATE_EVENT,
   newEvent,
@@ -16,18 +22,57 @@ const updatedEvent = (updatedEvent) => ({
 });
 
 //THUNK CREATOR
+//GET api/events/eventId
+export const getSingleEvent = (eventId) => async (dispatch) => {
+  try {
+    const singleEvent = await axios.get(
+      `http://localhost:3000/api/events/${eventId}`
+    );
+    dispatch(gotEvent(singleEvent.data));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //POST api/events/createEvent
 export const postEvent = (newEventInfo) => async (dispatch) => {
   try {
-    console.log('post creator', newEventInfo);
     const newEvent = await axios.post(
       `http://localhost:3000/api/events/createEvent`,
       newEventInfo
     );
-    console.log('newEvent', newEvent.data);
     dispatch(createdEvent(newEvent.data));
   } catch (error) {
-    console.log(error);
+    throw error;
+  }
+};
+
+//PUT api/events/:userId/updateEvent/:eventId
+
+export const updateEvent = (userId, editedInfo, eventId) => async (
+  dispatch
+) => {
+  try {
+    const newEvent = await axios.post(
+      `http://localhost:3000/api/events/${userId}/updateEvent/${eventId}`,
+      editedInfo
+    );
+    dispatch(updatedEvent(newEvent.data));
+  } catch (error) {
+    throw error;
+  }
+};
+
+// DELETE api/events/delete/eventId
+export const deleteEvent = (userId, eventId) => async (dispatch) => {
+  try {
+    const deletedEvent = await axios.delete(
+      `http://localhost:3000/api/events/${userId}/delete/${eventId}`,
+      editedInfo
+    );
+    console.log('deleted event thunk', deletedEvent);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -37,8 +82,8 @@ const initialState = [];
 //REDUCER
 const event = (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_EVENT:
-      return action.newEvent;
+    case GET_EVENT:
+      return action.singleEvent;
     default:
       return state;
   }

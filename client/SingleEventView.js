@@ -18,7 +18,7 @@ import {DateTime} from 'luxon';
 export default class SingleEventView extends React.Component {
 
   render() {
-      const {eventTitle, date, description, startTime, endTime, hostId} = this.props.navigation.state.params
+      const {eventTitle, date, description, startTime, endTime, hostId} = this.props.route;
       // create DateTime instance so can covert to properly formatted string
       const formattedStartTime= DateTime.fromISO(startTime).toLocaleString(DateTime.TIME_SIMPLE);
       const formattedEndTime= DateTime.fromISO(endTime).toLocaleString(DateTime.TIME_SIMPLE);

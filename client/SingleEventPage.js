@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {DateTime} from 'luxon';
 
 
-export default class SingleEventPage extends React.Component {
+export default class SingleEventView extends React.Component {
 
     render() {
         const {eventTitle, date, description, startTime, endTime, hostId} = this.props.navigation.state.params

@@ -54,7 +54,7 @@ export default class SingleEvent extends React.Component {
     const formattedDate = DateTime.fromISO(event.date).toLocaleString(DateTime.DATE_FULL);
         
     return (     
-        <TouchableOpacity onPress={() => navigate.navigate('SingleEventPage', event)}>
+        <TouchableOpacity onPress={() => navigate.navigate('SingleEventView', event)}>
             <View style={styles.listContainer} key={event.id}>
                 {/* Adds book image for each event */}
                 <Image

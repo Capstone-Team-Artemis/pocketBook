@@ -9,7 +9,7 @@ import {
   } from 'react-native'; 
 import React from 'react';
 import axios from 'axios';
-const { DateTime } = require("luxon");
+import {DateTime} from 'luxon';
 
 export default class SingleEvent extends React.Component {
     constructor(props) {

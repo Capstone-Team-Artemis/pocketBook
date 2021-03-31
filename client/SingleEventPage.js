@@ -12,13 +12,17 @@ import {
   } from 'react-native'; 
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {DateTime} from 'luxon';
 
 
 export default class SingleEventPage extends React.Component {
 
     render() {
         const {eventTitle, date, description, startTime, endTime, hostId} = this.props.navigation.state.params
-        
+        // create DateTime instance so can covert to properly formatted string
+        const formattedStartTime= DateTime.fromISO(startTime).toLocaleString(DateTime.TIME_SIMPLE);
+        const formattedEndTime= DateTime.fromISO(endTime).toLocaleString(DateTime.TIME_SIMPLE);
+        const formattedDate = DateTime.fromISO(date).toLocaleString(DateTime.DATE_FULL);
         return (     
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
@@ -33,9 +37,9 @@ export default class SingleEventPage extends React.Component {
                         {/* Adds event info */}
                         <View style={styles.eventData}>
                             <Text style={styles.eventTitle}>{eventTitle}</Text> 
-                            <Text style={styles.date}>Date: {date}</Text>
-                            <Text style={styles.startTime}>Start Time: {startTime}</Text>
-                            <Text style={styles.endTime}>End Time: {endTime}</Text>
+                            <Text style={styles.date}>Date: {formattedDate}</Text>
+                            <Text style={styles.startTime}>Start Time: {formattedStartTime}</Text>
+                            <Text style={styles.endTime}>End Time: {formattedEndTime}</Text>
                             <Text style={styles.description}>{description}</Text>
                         </View> 
                         {/* Adds book image for each event */}

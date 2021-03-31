@@ -25,6 +25,7 @@ const RootContainer = () => {
   const initialLoginState = {
     isLoading: true,
     userId: null,
+    imageURL: null,
     userToken: null,
   };
 
@@ -35,6 +36,7 @@ const RootContainer = () => {
         return {
           ...prevState,
           userId: action.id,
+          imageURL: action.image,
           userToken: action.token,
           isLoading: false,
         };
@@ -42,6 +44,7 @@ const RootContainer = () => {
         return {
           ...prevState,
           userId: action.id,
+          imageURL: action.image,
           userToken: action.token,
           isLoading: false,
         };
@@ -55,6 +58,7 @@ const RootContainer = () => {
         return {
           ...prevState,
           userId: action.id,
+          imageURL: action.image,
           userToken: action.token,
           isLoading: false,
         };
@@ -66,6 +70,7 @@ const RootContainer = () => {
     loginReducer,
     initialLoginState
   );
+  console.log('LOGIN STATE -->', loginState);
 
   // We will be passing authContext throughout our app
   const authContext = React.useMemo(
@@ -75,12 +80,19 @@ const RootContainer = () => {
           // Set userToken to inputted user's username and store it in AsyncStorage
           userToken = res.user.username;
           userId = res.user.id.toString();
+          imageURL = res.user.image;
           await AsyncStorage.setItem('userToken', userToken);
           await AsyncStorage.setItem('userId', userId);
+          await AsyncStorage.setItem('imageURL', imageURL);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'LOGIN', id: userId, token: userToken });
+        dispatch({
+          type: 'LOGIN',
+          id: userId,
+          image: imageURL,
+          token: userToken,
+        });
       },
       logOut: async () => {
         try {
@@ -94,12 +106,19 @@ const RootContainer = () => {
         try {
           userToken = res.user.username;
           userId = res.user.id.toString();
+          imageURL = res.user.image;
           await AsyncStorage.setItem('userToken', userToken);
           await AsyncStorage.setItem('userId', userId);
+          await AsyncStorage.setItem('imageURL', imageURL);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'SIGNUP', id: userId, token: userToken });
+        dispatch({
+          type: 'SIGNUP',
+          id: userId,
+          image: imageURL,
+          token: userToken,
+        });
       },
     }),
     []
@@ -112,13 +131,19 @@ const RootContainer = () => {
       try {
         // Fetch userId and userToken from AsyncStorage
         userId = await AsyncStorage.getItem('userId');
+        imageURL = await AsyncStorage.getItem('imageURL');
         userToken = await AsyncStorage.getItem('userToken');
       } catch (err) {
         console.log(err);
       }
       // If token is found, dispatch for token
       // Otherwise, userToken stays null
-      dispatch({ type: 'GET_TOKEN', id: userId, token: userToken });
+      dispatch({
+        type: 'GET_TOKEN',
+        id: userId,
+        image: imageURL,
+        token: userToken,
+      });
     }, 1000);
   }, []);
 

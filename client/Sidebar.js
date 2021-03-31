@@ -11,12 +11,12 @@ import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from './context';
+import { connect } from 'react-redux';
+import { changeImage } from './store/user';
 
-export default Sidebar = (props) => {
+const Sidebar = (props) => {
   // Set custom image state
-  const [image, setImage] = useState(
-    'https://cdn.nohat.cc/thumb/f/720/comvecteezy268447.jpg'
-  );
+  const [image, setImage] = useState(props.imageURL);
   const { logOut } = React.useContext(AuthContext);
 
   // Allows user to custom pick an image from camera roll
@@ -31,6 +31,9 @@ export default Sidebar = (props) => {
       });
       if (!pickImage.cancelled) {
         setImage(pickImage.uri);
+        let id = Number(props.userId);
+        console.log('URI??? -->', pickImage.uri);
+        props.changeImage(id, pickImage.uri);
       }
     }
   };
@@ -98,6 +101,21 @@ export default Sidebar = (props) => {
     </View>
   );
 };
+
+// const mapState = (state) => {
+//   return {
+//     user: state.user,
+//   };
+// };
+
+const mapDispatch = (dispatch) => {
+  return {
+    changeImage: (userId, imageURL) => dispatch(changeImage(userId, imageURL)),
+  };
+};
+
+export default connect(null, mapDispatch)(Sidebar);
+// export default Sidebar;
 
 const styles = StyleSheet.create({
   container: {

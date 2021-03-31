@@ -1,33 +1,39 @@
 import axios from 'axios';
 
 // ACTION TYPES
-const GET_USER = 'GET_USER';
+const CHANGED_IMAGE = 'CHANGED_IMAGE';
 
 // ACTION CREATORS
-const getUser = (user) => ({
-  type: GET_USER,
-  user,
+const changedImage = (image) => ({
+  type: RECEIVED_IMAGE,
+  image,
 });
 
 // THUNK CREATORS
-export const me = () => async (dispatch) => {
-  try {
-    const res = await axios.get('/auth/me');
-    dispatch(getUser(res.data || defaultUser));
-  } catch (err) {
-    console.error(err);
-  }
+export const changeImage = (userId, imageURL) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(
+        `http://localhost:3000/api/users/${userId}`,
+        {
+          image: imageURL,
+        }
+      );
+      // dispatch(changedImage(data));
+    } catch (error) {
+      console.log('Error saving image to server');
+    }
+  };
 };
 
 // INITIAL STATE
-const defaultUser = {};
+const initialState = {};
 
 // REDUCER
-export default function (state = defaultUser, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
-    case GET_USER:
-      console.log('ACTION.USER --->', action.user);
-      return action.user;
+    case CHANGED_IMAGE:
+      return action.image;
     default:
       return state;
   }

@@ -15,10 +15,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class SingleEventView extends React.Component {
   render() {
-    console.log(
-      'props in singleeventview: ',
-      this.props.navigation.state.params
-    );
     const {
       eventTitle,
       date,
@@ -26,8 +22,7 @@ export default class SingleEventView extends React.Component {
       startTime,
       endTime,
       hostId,
-    } = this.props.navigation.state.params;
-
+    } = this.props.route;
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>

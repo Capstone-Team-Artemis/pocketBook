@@ -30,9 +30,23 @@ router.get('/:userId', async (req, res, next) => {
   }
 });
 
+// Create GET route to generate books by status
+router.get('/:userId/image', async (req, res, next) => {
+  try {
+    console.log('testinggg user');
+    let userId = req.params.userId;
+    const user = await User.findAll({
+      where: { id: userId },
+    });
+    console.log('USER!!! ->', user[0].dataValues);
+    res.status(200).send(user[0].dataValues);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // PUT api/users/:userId route to set custom image
 router.put('/:userId/', async (req, res, next) => {
-  console.log('DID U GET MY IMAGE?? -->', req.body.image);
   try {
     const result = await User.update(
       {
@@ -45,7 +59,7 @@ router.put('/:userId/', async (req, res, next) => {
       }
     );
     if (result) {
-      res.sendStatus(200);
+      res.status(200).json(req.body.image);
     }
   } catch (err) {
     next(err);

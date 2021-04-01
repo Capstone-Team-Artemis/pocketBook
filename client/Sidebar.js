@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,13 +11,24 @@ import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from './context';
-import { connect } from 'react-redux';
-import { changeImage } from './store/user';
+import { useDispatch, useSelector } from 'react-redux';
+// import { connect } from 'react-redux';
+import { changeImage, fetchUser } from './store/user';
 
 const Sidebar = (props) => {
   // Set custom image state
-  const [image, setImage] = useState(props.imageURL);
+  const user = useSelector((state) => state.user);
+  // I HAVE THE IMAGE, BUT IT'S NOT SETTING IT TO IMAGE ON LINE 25
+  console.log('IMAGE --->', user.image);
+  const dispatch = useDispatch();
+  const [image, setImage] = useState(user.image);
+  // const [image, setImage] = useState(props.imageURL);
   const { logOut } = React.useContext(AuthContext);
+
+  // Update image
+  useEffect(() => {
+    dispatch(fetchUser(props.userId));
+  }, []);
 
   // Allows user to custom pick an image from camera roll
   const pickImage = async () => {
@@ -32,8 +43,7 @@ const Sidebar = (props) => {
       if (!pickImage.cancelled) {
         setImage(pickImage.uri);
         let id = Number(props.userId);
-        console.log('URI??? -->', pickImage.uri);
-        props.changeImage(id, pickImage.uri);
+        dispatch(changeImage(id, pickImage.uri));
       }
     }
   };
@@ -104,18 +114,18 @@ const Sidebar = (props) => {
 
 // const mapState = (state) => {
 //   return {
-//     user: state.user,
+//     image: state.image,
 //   };
 // };
 
-const mapDispatch = (dispatch) => {
-  return {
-    changeImage: (userId, imageURL) => dispatch(changeImage(userId, imageURL)),
-  };
-};
+// const mapDispatch = (dispatch) => {
+//   return {
+//     changeImage: (userId, imageURL) => dispatch(changeImage(userId, imageURL)),
+//   };
+// };
 
-export default connect(null, mapDispatch)(Sidebar);
-// export default Sidebar;
+export default Sidebar;
+// export default connect(mapState, mapDispatch)(Sidebar);
 
 const styles = StyleSheet.create({
   container: {
@@ -140,24 +150,3 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
-
-{
-  /* <ImageBackground
-        source={{
-          uri:
-            'https://png.pngtree.com/thumb_back/fw800/back_pic/04/00/88/6157ff435466669.jpg',
-        }}
-        style={{ width: undefined, padding: 20, paddingTop: 50 }}
-      >
-        <Image
-          source={{
-            uri: 'https://cdn.nohat.cc/thumb/f/720/comvecteezy268447.jpg',
-          }}
-          style={styles.profile}
-        />
-        <Text style={styles.name}>Test User</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.followers}>10 followers</Text>
-        </View>
-      </ImageBackground> */
-}

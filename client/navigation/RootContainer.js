@@ -3,6 +3,7 @@ import { View, ActivityIndicator } from 'react-native';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useDispatch } from 'react-redux';
 import store from '../store';
 import { AuthContext } from '../context';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -25,7 +26,6 @@ const RootContainer = () => {
   const initialLoginState = {
     isLoading: true,
     userId: null,
-    imageURL: null,
     userToken: null,
   };
 
@@ -36,7 +36,6 @@ const RootContainer = () => {
         return {
           ...prevState,
           userId: action.id,
-          imageURL: action.image,
           userToken: action.token,
           isLoading: false,
         };
@@ -44,7 +43,6 @@ const RootContainer = () => {
         return {
           ...prevState,
           userId: action.id,
-          imageURL: action.image,
           userToken: action.token,
           isLoading: false,
         };
@@ -58,7 +56,6 @@ const RootContainer = () => {
         return {
           ...prevState,
           userId: action.id,
-          imageURL: action.image,
           userToken: action.token,
           isLoading: false,
         };
@@ -80,17 +77,14 @@ const RootContainer = () => {
           // Set userToken to inputted user's username and store it in AsyncStorage
           userToken = res.user.username;
           userId = res.user.id.toString();
-          imageURL = res.user.image;
           await AsyncStorage.setItem('userToken', userToken);
           await AsyncStorage.setItem('userId', userId);
-          await AsyncStorage.setItem('imageURL', imageURL);
         } catch (err) {
           console.log(err);
         }
         dispatch({
           type: 'LOGIN',
           id: userId,
-          image: imageURL,
           token: userToken,
         });
       },
@@ -106,17 +100,14 @@ const RootContainer = () => {
         try {
           userToken = res.user.username;
           userId = res.user.id.toString();
-          imageURL = res.user.image;
           await AsyncStorage.setItem('userToken', userToken);
           await AsyncStorage.setItem('userId', userId);
-          await AsyncStorage.setItem('imageURL', imageURL);
         } catch (err) {
           console.log(err);
         }
         dispatch({
           type: 'SIGNUP',
           id: userId,
-          image: imageURL,
           token: userToken,
         });
       },
@@ -131,7 +122,6 @@ const RootContainer = () => {
       try {
         // Fetch userId and userToken from AsyncStorage
         userId = await AsyncStorage.getItem('userId');
-        imageURL = await AsyncStorage.getItem('imageURL');
         userToken = await AsyncStorage.getItem('userToken');
       } catch (err) {
         console.log(err);
@@ -141,7 +131,6 @@ const RootContainer = () => {
       dispatch({
         type: 'GET_TOKEN',
         id: userId,
-        image: imageURL,
         token: userToken,
       });
     }, 1000);

@@ -16,10 +16,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   postEvent,
-  getSingleEvent,
   updateEvent,
-  deletedEvent,
-} from './store/event';
+  deleteEvent,
+  fetchEvents
+} from "./store/events";
 
 //import GoogleAPI from '../test/GoogleAPI';
 
@@ -28,65 +28,80 @@ const { width: WIDTH } = Dimensions.get('window');
 class CreateEvent extends Component {
   constructor(props) {
     super(props);
+    //assign variable path to get event information
+    const path = this.props.route.params
+    //let formatDate = DateTime.fromISO(path.startTime).toLocaleString(DateTime.DATE_FULL)
+    // let time = new Date()
     this.state = {
-      eventTitle: this.props.event.id ? this.props.event.eventTitle : '',
+      //if event has id, then we are updating the event, if not we are creating event!
+      eventTitle: path.id ? path.eventTitle : "",
       //update parent component to use start and end date
-      startDate: this.props.event.id ? this.props.event.date : new Date(),
-      endDate: this.props.event.id ? this.props.event.date : new Date(),
+      date: path.id ? path.date : new Date(),
+      startTime: path.id ? path.startTime : new Date(),
+      endTime: path.id ? path.endTime : new Date(),
       // time: this.props.event.id ? this.props.event.time : new Date(),
-      description: this.props.event.id ? this.props.event.description : '',
-      hostId: this.props.user.id ? this.props.user.id : 1,
+      description: path.id ? path.description : "",
+      hostId: path.hostId ?  path.hostId : path.userId,
     };
     this.handleSubmit.bind(this);
     this.handleDelete.bind(this);
     this.handleGoBack.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.event.id && this.props.event.id) {
-      this.setState({
-        eventTitle: this.props.event.eventTitle,
-        date: this.props.event.eventTitle,
-        time: this.props.event.eventTitle,
-        description: this.props.event.eventTitle,
-        host: this.props.user.id,
-      });
-    }
-  }
+  //component did update to update auto populate as well.  
+  // componentDidUpdate(prevProps) {
+  //   console.log("PREV PROPS event Id?", prevProps)
+  //   let path = this.props.route.params
+  //   //console.log("PREV PROPS. navigation.navigate?", prevProps.navigation.state.params.eventTitle)
+  //   if (prevProps.route.params.id !== this.props.route.params.id) {
+  //     console.log("component did update")
+  //     this.setState({
+  //       eventTitle: this.state.eventTitle,
+  //       date: this.state.date,
+  //       startTime: this.state.startTime,
+  //       endTime: this.state.endTime,
+  //       description: path.description,
+  //     });
+  //   }
+  // }
   async handleSubmit() {
     //if event id exist then update the event otherwise create an event
-    let eventId = this.props.event.id;
+    let eventId = this.props.route.params.id;
+    let hostId = this.state.hostId
+    console.log("props", this.props)
+    console.log("this.state", this.state)
     try {
       eventId
-        ? await this.props.update(host, { ...this.state }, eventId)
+        ? await this.props.update(hostId, eventId, { ...this.state })
         : await this.props.create({
             ...this.state,
-            date: this.state.startDate,
-            startTime: this.state.startDate.toLocaleTimeString('en', {
-              hour: '2-digit',
-              minute: '2-digit',
+            date: this.state.date,
+            startTime: this.state.startTime.toLocaleTimeString("en", {
+              hour: "2-digit",
+              minute: "2-digit",
               hour12: false,
             }),
-            endTime: this.state.endDate.toLocaleTimeString('en', {
+            endTime: this.state.endTime.toLocaleTimeString('en', {
               hour: '2-digit',
               minute: '2-digit',
               hour12: false,
             }),
           });
+          
       this.props.navigation.navigate('AllEvents');
+      this.props.getEvents(hostId);
     } catch (error) {
-      console.log(error);
-      Alert.alert('Error', 'Please fill out all information');
+      console.log(error.response.data);
+      Alert.alert("Error", "Please fill out all information");
     }
   }
-  //catch(error) {
-
-  //}
 
   handleDelete() {
-    let eventId = this.props.event.id;
-    this.props.delete(host, eventId);
-    this.props.navigation.navigate('AllEvents');
+    let eventId = this.props.route.params.id;
+    let hostId = this.state.hostId
+    this.props.delete(hostId, eventId);
+    //after delete, go back to All event page 
+    this.props.navigation.navigate("AllEvents");
   }
 
   handleGoBack() {
@@ -94,6 +109,9 @@ class CreateEvent extends Component {
   }
 
   render() {
+    const {eventTitle, date, description, startTime, endTime, hostId} = this.props.route.params;
+
+    console.log("***PROPS***", this.props.route.params)
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>
@@ -106,65 +124,50 @@ class CreateEvent extends Component {
           </TouchableOpacity>
         </View>
         <Text style={styles.heading}>
-          {this.props.event.id ? 'Update Event' : 'Create Event'}
+          {eventTitle ? "Update Event" : "Create Event"}
         </Text>
+
         <View style={styles.inputContainer}>
           {/* <GoogleAPI /> */}
           <TextInput
             style={styles.input}
-            placeholder={'Title'}
+            placeholder={"Title"}
             onChangeText={(eventTitle) => {
               this.setState({ eventTitle });
             }}
-          ></TextInput>
+          >{eventTitle? `${this.state.eventTitle}` : "" }</TextInput>
+
           <DateTimePicker
-            value={this.state.startDate}
-            mode="date"
-            display="default"
+            value={this.state.date}
+            mode='date'
+            display='default'
             onChange={(event, selectedDate) =>
               this.setState({
-                startDate: selectedDate,
-                endDate: selectedDate,
-              })
-            }
-          />
-          {/* <TextInput
-            style={styles.input}
-            placeholder={"Date (mm/dd/yy)"}
-            value={this.state.date}
-            onChangeText={(date) => {
-              this.setState({ date });
-            }}
-          ></TextInput> */}
-          <DateTimePicker
-            value={this.state.startDate}
-            mode="time"
-            display="default"
-            onChange={(event, selectedTime) =>
-              this.setState({
-                startDate: selectedTime,
-              })
-            }
-          />
-          <DateTimePicker
-            value={this.state.endDate}
-            mode="time"
-            display="default"
-            onChange={(event, selectedTime) =>
-              this.setState({
-                endDate: selectedTime,
+                date: selectedDate,
               })
             }
           />
 
-          {/* <TextInput
-            style={styles.input}
-            placeholder={"Time (00:00Am - 00:00pm)"}
-            value={this.state.time}
-            onChangeText={(time) => {
-              this.setState({ time });
-            }}
-          ></TextInput> */}
+          <DateTimePicker
+            value={this.state.startTime}
+            mode='time'
+            display='default'
+            onChange={(event, selectedTime) =>
+              this.setState({
+                startTime: selectedTime,
+              })
+            }
+          />
+          <DateTimePicker
+            value={this.state.endTime}
+            mode='time'
+            display='default'
+            onChange={(event, selectedTime) =>
+              this.setState({
+                endTime: selectedTime,
+              })
+            }
+          />
 
           <TextInput
             style={[styles.input, description]}
@@ -172,7 +175,7 @@ class CreateEvent extends Component {
             onChangeText={(description) => {
               this.setState({ description });
             }}
-          ></TextInput>
+          >{eventTitle? `${this.state.description}` : "" }</TextInput>
 
           <TouchableHighlight
             style={styles.button}
@@ -181,8 +184,8 @@ class CreateEvent extends Component {
             <Text style={styles.submitText}>Submit</Text>
           </TouchableHighlight>
 
-          {this.props.event.id ? (
-            <Button title="Delete Event" opPress={() => this.handleDelete()} />
+          {eventTitle ? (
+            <Button title='Delete Event' onPress={() => this.handleDelete()} />
           ) : (
             <Button title="Go Back" onPress={() => this.handleGoBack()} />
           )}
@@ -237,15 +240,18 @@ const mapState = (state) => {
   return {
     event: state.event,
     user: state.user,
+    events: state.events.all
+    
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
+    getEvents: (userId) => dispatch(fetchEvents(userId)),
     create: (newEventInfo) => dispatch(postEvent(newEventInfo)),
-    update: (userId, editedInfo, eventId) =>
-      dispatch(updateEvent(userId, editedInfo, eventId)),
-    delete: (userId, eventId) => dispatch(deletedEvent(userId, eventId)),
+    update: (userId, eventId, editedInfo) =>
+      dispatch(updateEvent(userId, eventId, editedInfo)),
+    delete: (userId, eventId) => dispatch(deleteEvent(userId, eventId)),
   };
 };
 export default connect(mapState, mapDispatch)(CreateEvent);

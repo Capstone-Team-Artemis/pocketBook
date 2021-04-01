@@ -127,7 +127,7 @@ router.delete("/:userId/delete/:eventId", async (req, res, next) => {
     // destroy the event where you are the host and the event matches your request
     // finds all rows (will only be 1 match b/c event ids are unique) where host id matches whoever is logged in & the event id matches what was submitted in the route
     const result = await Event.destroy({
-      where: { host: userId, id: eventId },
+      where: { hostId: userId, id: eventId },
     });
     if (result) {
       res.sendStatus(200);

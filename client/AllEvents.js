@@ -20,13 +20,13 @@ export class AllEvents extends React.Component {
     super(props)
     this.state = {
       status: 'Upcoming', // state for dropdown menu
-      userId: 1  // hard coded 1 => userId (Selina)  ** need to change to be the variable representing the user Id
+      userId: Number(this.props.route.params.userId)  // convert from string
     }
   }
   
   componentDidMount() {
     // get all events (regardless of attending/created status) for a specific user
-    this.props.getEvents(this.state.userId);  // hard coded above as 1 => userId (Selina)
+    this.props.getEvents(this.state.userId);  
   }
 
   render() {

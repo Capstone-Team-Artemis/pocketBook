@@ -13,13 +13,11 @@ import {
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {
   postEvent,
-  getSingleEvent,
-  updateEvent,
-  deletedEvent,
-} from './store/event';
+  deleteEvent,
+} from "./store/event";
 
 //import GoogleAPI from '../test/GoogleAPI';
 
@@ -28,46 +26,37 @@ const { width: WIDTH } = Dimensions.get('window');
 class CreateEvent extends Component {
   constructor(props) {
     super(props);
+    //assign variable path to get event information
+    const path = this.props.route.params
+    //let formatDate = DateTime.fromISO(path.startTime).toLocaleString(DateTime.DATE_FULL)
+    // let time = new Date()
     this.state = {
-      eventTitle: this.props.event.id ? this.props.event.eventTitle : '',
+      //if event has id, then we are updating the event, if not we are creating event!
+      eventTitle: "",
       //update parent component to use start and end date
-      startDate: this.props.event.id ? this.props.event.date : new Date(),
-      endDate: this.props.event.id ? this.props.event.date : new Date(),
+      date: new Date(),
+      startTime: new Date(),
+      endTime: new Date(),
       // time: this.props.event.id ? this.props.event.time : new Date(),
-      description: this.props.event.id ? this.props.event.description : '',
-      hostId: this.props.user.id ? this.props.user.id : 1,
+      description: "",
+      hostId: path.hostId ?  path.hostId : path.userId,
     };
     this.handleSubmit.bind(this);
     this.handleDelete.bind(this);
     this.handleGoBack.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.event.id && this.props.event.id) {
-      this.setState({
-        eventTitle: this.props.event.eventTitle,
-        date: this.props.event.eventTitle,
-        time: this.props.event.eventTitle,
-        description: this.props.event.eventTitle,
-        host: this.props.user.id,
-      });
-    }
-  }
   async handleSubmit() {
-    //if event id exist then update the event otherwise create an event
-    let eventId = this.props.event.id;
     try {
-      eventId
-        ? await this.props.update(host, { ...this.state }, eventId)
-        : await this.props.create({
+      await this.props.create({
             ...this.state,
-            date: this.state.startDate,
-            startTime: this.state.startDate.toLocaleTimeString('en', {
-              hour: '2-digit',
-              minute: '2-digit',
+            date: this.state.date,
+            startTime: this.state.startTime.toLocaleTimeString("en", {
+              hour: "2-digit",
+              minute: "2-digit",
               hour12: false,
             }),
-            endTime: this.state.endDate.toLocaleTimeString('en', {
+            endTime: this.state.endTime.toLocaleTimeString('en', {
               hour: '2-digit',
               minute: '2-digit',
               hour12: false,
@@ -75,18 +64,16 @@ class CreateEvent extends Component {
           });
       this.props.navigation.navigate('AllEvents');
     } catch (error) {
-      console.log(error);
-      Alert.alert('Error', 'Please fill out all information');
+      console.log(error.response.data);
+      Alert.alert("Error", "Please fill out all information");
     }
   }
-  //catch(error) {
-
-  //}
 
   handleDelete() {
-    let eventId = this.props.event.id;
-    this.props.delete(host, eventId);
-    this.props.navigation.navigate('AllEvents');
+    let hostId = this.state.hostId
+    this.props.delete(hostId, eventId);
+    //after delete, go back to All event page 
+    this.props.navigation.navigate("AllEvents");
   }
 
   handleGoBack() {
@@ -94,6 +81,8 @@ class CreateEvent extends Component {
   }
 
   render() {
+    const {eventTitle} = this.props.route.params;
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>
@@ -106,65 +95,50 @@ class CreateEvent extends Component {
           </TouchableOpacity>
         </View>
         <Text style={styles.heading}>
-          {this.props.event.id ? 'Update Event' : 'Create Event'}
+          {"Create Event"}
         </Text>
+
         <View style={styles.inputContainer}>
           {/* <GoogleAPI /> */}
           <TextInput
             style={styles.input}
-            placeholder={'Title'}
+            placeholder={"Title"}
             onChangeText={(eventTitle) => {
               this.setState({ eventTitle });
             }}
           ></TextInput>
-          <DateTimePicker
-            value={this.state.startDate}
-            mode="date"
-            display="default"
+
+          <RNDateTimePicker
+            value={this.state.date}
+            mode='date'
+            display='default'
             onChange={(event, selectedDate) =>
               this.setState({
-                startDate: selectedDate,
-                endDate: selectedDate,
-              })
-            }
-          />
-          {/* <TextInput
-            style={styles.input}
-            placeholder={"Date (mm/dd/yy)"}
-            value={this.state.date}
-            onChangeText={(date) => {
-              this.setState({ date });
-            }}
-          ></TextInput> */}
-          <DateTimePicker
-            value={this.state.startDate}
-            mode="time"
-            display="default"
-            onChange={(event, selectedTime) =>
-              this.setState({
-                startDate: selectedTime,
-              })
-            }
-          />
-          <DateTimePicker
-            value={this.state.endDate}
-            mode="time"
-            display="default"
-            onChange={(event, selectedTime) =>
-              this.setState({
-                endDate: selectedTime,
+                date: selectedDate,
               })
             }
           />
 
-          {/* <TextInput
-            style={styles.input}
-            placeholder={"Time (00:00Am - 00:00pm)"}
-            value={this.state.time}
-            onChangeText={(time) => {
-              this.setState({ time });
-            }}
-          ></TextInput> */}
+          <RNDateTimePicker
+            value={this.state.startTime}
+            mode='time'
+            display='default'
+            onChange={(event, selectedTime) =>
+              this.setState({
+                startTime: selectedTime,
+              })
+            }
+          />
+          <RNDateTimePicker
+            value={this.state.endTime}
+            mode='time'
+            display='default'
+            onChange={(event, selectedTime) =>
+              this.setState({
+                endTime: selectedTime,
+              })
+            }
+          />
 
           <TextInput
             style={[styles.input, description]}
@@ -181,8 +155,8 @@ class CreateEvent extends Component {
             <Text style={styles.submitText}>Submit</Text>
           </TouchableHighlight>
 
-          {this.props.event.id ? (
-            <Button title="Delete Event" opPress={() => this.handleDelete()} />
+          {eventTitle ? (
+            <Button title='Delete Event' onPress={() => this.handleDelete()} />
           ) : (
             <Button title="Go Back" onPress={() => this.handleGoBack()} />
           )}
@@ -243,9 +217,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     create: (newEventInfo) => dispatch(postEvent(newEventInfo)),
-    update: (userId, editedInfo, eventId) =>
-      dispatch(updateEvent(userId, editedInfo, eventId)),
-    delete: (userId, eventId) => dispatch(deletedEvent(userId, eventId)),
+    delete: (userId, eventId) => dispatch(deleteEvent(userId, eventId)),
   };
 };
 export default connect(mapState, mapDispatch)(CreateEvent);

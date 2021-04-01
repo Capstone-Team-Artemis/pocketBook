@@ -16,7 +16,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {
   postEvent,
-  deleteEvent,
 } from "./store/event";
 
 //import GoogleAPI from '../test/GoogleAPI';
@@ -28,21 +27,16 @@ class CreateEvent extends Component {
     super(props);
     //assign variable path to get event information
     const path = this.props.route.params
-    //let formatDate = DateTime.fromISO(path.startTime).toLocaleString(DateTime.DATE_FULL)
-    // let time = new Date()
+    const id = Number(path.userId)
     this.state = {
-      //if event has id, then we are updating the event, if not we are creating event!
       eventTitle: "",
-      //update parent component to use start and end date
       date: new Date(),
       startTime: new Date(),
       endTime: new Date(),
-      // time: this.props.event.id ? this.props.event.time : new Date(),
       description: "",
-      hostId: path.hostId ?  path.hostId : path.userId,
+      hostId: path.hostId ?  path.hostId : id,
     };
     this.handleSubmit.bind(this);
-    this.handleDelete.bind(this);
     this.handleGoBack.bind(this);
   }
 
@@ -62,18 +56,12 @@ class CreateEvent extends Component {
               hour12: false,
             }),
           });
+      //after creating an event, navigate to the all events page
       this.props.navigation.navigate('AllEvents');
     } catch (error) {
-      console.log(error.response.data);
+      //give alert message if the user did not fill out all required filed 
       Alert.alert("Error", "Please fill out all information");
     }
-  }
-
-  handleDelete() {
-    let hostId = this.state.hostId
-    this.props.delete(hostId, eventId);
-    //after delete, go back to All event page 
-    this.props.navigation.navigate("AllEvents");
   }
 
   handleGoBack() {
@@ -154,12 +142,8 @@ class CreateEvent extends Component {
           >
             <Text style={styles.submitText}>Submit</Text>
           </TouchableHighlight>
-
-          {eventTitle ? (
-            <Button title='Delete Event' onPress={() => this.handleDelete()} />
-          ) : (
-            <Button title="Go Back" onPress={() => this.handleGoBack()} />
-          )}
+          
+          <Button title="Go Back" onPress={() => this.handleGoBack()} />
         </View>
       </SafeAreaView>
     );
@@ -207,6 +191,7 @@ const styles = StyleSheet.create({
     paddingLeft: 300,
   },
 });
+
 const mapState = (state) => {
   return {
     event: state.event,
@@ -217,7 +202,6 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     create: (newEventInfo) => dispatch(postEvent(newEventInfo)),
-    delete: (userId, eventId) => dispatch(deleteEvent(userId, eventId)),
   };
 };
 export default connect(mapState, mapDispatch)(CreateEvent);

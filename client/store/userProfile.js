@@ -29,7 +29,9 @@ export const getUserProfile = (userId) => async (dispatch) => {
 
 export const getBooks = (userId) => async (dispatch) => {
   try {
-    const books = await axios.get(`http://localhost:3000/api/users/${userId}`);
+    const books = await axios.get(
+      `http://localhost:3000/api/users/${userId}`
+    );
     dispatch(gotBooks(books.data));
   } catch (error) {
     console.error(error);

@@ -12,9 +12,8 @@ import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
 import {DateTime} from 'luxon';
-import {
-  deleteEvent,
-} from "./store/events";
+// import thunk
+import { deleteEvent } from "./store/events";
 
 class SingleEvent extends React.Component {
   constructor(props) {

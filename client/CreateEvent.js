@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {
   postEvent,
-} from "./store/event";
+} from "./store/events";
 
 //import GoogleAPI from '../test/GoogleAPI';
 

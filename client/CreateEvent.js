@@ -69,6 +69,8 @@ class CreateEvent extends Component {
   }
 
   render() {
+    const {eventTitle} = this.props.route.params;
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>

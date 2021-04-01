@@ -59,4 +59,5 @@ const event = (state=initialState, action) => {
             return state
     }
   }
+
 export default event;

@@ -1,5 +1,6 @@
 // SINGLE event component (child component of AllEvents component)
 import {
+  Alert,
   Text,
   StyleSheet,
   View,
@@ -7,16 +8,22 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
 import {DateTime} from 'luxon';
+import {
+  deleteEvent,
+} from "./store/event";
 
-export default class SingleEvent extends React.Component {
+class SingleEvent extends React.Component {
   constructor(props) {
     super(props);
     this.unregister = this.unregister.bind(this);
     this.register = this.register.bind(this);
-  }
+    this.handleDelete = this.handleDelete.bind(this);
+    this.openTwoButtonAlert = this.openTwoButtonAlert.bind(this);
+  };
   // UNREGISTER the logged in user from a specific event
   unregister = async () => {
     try {
@@ -44,6 +51,27 @@ export default class SingleEvent extends React.Component {
       console.log(error);
     }
   };
+
+  handleDelete() {
+    let hostId = this.props.event.hostId;
+    let eventId = this.props.event.id;
+    console.log('EVENT ID: ', eventId)
+    this.props.delete(hostId, eventId);
+  };
+
+  openTwoButtonAlert=()=>{
+    Alert.alert(
+      'Delete Event',
+      'Are you sure you want to delete this event?',
+      [
+        {text: 'Delete', onPress: () => this.handleDelete()},
+        {text: 'Cancel', onPress: () => console.log('No button clicked'), style: 'cancel'},
+      ],
+      { 
+        cancelable: true 
+      }
+    );
+  }
 
   render() {    
     // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
@@ -79,10 +107,9 @@ export default class SingleEvent extends React.Component {
                     {user === event.hostId ? (
                     <Button
                         // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
-                        title={'Edit/Delete'}
+                        title={'Delete Event'}
                         onPress={() => {
-                        navigate.navigate('CreateEvent', event); 
-                        }}
+                          this.openTwoButtonAlert()}}
                         color="white"
                         accessibilityLabel="Status"
                     />
@@ -162,3 +189,10 @@ const styles = StyleSheet.create({
     marginLeft: 95,
   },
 });
+
+const mapDispatch = (dispatch) => {
+  return {
+    delete: (userId, eventId) => dispatch(deleteEvent(userId, eventId)),
+  };
+};
+export default connect(null, mapDispatch)(SingleEvent);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -24,6 +24,26 @@ const Chat = () => {
       GiftedChat.append(previousMessages, messages)
     );
   }, []);
+
+  // Changes styling on Chat bubble messages
+  const renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#6475a5',
+          },
+        }}
+        textStyle={{
+          right: {
+            color: '#fff',
+          },
+        }}
+      />
+    );
+  };
+
   return (
     <GiftedChat
       messages={messages}
@@ -31,6 +51,9 @@ const Chat = () => {
       user={{
         _id: 1,
       }}
+      renderBubble={renderBubble}
+      alwaysShowSend
+      scrollToBottom
     />
   );
 };

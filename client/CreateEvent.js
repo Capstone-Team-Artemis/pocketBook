@@ -19,7 +19,6 @@ import {
   updateEvent,
   deleteEvent,
 } from "./store/event";
-import {DateTime} from 'luxon';
 
 //import GoogleAPI from '../test/GoogleAPI';
 
@@ -75,13 +74,13 @@ class CreateEvent extends Component {
         ? await this.props.update(hostId, eventId, { ...this.state })
         : await this.props.create({
             ...this.state,
-            date: this.state.startDate,
+            date: this.state.date,
             startTime: this.state.startTime.toLocaleTimeString("en", {
               hour: "2-digit",
               minute: "2-digit",
               hour12: false,
             }),
-            endTime: this.state.endDate.toLocaleTimeString('en', {
+            endTime: this.state.endTime.toLocaleTimeString('en', {
               hour: '2-digit',
               minute: '2-digit',
               hour12: false,

@@ -103,6 +103,7 @@ const Login = (props) => {
                 style={styles.inputText}
                 secureTextEntry={secureTextEntry ? true : false}
                 placeholder={'Password'}
+                returnKeyType="go"
                 onChangeText={props.handleChange('password')}
                 value={props.values.password}
               />

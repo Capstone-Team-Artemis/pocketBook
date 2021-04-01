@@ -53,26 +53,53 @@ async function seed() {
       startTime: '18:00',
       endTime: '20:00',
       description:
-        'Muggles of pocketbook, finished reading the series? Let’s discuss our favorite scenes, characters, and more! If we have time, let’s take the Sorting Hat quiz in the end to find our houses!',
+        'Muggles of Pocketbook, what did you think of that ending? Let’s discuss our favorite scenes, characters, and more! If we have time, let’s take the Sorting Hat quiz in the end to share our houses!',
       hostId: 1,
     },
     {
-      eventTitle: 'Book Writing Class for Kids!',
+      eventTitle: 'Reality and Make Believe',
       date: '2021-04-09',
       startTime: '12:00',
       endTime: '14:00',
       description:
-        'Enjoy this FREE virtual club for kids led by child authors & illustrators, Avery & Avion, along with author, educator and Luxe Library co-founder- Delicia B. Davis. We will work step by step to plan, create, design, and finish our books. You won’t want to miss this opportunity to engage with artistic youth while creating your own lasting work of art! Register NOW for your Free Spot!',
+        'The Little Prince introduces a variety of philosophical concepts including authority, loneliness, and ownership. Did you read this classic? If so, when? What was your opinion of the book? Looking forward to discussing with you all!',
       hostId: 2,
     },
     {
-      eventTitle: 'Book Discussion: Women Talking by Miriam Toews',
+      eventTitle: 'Who Did It?',
       date: '2021-09-27',
       startTime: '18:00',
       endTime: '20:00',
       description:
-        "Join the Mulberry Street Branch for a discussion of Miriam Toew's novel 'Women Talking.'",
+        "Welcome, our thrill seekers! Let's talk about And Then There Were None. Even though this was Agatha Christie's most difficult book to write, her hard work pays off! Let's talk about the world's best-selling mystery. Were you able to identify the killer? Which alliances did you think were the strongest? Excited to chat with you then!",
       hostId: 1,
+    },
+    {
+      eventTitle: "Let's Talk Habits!",
+      date: '2021-10-15',
+      startTime: '18:00',
+      endTime: '20:00',
+      description:
+        'For those who have read Atomic Habits, how did you enjoy it? How much of what you read did you apply into your daily lives? Everyone is welcome to join in as we will discuss building better habits and stopping bad ones. ',
+      hostId: 3,
+    },
+    {
+      eventTitle: 'Becoming Us',
+      date: '2021-10-20',
+      startTime: '13:00',
+      endTime: '15:00',
+      description:
+        'With over 10,000,000 copies sold, what are your thoughts on the most successful memoir, Becoming? I have came prepared with discussion questions so I look forward to meeting and chatting with you all!',
+      hostId: 3,
+    },
+    {
+      eventTitle: 'The Power Of Sleep',
+      date: '2021-11-02',
+      startTime: '16:00',
+      endTime: '18:00',
+      description:
+        "Do you think you are getting enough sleep every night? Because after reading this book, I am shocked at the impact sleep has on our lives. I would love to hear your inputs. Also, if you have any tips on getting a good night's rest, please share!!",
+      hostId: 4,
     },
   ];
 

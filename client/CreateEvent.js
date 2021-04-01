@@ -13,10 +13,9 @@ import {
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {
   postEvent,
-  updateEvent,
   deleteEvent,
 } from "./store/event";
 
@@ -33,13 +32,13 @@ class CreateEvent extends Component {
     // let time = new Date()
     this.state = {
       //if event has id, then we are updating the event, if not we are creating event!
-      eventTitle: path.id ? path.eventTitle : "",
+      eventTitle: "",
       //update parent component to use start and end date
-      date: path.id ? path.date : new Date(),
-      startTime: path.id ? path.startTime : new Date(),
-      endTime: path.id ? path.endTime : new Date(),
+      date: new Date(),
+      startTime: new Date(),
+      endTime: new Date(),
       // time: this.props.event.id ? this.props.event.time : new Date(),
-      description: path.id ? path.description : "",
+      description: "",
       hostId: path.hostId ?  path.hostId : path.userId,
     };
     this.handleSubmit.bind(this);
@@ -47,32 +46,9 @@ class CreateEvent extends Component {
     this.handleGoBack.bind(this);
   }
 
-  //component did update to update auto populate as well.  
-  // componentDidUpdate(prevProps) {
-  //   console.log("PREV PROPS event Id?", prevProps)
-  //   let path = this.props.route.params
-  //   //console.log("PREV PROPS. navigation.navigate?", prevProps.navigation.state.params.eventTitle)
-  //   if (prevProps.route.params.id !== this.props.route.params.id) {
-  //     console.log("component did update")
-  //     this.setState({
-  //       eventTitle: this.state.eventTitle,
-  //       date: this.state.date,
-  //       startTime: this.state.startTime,
-  //       endTime: this.state.endTime,
-  //       description: path.description,
-  //     });
-  //   }
-  // }
   async handleSubmit() {
-    //if event id exist then update the event otherwise create an event
-    let eventId = this.props.route.params.id;
-    let hostId = this.state.hostId
-    console.log("props", this.props)
-    console.log("this.state", this.state)
     try {
-      eventId
-        ? await this.props.update(hostId, eventId, { ...this.state })
-        : await this.props.create({
+      await this.props.create({
             ...this.state,
             date: this.state.date,
             startTime: this.state.startTime.toLocaleTimeString("en", {
@@ -94,7 +70,6 @@ class CreateEvent extends Component {
   }
 
   handleDelete() {
-    let eventId = this.props.route.params.id;
     let hostId = this.state.hostId
     this.props.delete(hostId, eventId);
     //after delete, go back to All event page 
@@ -106,9 +81,8 @@ class CreateEvent extends Component {
   }
 
   render() {
-    const {eventTitle, date, description, startTime, endTime, hostId} = this.props.route.params;
+    const {eventTitle} = this.props.route.params;
 
-    console.log("***PROPS***", this.props.route.params)
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>
@@ -121,7 +95,7 @@ class CreateEvent extends Component {
           </TouchableOpacity>
         </View>
         <Text style={styles.heading}>
-          {eventTitle ? "Update Event" : "Create Event"}
+          {"Create Event"}
         </Text>
 
         <View style={styles.inputContainer}>
@@ -132,9 +106,9 @@ class CreateEvent extends Component {
             onChangeText={(eventTitle) => {
               this.setState({ eventTitle });
             }}
-          >{eventTitle? `${this.state.eventTitle}` : "" }</TextInput>
+          ></TextInput>
 
-          <DateTimePicker
+          <RNDateTimePicker
             value={this.state.date}
             mode='date'
             display='default'
@@ -145,7 +119,7 @@ class CreateEvent extends Component {
             }
           />
 
-          <DateTimePicker
+          <RNDateTimePicker
             value={this.state.startTime}
             mode='time'
             display='default'
@@ -155,7 +129,7 @@ class CreateEvent extends Component {
               })
             }
           />
-          <DateTimePicker
+          <RNDateTimePicker
             value={this.state.endTime}
             mode='time'
             display='default'
@@ -172,7 +146,7 @@ class CreateEvent extends Component {
             onChangeText={(description) => {
               this.setState({ description });
             }}
-          >{eventTitle? `${this.state.description}` : "" }</TextInput>
+          ></TextInput>
 
           <TouchableHighlight
             style={styles.button}
@@ -243,8 +217,6 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     create: (newEventInfo) => dispatch(postEvent(newEventInfo)),
-    update: (userId, eventId, editedInfo) =>
-      dispatch(updateEvent(userId, eventId, editedInfo)),
     delete: (userId, eventId) => dispatch(deleteEvent(userId, eventId)),
   };
 };

@@ -1,5 +1,6 @@
 // SINGLE event component (child component of AllEvents component)
 import {
+  Alert,
   Text,
   StyleSheet,
   View,
@@ -21,6 +22,7 @@ class SingleEvent extends React.Component {
     this.unregister = this.unregister.bind(this);
     this.register = this.register.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.openTwoButtonAlert = this.openTwoButtonAlert.bind(this);
   };
   // UNREGISTER the logged in user from a specific event
   unregister = async () => {
@@ -56,6 +58,20 @@ class SingleEvent extends React.Component {
     console.log('EVENT ID: ', eventId)
     this.props.delete(hostId, eventId);
   };
+
+  openTwoButtonAlert=()=>{
+    Alert.alert(
+      'Delete Event',
+      'Are you sure you want to delete this event?',
+      [
+        {text: 'Delete', onPress: () => this.handleDelete()},
+        {text: 'Cancel', onPress: () => console.log('No button clicked'), style: 'cancel'},
+      ],
+      { 
+        cancelable: true 
+      }
+    );
+  }
 
   render() {    
     // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
@@ -93,7 +109,7 @@ class SingleEvent extends React.Component {
                         // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
                         title={'Delete Event'}
                         onPress={() => {
-                          this.handleDelete()}}
+                          this.openTwoButtonAlert()}}
                         color="white"
                         accessibilityLabel="Status"
                     />

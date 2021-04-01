@@ -3,7 +3,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "node index.js --ignore public --ignore client",
-    "seed": "node seed.js"
+    "server-seed": "node seed.js"
   },
   "dependencies": {
     "express": "^4.17.1",

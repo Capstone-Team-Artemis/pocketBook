@@ -7,16 +7,21 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
 import {DateTime} from 'luxon';
+import {
+  deleteEvent,
+} from "./store/event";
 
-export default class SingleEvent extends React.Component {
+class SingleEvent extends React.Component {
   constructor(props) {
     super(props);
     this.unregister = this.unregister.bind(this);
     this.register = this.register.bind(this);
-  }
+    this.handleDelete = this.handleDelete.bind(this);
+  };
   // UNREGISTER the logged in user from a specific event
   unregister = async () => {
     try {
@@ -43,6 +48,13 @@ export default class SingleEvent extends React.Component {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  handleDelete() {
+    let hostId = this.props.event.hostId;
+    let eventId = this.props.event.id;
+    console.log('EVENT ID: ', eventId)
+    this.props.delete(hostId, eventId);
   };
 
   render() {    
@@ -79,10 +91,9 @@ export default class SingleEvent extends React.Component {
                     {user === event.hostId ? (
                     <Button
                         // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
-                        title={'Edit/Delete'}
+                        title={'Delete Event'}
                         onPress={() => {
-                        navigate.navigate('CreateEvent', event); 
-                        }}
+                          this.handleDelete()}}
                         color="white"
                         accessibilityLabel="Status"
                     />
@@ -162,3 +173,10 @@ const styles = StyleSheet.create({
     marginLeft: 95,
   },
 });
+
+const mapDispatch = (dispatch) => {
+  return {
+    delete: (userId, eventId) => dispatch(deleteEvent(userId, eventId)),
+  };
+};
+export default connect(null, mapDispatch)(SingleEvent);

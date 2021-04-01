@@ -51,11 +51,10 @@ class SingleEvent extends React.Component {
       console.log(error);
     }
   };
-
+  // DELETE a single event
   handleDelete() {
     let hostId = this.props.event.hostId;
     let eventId = this.props.event.id;
-    console.log('EVENT ID: ', eventId)
     this.props.delete(hostId, eventId);
   };
 

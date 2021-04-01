@@ -3,7 +3,7 @@ import axios from 'axios';
 //ACTION TYPE
 
 const CREATE_EVENT = 'CREATE_EVENT';
-const UPDATE_EVENT = 'UPDATE_EVENT';
+//const UPDATE_EVENT = 'UPDATE_EVENT';
 
 const createdEvent = (newEvent) => ({
   type: CREATE_EVENT,

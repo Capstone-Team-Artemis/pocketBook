@@ -57,7 +57,7 @@ class SingleEvent extends React.Component {
     let eventId = this.props.event.id;
     this.props.delete(hostId, eventId);
   };
-
+  // DELETE CONFIRMATION POPUP ALERT 
   openTwoButtonAlert=()=>{
     Alert.alert(
       'Delete Event',
@@ -100,12 +100,12 @@ class SingleEvent extends React.Component {
                     Description: {event.description}
                     </Text>
                 
-                {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                {/* if logged in user is the HOST, button can only say 'Delete Event'.
                         if not host, button can also say 'Un/Register' */}
                 <View style={styles.registerButtonContainer}>
                     {user === event.hostId ? (
                     <Button
-                        // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
+                        // 'Delete Event' button triggers alert box to confirm you want to delete event
                         title={'Delete Event'}
                         onPress={() => {
                           this.openTwoButtonAlert()}}

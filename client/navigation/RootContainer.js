@@ -182,11 +182,6 @@ const RootContainer = () => {
                 component={SingleEventView}
                 initialParams={{ userId: loginState.userId }}
               />
-              <Drawer.Screen
-                name="Chat"
-                component={Chat}
-                initialParams={{ userId: loginState.userId }}
-              />
             </Drawer.Navigator>
           ) : (
             <AuthNavigation />

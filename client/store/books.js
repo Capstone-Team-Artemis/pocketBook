@@ -18,7 +18,7 @@ const deletedBook = (bookId) => ({
 export const addBook = () => {
   return async (dispatch) => {
     try {
-      const {data: book} = await axios.post("http://localhost:3000/api/books", {
+      const {data: book} = await axios.post("https://pocketbook-gh.herokuapp.com/api/books", {
                 status,
                 book: {
                   title: bookPath.volumeInfo.title,
@@ -38,7 +38,7 @@ export const addBook = () => {
 export const deleteBook = (bookId, userId) => {
   return async (dispatch) => {
     try {
-      const {data: bookId} = await axios.delete(`http://localhost:3000/api/${userId}/${bookId}`)
+      const {data: bookId} = await axios.delete(`https://pocketbook-gh.herokuapp.com/api/${userId}/${bookId}`)
       dispatch(deletedBook(bookId))
     } catch (error) {
       console.error(error)

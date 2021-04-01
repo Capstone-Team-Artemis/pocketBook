@@ -20,7 +20,7 @@ export const fetchUser = (userId) => {
     try {
       console.log('FETCHING USER --->', userId);
       const { data } = await axios.get(
-        `http://localhost:3000/api/users/${userId}/image`
+        `https://pocketbook-gh.herokuapp.com/api/users/${userId}/image`
       );
       console.log('DATA FROM USER --->', data);
       dispatch(fetchedUser(data));
@@ -34,7 +34,7 @@ export const changeImage = (userId, imageURL) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.put(
-        `http://localhost:3000/api/users/${userId}`,
+        `https://pocketbook-gh.herokuapp.com/api/users/${userId}`,
         {
           image: imageURL,
         }

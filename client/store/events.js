@@ -16,8 +16,8 @@ export const fetchEvents = (userId) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/events/${userId}`
-      ); // this needs to be changed to reflect ngrok!!
+        `https://pocketbook-gh.herokuapp.com/api/events/${userId}`
+      );
       dispatch(receivedEvents(data));
     } catch (error) {
       console.log('Error fetching events from server');

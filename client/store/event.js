@@ -26,7 +26,7 @@ const updatedEvent = (updatedEvent) => ({
 export const getSingleEvent = (eventId) => async (dispatch) => {
   try {
     const singleEvent = await axios.get(
-      `http://localhost:3000/api/events/${eventId}`
+      `https://pocketbook-gh.herokuapp.com/api/events/${eventId}`
     );
     dispatch(gotEvent(singleEvent.data));
   } catch (error) {
@@ -38,7 +38,7 @@ export const getSingleEvent = (eventId) => async (dispatch) => {
 export const postEvent = (newEventInfo) => async (dispatch) => {
   try {
     const newEvent = await axios.post(
-      `http://localhost:3000/api/events/createEvent`,
+      `https://pocketbook-gh.herokuapp.com/api/events/createEvent`,
       newEventInfo
     );
     dispatch(createdEvent(newEvent.data));
@@ -54,7 +54,7 @@ export const updateEvent = (userId, editedInfo, eventId) => async (
 ) => {
   try {
     const newEvent = await axios.post(
-      `http://localhost:3000/api/events/${userId}/updateEvent/${eventId}`,
+      `https://pocketbook-gh.herokuapp.com/api/events/${userId}/updateEvent/${eventId}`,
       editedInfo
     );
     dispatch(updatedEvent(newEvent.data));
@@ -67,7 +67,7 @@ export const updateEvent = (userId, editedInfo, eventId) => async (
 export const deleteEvent = (userId, eventId) => async (dispatch) => {
   try {
     const deletedEvent = await axios.delete(
-      `http://localhost:3000/api/events/${userId}/delete/${eventId}`,
+      `https://pocketbook-gh.herokuapp.com/api/events/${userId}/delete/${eventId}`,
       editedInfo
     );
     console.log('deleted event thunk', deletedEvent);

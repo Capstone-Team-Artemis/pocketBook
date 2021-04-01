@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import DropDownPicker from 'react-native-dropdown-picker';
+import axios from 'axios';
 
 import {
   Text,
@@ -11,18 +11,18 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function SingleBookView(props) {
-  const [status, setStatus] = useState("Completed");
+  const [status, setStatus] = useState('Completed');
   useEffect(() => {
     const getStatus = async () => {
       try {
         // MADE URL DYNAMIC TO TAKE INTO ACCOUNT NAVIGATING FROM PROFILE TO SINGLEBOOKVIEW
         const { data } = await axios.get(
-          `http://localhost:3000/api/books/${
+          `https://pocketbook-gh.herokuapp.com/api/books/${
             props.route.book ? props.route.book.googleId : props.route.params.id
           }`
         );
@@ -38,10 +38,10 @@ export default function SingleBookView(props) {
       <SafeAreaView>
         <ScrollView>
           <TouchableOpacity
-            style={{ alignItems: "flex-end", margin: 16 }}
+            style={{ alignItems: 'flex-end', margin: 16 }}
             onPress={props.navigation.openDrawer}
           >
-            <Icon name='bars' size={24} color='#161924' />
+            <Icon name="bars" size={24} color="#161924" />
           </TouchableOpacity>
           <View style={styles.center}>
             <Image
@@ -79,16 +79,16 @@ export default function SingleBookView(props) {
             defaultValue={status}
             onChangeItem={(item) => setStatus(item.value)}
             items={[
-              { label: "Completed", value: "Completed" },
-              { label: "Currently Reading", value: "Currently Reading" },
-              { label: "To Read", value: "To Read" },
+              { label: 'Completed', value: 'Completed' },
+              { label: 'Currently Reading', value: 'Currently Reading' },
+              { label: 'To Read', value: 'To Read' },
             ]}
           />
           {/* CHANGE BELOW CODE TOO */}
           <Button
-            title='Add to Bookshelf'
+            title="Add to Bookshelf"
             onPress={() => {
-              axios.post("http://localhost:3000/api/books", {
+              axios.post('https://pocketbook-gh.herokuapp.com/api/books', {
                 status,
                 book: {
                   title: bookPath.volumeInfo
@@ -112,10 +112,10 @@ export default function SingleBookView(props) {
             }}
           />
           <Button
-            title='Delete from Bookshelf'
+            title="Delete from Bookshelf"
             onPress={() => {
               axios.delete(
-                `http://localhost:3000/api/${userId}/${bookPath.id}`
+                `https://pocketbook-gh.herokuapp.com/api/${userId}/${bookPath.id}`
               );
             }}
           />
@@ -134,13 +134,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   center: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textTitle: {
-    fontWeight: "bold",
-    alignContent: "center",
-    width: "100%",
-    textAlign: "center",
+    fontWeight: 'bold',
+    alignContent: 'center',
+    width: '100%',
+    textAlign: 'center',
   },
 });

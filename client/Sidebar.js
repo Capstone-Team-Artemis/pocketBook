@@ -1,12 +1,53 @@
-import React from 'react';
-import { View, StyleSheet, Image, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import { Text, Drawer } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from './context';
+import { useDispatch, useSelector } from 'react-redux';
+// import { connect } from 'react-redux';
+import { changeImage, fetchUser } from './store/user';
 
-export default Sidebar = (props) => {
+const Sidebar = (props) => {
+  // Set custom image state
+  const imageURL = useSelector((state) => state.user.image);
+  // I HAVE THE IMAGE, BUT IT'S NOT SETTING IT TO IMAGE ON LINE 25
+  console.log('IMAGE --->', imageURL);
+  const dispatch = useDispatch();
+  const [image, setImage] = useState(imageURL);
+  // const [image, setImage] = useState(props.imageURL);
   const { logOut } = React.useContext(AuthContext);
+
+  // Update image
+  useEffect(() => {
+    dispatch(fetchUser(props.userId));
+  }, []);
+
+  // Allows user to custom pick an image from camera roll
+  const pickImage = async () => {
+    let { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permission to make this work!');
+      return;
+    } else {
+      const pickImage = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+      });
+      if (!pickImage.cancelled) {
+        setImage(pickImage.uri);
+        let id = Number(props.userId);
+        dispatch(changeImage(id, pickImage.uri));
+      }
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -17,12 +58,14 @@ export default Sidebar = (props) => {
           }}
           style={{ width: undefined, padding: 20, paddingTop: 50 }}
         >
-          <Image
-            source={{
-              uri: 'https://cdn.nohat.cc/thumb/f/720/comvecteezy268447.jpg',
-            }}
-            style={styles.profile}
-          />
+          <TouchableOpacity onPress={pickImage}>
+            <Image
+              source={{
+                uri: image,
+              }}
+              style={styles.profile}
+            />
+          </TouchableOpacity>
           <Text style={styles.name}>{props.userToken}</Text>
           <View style={{ flexDirection: 'row' }}></View>
         </ImageBackground>
@@ -38,9 +81,9 @@ export default Sidebar = (props) => {
           />
           <DrawerItem
             icon={({ color, size }) => (
-              <Icon name="user-circle" color={color} size={size} />
+              <Icon name="book" color={color} size={size} />
             )}
-            label="My Profile"
+            label="My Bookshelf"
             onPress={() => {
               props.navigation.navigate('UserProfile');
             }}
@@ -69,6 +112,21 @@ export default Sidebar = (props) => {
   );
 };
 
+// const mapState = (state) => {
+//   return {
+//     image: state.image,
+//   };
+// };
+
+// const mapDispatch = (dispatch) => {
+//   return {
+//     changeImage: (userId, imageURL) => dispatch(changeImage(userId, imageURL)),
+//   };
+// };
+
+export default Sidebar;
+// export default connect(mapState, mapDispatch)(Sidebar);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -92,24 +150,3 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
-
-{
-  /* <ImageBackground
-        source={{
-          uri:
-            'https://png.pngtree.com/thumb_back/fw800/back_pic/04/00/88/6157ff435466669.jpg',
-        }}
-        style={{ width: undefined, padding: 20, paddingTop: 50 }}
-      >
-        <Image
-          source={{
-            uri: 'https://cdn.nohat.cc/thumb/f/720/comvecteezy268447.jpg',
-          }}
-          style={styles.profile}
-        />
-        <Text style={styles.name}>Test User</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.followers}>10 followers</Text>
-        </View>
-      </ImageBackground> */
-}

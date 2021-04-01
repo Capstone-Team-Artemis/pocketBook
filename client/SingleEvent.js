@@ -14,7 +14,7 @@ import axios from 'axios';
 import {DateTime} from 'luxon';
 import {
   deleteEvent,
-} from "./store/event";
+} from "./store/events";
 
 class SingleEvent extends React.Component {
   constructor(props) {
@@ -57,6 +57,7 @@ class SingleEvent extends React.Component {
     let eventId = this.props.event.id;
     this.props.delete(hostId, eventId);
   };
+
   // DELETE CONFIRMATION POPUP ALERT 
   openTwoButtonAlert=()=>{
     Alert.alert(

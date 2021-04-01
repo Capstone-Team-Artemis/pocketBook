@@ -5,7 +5,7 @@ import axios from 'axios';
 const RECEIVED_EVENTS = 'RECEIVED_EVENTS';
 // const CREATED_EVENT = 'CREATED_EVENT';
 // const UPDATED_EVENT = 'UPDATED_EVENT';
-// const DELETED_EVENT = 'DELETED_EVENT';
+const DELETED_EVENT = 'DELETED_EVENT';
 
 // ACTION CREATORS
 const receivedEvents = (events) => ({
@@ -23,10 +23,11 @@ const receivedEvents = (events) => ({
 //   updatedEvent,
 // });
 
-// const deletedEvents = (deletedEvent) => ({
-//   type: DELETED_EVENT,
-//   deletedEvent,
-// });
+const deletedEvents = (userId, eventId) => ({
+  type: DELETED_EVENT,
+  userId, 
+  eventId
+});
 
 // THUNK CREATORS
 
@@ -72,16 +73,18 @@ export const fetchEvents = (userId) => {
 //   }
 // };
 
-// DELETE api/events/delete/eventId
-// export const deleteEvent = (userId, eventId) => async (dispatch) => {
-//   try {
-//     const deletedEvent = await axios.delete(
-//       `http://localhost:3000/api/events/${userId}/delete/${eventId}`);
-//     dispatch(deletedEvents(deletedEvent.data));
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+//DELETE api/events/delete/eventId
+export const deleteEvent = (userId, eventId) => async (dispatch) => {
+  try {
+    await axios.delete(
+      `http://localhost:3000/api/events/${userId}/delete/${eventId}`);
+      console.log('postaxios')
+      dispatch(deletedEvents(userId, eventId));
+      console.log('action creator: ',deletedEvents(userId, eventId));
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // INITIAL STATE
 const initialState = {
@@ -95,7 +98,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         all: action.events,
-      };
+      }
     // case CREATED_EVENT:
     //   console.log('in created event reducer!')
     //   console.log('RETURN VALUE OF REDUCER:',{
@@ -114,12 +117,12 @@ const reducer = (state = initialState, action) => {
     //       action.updatedEvent : event
     //     })
     //   };
-    // case DELETED_EVENT:
-    //   return {
-    //     ...state, 
-    //     all: [...state.all].filter((event) => {
-    //       return event.id !== action.deletedEvent.id
-    //   })
+    case DELETED_EVENT:
+      return {
+        ...state,
+        all: state.all.filter((event) => {
+          return event.id !== action.eventId;
+      })}
       //
     default:
       return state;

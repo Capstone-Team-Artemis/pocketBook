@@ -128,9 +128,9 @@ export default function LandingPage({ navigation }) {
                   >
                     <Image
                       alt={featureBook.volumeInfo.title}
-                      source={{
-                        uri: featureBook.volumeInfo.imageLinks.thumbnail,
-                      }}
+                      // source={{
+                      //   uri: featureBook.volumeInfo.imageLinks.thumbnail,
+                      // }}
                       style={{ width: 200, height: 300, margin: 'auto' }}
                     />
                   </TouchableOpacity>

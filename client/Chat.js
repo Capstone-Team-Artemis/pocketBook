@@ -7,7 +7,7 @@ import { fetchUser } from './store/user';
 import { io } from 'socket.io-client';
 // const socket = io();
 // const socket = io('http://127.0.0.1:3000');
-
+//'http://5d0f23dd9334.ngrok.io'
 // const socket = io('https://pocketbook-gh.herokuapp.com/');
 
 // thisComponent.setState({ discussion: [...discussion, msg] });
@@ -22,7 +22,7 @@ class Chat extends React.Component {
     };
   }
   componentDidMount() {
-    this.socket = io('http://5d0f23dd9334.ngrok.io', {
+    this.socket = io('https://pocketbook-gh.herokuapp.com/', {
       transports: ['websocket'],
       jsonp: false,
     });

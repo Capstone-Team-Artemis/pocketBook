@@ -1,23 +1,23 @@
-import React, { useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
-import { Provider } from 'react-redux';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import store from '../store';
-import { AuthContext } from '../context';
-import AsyncStorage from '@react-native-community/async-storage';
+import React, { useEffect } from "react";
+import { View, ActivityIndicator } from "react-native";
+import { Provider } from "react-redux";
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import store from "../store";
+import { AuthContext } from "../context";
+import AsyncStorage from "@react-native-community/async-storage";
 
 // Import Screens:
-import Sidebar from '../Sidebar';
-import LandingPage from '../LandingPage';
-import SingleBookView from '../SingleBookView';
-import AllEvents from '../AllEvents';
-import SingleEventView from '../SingleEventView';
-import CreateEvent from '../CreateEvent';
-import UserProfile from '../UserProfile';
-import Chat from '../Chat';
-import AuthNavigation from './AuthNavigation';
-import StackContainer from './StackContainer';
+import Sidebar from "../Sidebar";
+import LandingPage from "../LandingPage";
+import SingleBookView from "../SingleBookView";
+import AllEvents from "../AllEvents";
+import SingleEventView from "../SingleEventView";
+import CreateEvent from "../CreateEvent";
+import UserProfile from "../UserProfile";
+import Chat from "../Chat";
+import AuthNavigation from "./AuthNavigation";
+import StackContainer from "./StackContainer";
 
 const Drawer = createDrawerNavigator();
 
@@ -31,27 +31,27 @@ const RootContainer = () => {
   // Reducer for different case scenarios
   const loginReducer = (prevState, action) => {
     switch (action.type) {
-      case 'GET_TOKEN':
+      case "GET_TOKEN":
         return {
           ...prevState,
           userId: action.id,
           userToken: action.token,
           isLoading: false,
         };
-      case 'LOGIN':
+      case "LOGIN":
         return {
           ...prevState,
           userId: action.id,
           userToken: action.token,
           isLoading: false,
         };
-      case 'LOGOUT':
+      case "LOGOUT":
         return {
           ...prevState,
           userToken: null,
           isLoading: false,
         };
-      case 'SIGNUP':
+      case "SIGNUP":
         return {
           ...prevState,
           userId: action.id,
@@ -75,31 +75,31 @@ const RootContainer = () => {
           // Set userToken to inputted user's username and store it in AsyncStorage
           userToken = res.user.username;
           userId = res.user.id.toString();
-          await AsyncStorage.setItem('userToken', userToken);
-          await AsyncStorage.setItem('userId', userId);
+          await AsyncStorage.setItem("userToken", userToken);
+          await AsyncStorage.setItem("userId", userId);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'LOGIN', id: userId, token: userToken });
+        dispatch({ type: "LOGIN", id: userId, token: userToken });
       },
       logOut: async () => {
         try {
-          await AsyncStorage.removeItem('userToken');
+          await AsyncStorage.removeItem("userToken");
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'LOGOUT' });
+        dispatch({ type: "LOGOUT" });
       },
       signUp: async (res) => {
         try {
           userToken = res.user.username;
           userId = res.user.id.toString();
-          await AsyncStorage.setItem('userToken', userToken);
-          await AsyncStorage.setItem('userId', userId);
+          await AsyncStorage.setItem("userToken", userToken);
+          await AsyncStorage.setItem("userId", userId);
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: 'SIGNUP', id: userId, token: userToken });
+        dispatch({ type: "SIGNUP", id: userId, token: userToken });
       },
     }),
     []
@@ -111,22 +111,22 @@ const RootContainer = () => {
       let userToken = null;
       try {
         // Fetch userId and userToken from AsyncStorage
-        userId = await AsyncStorage.getItem('userId');
-        userToken = await AsyncStorage.getItem('userToken');
+        userId = await AsyncStorage.getItem("userId");
+        userToken = await AsyncStorage.getItem("userToken");
       } catch (err) {
         console.log(err);
       }
       // If token is found, dispatch for token
       // Otherwise, userToken stays null
-      dispatch({ type: 'GET_TOKEN', id: userId, token: userToken });
+      dispatch({ type: "GET_TOKEN", id: userId, token: userToken });
     }, 1000);
   }, []);
 
   // Spinning icon state, during which user is determined to be logged in or not
   if (loginState.isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size='large' />
       </View>
     );
   }
@@ -141,35 +141,39 @@ const RootContainer = () => {
             <Drawer.Navigator
               drawerContent={(props) => <Sidebar {...props} {...loginState} />}
             >
-              <Drawer.Screen name="Home" component={StackContainer} />
-              <Drawer.Screen name="LandingPage" component={LandingPage} />
+              {/* <Drawer.Screen name='Home' component={StackContainer} /> */}
               <Drawer.Screen
-                name="SingleBookView"
+                name='LandingPage'
+                initialParams={{ userId: loginState.userId }}
+                component={LandingPage}
+              />
+              <Drawer.Screen
+                name='SingleBookView'
                 component={SingleBookView}
                 initialParams={{ userId: loginState.userId }}
               />
               <Drawer.Screen
-                name="UserProfile"
+                name='UserProfile'
                 component={UserProfile}
                 initialParams={{ userId: loginState.userId }}
               />
               <Drawer.Screen
-                name="AllEvents"
+                name='AllEvents'
                 component={AllEvents}
                 initialParams={{ userId: loginState.userId }}
               />
               <Drawer.Screen
-                name="CreateEvent"
+                name='CreateEvent'
                 component={CreateEvent}
                 initialParams={{ userId: loginState.userId }}
               />
               <Drawer.Screen
-                name="SingleEventView"
+                name='SingleEventView'
                 component={SingleEventView}
                 initialParams={{ userId: loginState.userId }}
               />
               <Drawer.Screen
-                name="Chat"
+                name='Chat'
                 component={Chat}
                 initialParams={{ userId: loginState.userId }}
               />

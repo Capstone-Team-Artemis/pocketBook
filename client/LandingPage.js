@@ -12,12 +12,12 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Formik } from "formik";
-// import GOOGLE_API from "../secrets";
+import GOOGLE_API from "../secrets";
 import axios from "axios";
 // import SingleBookView from "./SingleBookView";
-const GOOGLE_API = "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg";
+// const GOOGLE_API = "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg";
 
-export default function LandingPage({ navigation }) {
+export default function LandingPage({ navigation, route }) {
   const [book, setBook] = useState("");
   const [result, setResult] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,7 +60,8 @@ export default function LandingPage({ navigation }) {
         "https://www.googleapis.com/books/v1/volumes?q=" +
           book +
           "&key=" +
-          "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg" +
+          GOOGLE_API +
+          // "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg" +
           // GOOGLE_API +
           "&maxResults=5"
       )
@@ -119,16 +120,21 @@ export default function LandingPage({ navigation }) {
                   <Text style={styles.published}>Newly Published</Text>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate("SingleBookView", featureBook);
+                      navigation.navigate("SingleBookView", {
+                        ...featureBook,
+                        userId: route.params.userId,
+                      });
                     }}
                   >
-                    <Image
-                      alt={featureBook.volumeInfo.title}
-                      source={{
-                        uri: featureBook.volumeInfo.imageLinks.thumbnail,
-                      }}
-                      style={{ width: 200, height: 300, margin: "auto" }}
-                    />
+                    {featureBook.volumeInfo.imageLinks && (
+                      <Image
+                        alt={featureBook.volumeInfo.title}
+                        source={{
+                          uri: featureBook.volumeInfo.imageLinks.thumbnail,
+                        }}
+                        style={{ width: 200, height: 300, margin: "auto" }}
+                      />
+                    )}
                   </TouchableOpacity>
                   {/* <Text>{featureBook.volumeInfo.description}</Text> */}
                 </View>
@@ -154,7 +160,10 @@ export default function LandingPage({ navigation }) {
                             <TouchableOpacity
                               onPress={() => {
                                 setModalVisible(false);
-                                navigation.navigate("SingleBookView", book);
+                                navigation.navigate("SingleBookView", {
+                                  ...book,
+                                  userId: route.params.userId,
+                                });
                               }}
                             >
                               <Image

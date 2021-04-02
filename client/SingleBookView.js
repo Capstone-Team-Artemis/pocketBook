@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
+import { addBook, deleteBook } from "./store/books";
 
 import {
   Text,
@@ -14,24 +15,32 @@ import {
 } from "react-native";
 
 import Icon from "react-native-vector-icons/FontAwesome";
+import { connect } from "formik";
+import { connect as reduxConnect } from "react-redux";
 
-export default function SingleBookView(props) {
+function SingleBookView(props) {
   const [status, setStatus] = useState("Completed");
+  const [inBookshelf, setInBookshelf] = useState(false);
+  const bookPath = props.route.params;
+  const userId = props.route.params.userId;
   useEffect(() => {
     const getStatus = async () => {
       try {
         // MADE URL DYNAMIC TO TAKE INTO ACCOUNT NAVIGATING FROM PROFILE TO SINGLEBOOKVIEW
-        const { data } = await axios.get(
-          `http://localhost:3000/api/books/${
-            props.route.book ? props.route.book.googleId : props.route.params.id
-          }`
-        );
+
+        const id = bookPath.id ? bookPath.id : bookPath.book.googleId;
+        const url = `http://localhost:3000/api/books/${id}`;
+
+        const { data } = await axios.get(url);
+
         setStatus(data);
-      } catch (err) {}
+        setInBookshelf(true);
+      } catch (err) {
+        setInBookshelf(false);
+      }
     };
     getStatus();
-  }, [setStatus]);
-  const bookPath = props.route.params;
+  }, [setStatus, setInBookshelf, bookPath]);
 
   return (
     <View style={styles.container}>
@@ -85,12 +94,11 @@ export default function SingleBookView(props) {
             ]}
           />
           {/* CHANGE BELOW CODE TOO */}
-          <Button
-            title='Add to Bookshelf'
-            onPress={() => {
-              axios.post("http://localhost:3000/api/books", {
-                status,
-                book: {
+          {!inBookshelf ? (
+            <Button
+              title='Add to Bookshelf'
+              onPress={async () => {
+                const bookToAdd = {
                   title: bookPath.volumeInfo
                     ? bookPath.volumeInfo.title
                     : bookPath.book.title,
@@ -107,22 +115,53 @@ export default function SingleBookView(props) {
                     ? bookPath.volumeInfo.description
                     : bookPath.book.description,
                   googleId: props.route.params.id,
-                },
-              });
-            }}
-          />
-          <Button
-            title='Delete from Bookshelf'
-            onPress={() => {
-              axios.delete(
-                `http://localhost:3000/api/${userId}/${bookPath.id}`
-              );
-            }}
-          />
-          {/* <Button
-            title="Go Back"
-            onPress={() => route.navigation.navigate('LandingPage')}
-          /> */}
+                };
+                await props.addBook({
+                  status,
+                  book: bookToAdd,
+                });
+                bookPath.book = bookToAdd;
+                setInBookshelf(true);
+              }}
+            />
+          ) : (
+            <>
+              <Button
+                title='Change Status'
+                onPress={() => {
+                  const bookToAdd = {
+                    title: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.title
+                      : bookPath.book.title,
+                    image: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.imageLinks.thumbnail
+                      : bookPath.book.image,
+                    authors: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.authors
+                      : bookPath.book.authors,
+                    rating: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.averageRating
+                      : bookPath.book.rating,
+                    description: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.description
+                      : bookPath.book.description,
+                    googleId: props.route.params.id,
+                  };
+                  props.addBook({
+                    status,
+                    book: bookToAdd,
+                  });
+                }}
+              />
+              <Button
+                title='Delete from Bookshelf'
+                onPress={() => {
+                  props.deleteBook(bookPath.book.id, userId);
+                  setInBookshelf(false);
+                }}
+              />
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -132,8 +171,6 @@ export default function SingleBookView(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  center: {
     alignItems: "center",
     justifyContent: "center",
   },
@@ -141,6 +178,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignContent: "center",
     width: "100%",
-    textAlign: "center",
   },
 });
+
+const mapState = (state) => ({
+  user: state.user,
+});
+
+const mapDispatch = (dispatch) => ({
+  addBook: (body) => dispatch(addBook(body)),
+  deleteBook: (bookId, userId) => dispatch(deleteBook(bookId, userId)),
+});
+
+export default reduxConnect(mapState, mapDispatch)(SingleBookView);

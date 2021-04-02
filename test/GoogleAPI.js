@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import axios from 'axios';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import axios from "axios";
 import {
   StyleSheet,
   ScrollView,
@@ -10,14 +10,14 @@ import {
   SafeAreaView,
   TextInput,
   Image,
-} from 'react-native';
-import { Formik } from 'formik';
-import GOOGLE_API from '../secrets';
-import Chat from './SocketsFrontend';
+} from "react-native";
+import { Formik } from "formik";
+import GOOGLE_API from "../secrets";
+import Chat from "./SocketsFrontend";
 
 export default function GoogleAPI() {
   // REACT HOOKS
-  const [book, setBook] = useState('');
+  const [book, setBook] = useState("");
   const [result, setResult] = useState([]);
   const [toggle, setToggle] = useState(true);
 
@@ -32,11 +32,11 @@ export default function GoogleAPI() {
     // Axios runs, passing in "book" & our Google Books API key
     axios
       .get(
-        'https://www.googleapis.com/books/v1/volumes?q=' +
+        "https://www.googleapis.com/books/v1/volumes?q=" +
           book +
-          '&key=' +
+          "&key=" +
           GOOGLE_API +
-          '&maxResults=10'
+          "&maxResults=10"
       )
       // Axios retrieves max list of 10 results
       .then((data) => {
@@ -55,11 +55,11 @@ export default function GoogleAPI() {
           {/* Toggle ternary to render either Google Book Search or Socket live chat */}
           {toggle ? (
             <View>
-              <Text style={{ marginTop: 50, textAlign: 'center' }}>
+              <Text style={{ marginTop: 50, textAlign: "center" }}>
                 Google Book Search
               </Text>
               <TextInput onChangeText={handleChange} />
-              <Button title="Submit" onPress={handleSubmit} />
+              <Button title='Submit' onPress={handleSubmit} />
 
               {/* SafeAreaView & Scrollview to allow horizontal scrolling */}
               <SafeAreaView>
@@ -97,7 +97,7 @@ export default function GoogleAPI() {
         {/* Separate button to toggle between Google Book Search & Sockets live chat */}
         <Button
           onPress={() => setToggle(!toggle)}
-          title={toggle ? 'chat' : 'search'}
+          title={toggle ? "chat" : "search"}
         />
       </View>
     </Formik>
@@ -108,9 +108,9 @@ export default function GoogleAPI() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   bookList: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 });

@@ -1,51 +1,65 @@
-import axios from axioss
+import axios from "axios";
 
 //ACTION TYPES
-const ADDED_BOOK = "ADD_BOOK"
-const DELETED_BOOK  = "DELETED_BOOK"
-
+const ADDED_BOOK = "ADDED_BOOK";
+const DELETED_BOOK = "DELETED_BOOK";
+const GOT_BOOKS = "GOT_BOOKS";
 //ACTION CREATORS
 const addedBook = (book) => ({
   type: ADDED_BOOK,
   book,
-})
+});
 const deletedBook = (bookId) => ({
   type: DELETED_BOOK,
   bookId,
-})
+});
+const gotBooks = (books) => ({
+  type: GOT_BOOKS,
+  books,
+});
 
 //THUNK CREATORS
-export const addBook = () => {
+export const addBook = (body) => {
+  console.log("ADDBOOK BODY", body);
+  console.log("body.book.id", body.book.id);
+  console.log("body.book.googleId", body.book.googleId);
   return async (dispatch) => {
     try {
-      const {data: book} = await axios.post("http://localhost:3000/api/books", {
-                status,
-                book: {
-                  title: bookPath.volumeInfo.title,
-                  image: bookPath.volumeInfo.imageLinks.thumbnail,
-                  authors: bookPath.volumeInfo.authors,
-                  rating: bookPath.volumeInfo.averageRating,
-                  description: bookPath.volumeInfo.description,
-                  googleId: bookPath.id,
-                },
-              });
-              dispatch(addedBook(book))
+      if (!body.book.googleId) {
+        body.book.googleId = body.book.id;
+      }
+      const { data: book } = await axios.post(
+        "http://localhost:3000/api/books",
+        {
+          status: body.status,
+          book: body.book,
+        }
+      );
+      dispatch(addedBook({ ...book, status: body.status }));
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
-}
+  };
+};
 export const deleteBook = (bookId, userId) => {
   return async (dispatch) => {
     try {
-      const {data: bookId} = await axios.delete(`http://localhost:3000/api/${userId}/${bookId}`)
-      dispatch(deletedBook(bookId))
+      await axios.delete(`http://localhost:3000/api/users/${userId}/${bookId}`);
+      dispatch(deletedBook(bookId));
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
+  };
+};
+export const getBooks = (userId) => async (dispatch) => {
+  try {
+    const books = await axios.get(`http://localhost:3000/api/users/${userId}`);
+    dispatch(gotBooks(books.data));
+  } catch (error) {
+    console.error(error);
   }
-}
- 
+};
+
 //INITIAL STATE
 const books = [];
 
@@ -53,10 +67,31 @@ const books = [];
 const reducer = (state = books, action) => {
   switch (action.type) {
     case ADDED_BOOK:
-      return [...state, action.book]
+      const dupeBookIdx = state.findIndex((b) => b.bookId === action.book.id);
+      if (dupeBookIdx !== -1) {
+        const stateCopy = [...state];
+        stateCopy.splice(dupeBookIdx, 1, {
+          status: action.book.status,
+          book: action.book,
+          bookId: action.book.id,
+        });
+        return stateCopy;
+      }
+      return [
+        ...state,
+        {
+          status: action.book.status,
+          book: action.book,
+          bookId: action.book.id,
+        },
+      ];
     case DELETED_BOOK:
-      return state.filter((book) => book.Id !== action.bookId)
+      return state.filter((book) => book.book.id !== action.bookId);
+    case GOT_BOOKS:
+      return action.books;
     default:
       return state;
   }
-}
+};
+
+export default reducer;

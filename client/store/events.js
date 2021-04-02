@@ -13,8 +13,8 @@ const receivedEvents = (events) => ({
 
 const deletedEvents = (userId, eventId) => ({
   type: DELETED_EVENT,
-  userId, 
-  eventId
+  userId,
+  eventId,
 });
 
 // THUNK CREATORS
@@ -24,7 +24,8 @@ export const fetchEvents = (userId) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/events/${userId}`); 
+        `https://pocketbook-gh.herokuapp.com/api/events/${userId}`
+      );
       dispatch(receivedEvents(data));
     } catch (error) {
       console.log('Error fetching events from server');
@@ -42,9 +43,10 @@ export const postEvent = (newEventInfo) => async (dispatch) => {
     );
     // makes the API call to get ALL the events and perform left join to include the attendee's info who is logged in
     const { data } = await axios.get(
-      `http://localhost:3000/api/events/${userId}`); 
+      `http://localhost:3000/api/events/${userId}`
+    );
     // this updates the store state w/the new data and triggers re-rendering of the DOM
-    dispatch(receivedEvents(data));   
+    dispatch(receivedEvents(data));
   } catch (error) {
     throw error;
   }
@@ -54,8 +56,9 @@ export const postEvent = (newEventInfo) => async (dispatch) => {
 export const deleteEvent = (userId, eventId) => async (dispatch) => {
   try {
     await axios.delete(
-      `http://localhost:3000/api/events/${userId}/delete/${eventId}`);
-      dispatch(deletedEvents(userId, eventId));
+      `http://localhost:3000/api/events/${userId}/delete/${eventId}`
+    );
+    dispatch(deletedEvents(userId, eventId));
   } catch (error) {
     console.error(error);
   }
@@ -73,13 +76,14 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         all: action.events,
-      }
+      };
     case DELETED_EVENT:
       return {
         ...state,
         all: state.all.filter((event) => {
           return event.id !== action.eventId;
-      })}
+        }),
+      };
     default:
       return state;
   }

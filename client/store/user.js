@@ -19,8 +19,12 @@ export const fetchUser = (userId) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/users/${userId}/image`
+        `https://pocketbook-gh.herokuapp.com/api/users/${userId}/image`
       );
+<<<<<<< HEAD
+      //console.log('DATA FROM USER --->', data);
+=======
+>>>>>>> 9cb7183ab34ef97c53468110789005345c9753b6
       dispatch(fetchedUser(data));
     } catch (error) {
       console.log('Error fetching user from server');
@@ -32,7 +36,7 @@ export const changeImage = (userId, imageURL) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.put(
-        `http://localhost:3000/api/users/${userId}`,
+        `https://pocketbook-gh.herokuapp.com/api/users/${userId}`,
         {
           image: imageURL,
         }

@@ -99,13 +99,16 @@ const SignUp = (props) => {
             // Once that's validated, axios runs call to signup and navigate to App screen
           } else {
             try {
-              let res = await axios.post('http://localhost:3000/auth/signup/', {
-                email: values.email,
-                password: values.password,
-                username: values.username,
-                firstName: values.firstName,
-                lastName: values.lastName,
-              });
+              let res = await axios.post(
+                'https://pocketbook-gh.herokuapp.com/auth/signup/',
+                {
+                  email: values.email,
+                  password: values.password,
+                  username: values.username,
+                  firstName: values.firstName,
+                  lastName: values.lastName,
+                }
+              );
               // handlePress = passes user info to function that will navigate to DrawerNavigaton
               handlePress({ user: res.data });
               // If there was a problem signing up, display an alert error

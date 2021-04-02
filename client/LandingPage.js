@@ -26,21 +26,25 @@ export default function LandingPage({ navigation, route }) {
   useEffect(() => {
     //makes an axios call to fetch all books with query of "book" & ordered by newest published books
     const getRandomBook = async () => {
-      const { data } = await axios.get(
-        "https://www.googleapis.com/books/v1/volumes",
-        {
-          //breaking up params can help with entering in different inputs for keys below and easier to see the params
-          params: {
-            q: "puppies",
-            key: GOOGLE_API,
-            orderBy: "relevance",
-          },
-        }
-      );
-      //book gives us a random book from data from the axios call
-      const book = data.items[Math.floor(Math.random() * data.items.length)];
-      //sets the chosen book into featureBook
-      setFeatureBook(book);
+      try {
+        const { data } = await axios.get(
+          "https://www.googleapis.com/books/v1/volumes",
+          {
+            //breaking up params can help with entering in different inputs for keys below and easier to see the params
+            params: {
+              q: "puppies",
+              key: GOOGLE_API,
+              orderBy: "relevance",
+            },
+          }
+        );
+        //book gives us a random book from data from the axios call
+        const book = data.items[Math.floor(Math.random() * data.items.length)];
+        //sets the chosen book into featureBook
+        setFeatureBook(book);
+      } catch (err) {
+        console.log(err);
+      }
     };
     //invoke getRandomBook
     getRandomBook();

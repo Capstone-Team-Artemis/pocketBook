@@ -1,70 +1,60 @@
 import axios from 'axios';
 
 // ACTION TYPES
-const GET_USER = 'GET_USER';
+const CHANGED_IMAGE = 'CHANGED_IMAGE';
+const FETCHED_USER = 'FETCHED_USER';
 
 // ACTION CREATORS
-const getUser = (user) => ({
-  type: GET_USER,
+const fetchedUser = (user) => ({
+  type: FETCHED_USER,
   user,
+});
+const changedImage = (image) => ({
+  type: CHANGED_IMAGE,
+  image,
 });
 
 // THUNK CREATORS
-// export const me = () => async (dispatch) => {
-//   try {
-//     const res = await axios.get('/auth/me');
-//     dispatch(getUser(res.data || defaultUser));
-//   } catch {
-//     console.error(err);
-//   }
-// };
-
-export const auth = (
-  email,
-  password,
-  method,
-  username,
-  firstName,
-  lastName
-) => async (dispatch) => {
-  let res;
-  try {
-    if (method === 'SignUp') {
-      res = await axios.post('http://localhost:3000/auth/signup/', {
-        email,
-        password,
-        username,
-        firstName,
-        lastName,
-      });
-      // If method is 'Login':
-    } else {
-      res = await axios.post('http://localhost:3000/auth/login/', {
-        email,
-        password,
-      });
-      return dispatch(getUser(res.data));
+export const fetchUser = (userId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(
+        `https://pocketbook-gh.herokuapp.com/api/users/${userId}/image`
+      );
+      //console.log('DATA FROM USER --->', data);
+      dispatch(fetchedUser(data));
+    } catch (error) {
+      console.log('Error fetching user from server');
     }
-  } catch (authError) {
-    console.error(authError);
-    return dispatch(getUser({ error: authError }));
-  }
+  };
+};
 
-  // try {
-  //   dispatch(getUser(res.data));
-  // } catch (dispatchErr) {
-  //   console.error(dispatchErr);
-  // }
+export const changeImage = (userId, imageURL) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(
+        `https://pocketbook-gh.herokuapp.com/api/users/${userId}`,
+        {
+          image: imageURL,
+        }
+      );
+      console.log('CHANGED THE IMAGE -->', data);
+      // dispatch(changedImage(data));
+    } catch (error) {
+      console.log('Error saving image to server');
+    }
+  };
 };
 
 // INITIAL STATE
-const defaultUser = {};
+const initialState = [];
 
 // REDUCER
-export default function (state = defaultUser, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
-    case GET_USER:
-      console.log('ACTION.USER --->', action.user);
+    case CHANGED_IMAGE:
+      return action.image;
+    case FETCHED_USER:
       return action.user;
     default:
       return state;

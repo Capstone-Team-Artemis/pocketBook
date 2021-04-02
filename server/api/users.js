@@ -18,16 +18,49 @@ module.exports = router;
 router.get('/:userId', async (req, res, next) => {
   try {
     //find all books associated with the user in UserBook through table
-    let userId = req.params.userId
-    console.log(userId)
+    let userId = req.params.userId;
+    console.log(userId);
     const myBooks = await UserBook.findAll({
-      where: { userId: userId},
+      where: { userId: userId },
       include: Book,
     });
     res.status(200).send(myBooks);
-
   } catch (error) {
     next(error);
+  }
+});
+
+// Create GET route to generate books by status
+router.get('/:userId/image', async (req, res, next) => {
+  try {
+    let userId = req.params.userId;
+    const user = await User.findAll({
+      where: { id: userId },
+    });
+    res.status(200).send(user[0].dataValues);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// PUT api/users/:userId route to set custom image
+router.put('/:userId/', async (req, res, next) => {
+  try {
+    const result = await User.update(
+      {
+        image: req.body.image,
+      },
+      {
+        where: {
+          id: req.params.userId,
+        },
+      }
+    );
+    if (result) {
+      res.status(200).json(req.body.image);
+    }
+  } catch (err) {
+    next(err);
   }
 });
 

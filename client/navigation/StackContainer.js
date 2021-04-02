@@ -46,7 +46,10 @@ const StackContainer = (props) => (
     <Stack.Screen
       name='Chat'
       component={Chat}
-      options={{ headerShown: false }}
+      options={({ route }) => ({
+        title: route.params.title,
+        headerBackTitleVisible: false,
+      })}
     />
   </Stack.Navigator>
 );

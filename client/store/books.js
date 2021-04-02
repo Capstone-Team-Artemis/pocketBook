@@ -46,6 +46,8 @@ export const deleteBook = (bookId, userId) => {
     try {
       await axios.delete(`http://localhost:3000/api/users/${userId}/${bookId}`);
       dispatch(deletedBook(bookId));
+      // const {data: bookId} = await axios.delete(`https://pocketbook-gh.herokuapp.com/api/${userId}/${bookId}`)
+      // dispatch(deletedBook(bookId))
     } catch (error) {
       console.error(error);
     }

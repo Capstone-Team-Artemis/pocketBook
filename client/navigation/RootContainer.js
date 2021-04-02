@@ -3,6 +3,7 @@ import { View, ActivityIndicator } from "react-native";
 import { Provider } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { useDispatch } from "react-redux";
 import store from "../store";
 import { AuthContext } from "../context";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -80,7 +81,11 @@ const RootContainer = () => {
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: "LOGIN", id: userId, token: userToken });
+        dispatch({
+          type: "LOGIN",
+          id: userId,
+          token: userToken,
+        });
       },
       logOut: async () => {
         try {
@@ -99,7 +104,11 @@ const RootContainer = () => {
         } catch (err) {
           console.log(err);
         }
-        dispatch({ type: "SIGNUP", id: userId, token: userToken });
+        dispatch({
+          type: "SIGNUP",
+          id: userId,
+          token: userToken,
+        });
       },
     }),
     []
@@ -118,7 +127,11 @@ const RootContainer = () => {
       }
       // If token is found, dispatch for token
       // Otherwise, userToken stays null
-      dispatch({ type: "GET_TOKEN", id: userId, token: userToken });
+      dispatch({
+        type: "GET_TOKEN",
+        id: userId,
+        token: userToken,
+      });
     }, 1000);
   }, []);
 
@@ -170,11 +183,6 @@ const RootContainer = () => {
               <Drawer.Screen
                 name='SingleEventView'
                 component={SingleEventView}
-                initialParams={{ userId: loginState.userId }}
-              />
-              <Drawer.Screen
-                name='Chat'
-                component={Chat}
                 initialParams={{ userId: loginState.userId }}
               />
             </Drawer.Navigator>

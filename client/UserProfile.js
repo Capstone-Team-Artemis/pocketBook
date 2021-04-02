@@ -12,13 +12,11 @@ import {
 } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { getUserProfile } from "./store/userProfile";
-import { getBooks } from "./store/books";
+import { getBooks } from "./store/userProfile";
 
 const { width: WIDTH } = Dimensions.get("window");
 
 const UserProfile = (props) => {
-  console.log("PROPS --->", props.route.params.userId);
   // console.log("props in userprofile component", props)
   //hardcode it to 1 since no user loged in
 
@@ -214,7 +212,6 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-  //getUser: (userId) => dispatch(getUserProfile(userId)),
   getBooks: (userId) => dispatch(getBooks(userId)),
 });
 

@@ -8,15 +8,13 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  Button
-} from 'react-native'; 
+  Button,
+} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {DateTime} from 'luxon';
-
+import { DateTime } from 'luxon';
 
 export default class SingleEventView extends React.Component {
-
   render() {
       const {eventTitle, date, description, startTime, endTime, hostId} = this.props.route.params;
       
@@ -59,62 +57,63 @@ export default class SingleEventView extends React.Component {
                       color= '#e9967a'
                       accessibilityLabel="Join Now"
                       /> 
+                  <Button title="Go Back" onPress={() => {this.props.navigation.navigate('AllEvents')}} />
           </ScrollView>
       </SafeAreaView>
-      );
+    );
   }
-}      
-      
+}
+
 const styles = StyleSheet.create({
-container: {
-  flex: 1,
-},
-scrollView: {
-  marginHorizontal: 10,
-},
-image: {
-  padding: 0,
-  width: 100,
-  height: 100,
-  marginTop: 10,
-  marginLeft: 8,
-},
-eventTitle: {
-  fontSize: 30,
-  marginBottom: 5,
-  fontWeight: 'bold',
-},
-date: {
-  fontSize: 15,
-  marginBottom: 5,
-},
-startTime: {
-  fontSize: 15,
-  marginBottom: 5,
-},
-endTime: {
-  fontSize: 15,
-  marginBottom: 5,
-},
-description: {
-  fontSize: 15,
-  marginBottom: 5,
-},
-listContainer: {
-  flexDirection: 'row',
-  marginBottom: 15,
-  marginTop: 15
-},
-eventData: {
-  padding: 10,
-  width: 250,
-},
-clickMe: {
-  backgroundColor: '#ff00ff',
-  borderRadius: 15,
-  padding: 0.8,
-  width: 200,
-  height: 100,
-  marginLeft: 95
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    marginHorizontal: 10,
+  },
+  image: {
+    padding: 0,
+    width: 100,
+    height: 100,
+    marginTop: 10,
+    marginLeft: 8,
+  },
+  eventTitle: {
+    fontSize: 30,
+    marginBottom: 5,
+    fontWeight: 'bold',
+  },
+  date: {
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  startTime: {
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  endTime: {
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  description: {
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  listContainer: {
+    flexDirection: 'row',
+    marginBottom: 15,
+    marginTop: 15,
+  },
+  eventData: {
+    padding: 10,
+    width: 250,
+  },
+  clickMe: {
+    backgroundColor: '#ff00ff',
+    borderRadius: 15,
+    padding: 0.8,
+    width: 200,
+    height: 100,
+    marginLeft: 95,
   },
 });

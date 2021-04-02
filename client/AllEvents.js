@@ -17,16 +17,16 @@ import { fetchEvents } from './store/events';
 
 export class AllEvents extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       status: 'Upcoming', // state for dropdown menu
-      userId: 1  // hard coded 1 => userId (Selina)  ** need to change to be the variable representing the user Id
-    }
+      userId: Number(this.props.route.params.userId), // convert from string
+    };
   }
-  
+
   componentDidMount() {
     // get all events (regardless of attending/created status) for a specific user
-    this.props.getEvents(this.state.userId);  // hard coded above as 1 => userId (Selina)
+    this.props.getEvents(this.state.userId);
   }
 
   render() {
@@ -54,20 +54,22 @@ export class AllEvents extends React.Component {
           </View>
           {/* Adds Dropdown menu */}
           <DropDownPicker
-              style={{backgroundColor: '#fafafa'}}
-              itemStyle={{justifyContent: 'flex-start'}}
-              dropDownStyle={{backgroundColor: '#fafafa'}}
-              containerStyle={{ height: 40 }}
-              activeLabelStyle={{color: 'red'}}
-              defaultValue={this.state.status}
-              onChangeItem={item => this.setState({
-                status: item.value
-              })}
-              items={[
-                { label: 'Upcoming Events', value: 'Upcoming' },
-                { label: 'Attending Events', value: 'Attending' },
-                { label: 'Created Events', value: 'Created' },
-              ]}
+            style={{ backgroundColor: '#fafafa' }}
+            itemStyle={{ justifyContent: 'flex-start' }}
+            dropDownStyle={{ backgroundColor: '#fafafa' }}
+            containerStyle={{ height: 40 }}
+            activeLabelStyle={{ color: 'red' }}
+            defaultValue={this.state.status}
+            onChangeItem={(item) =>
+              this.setState({
+                status: item.value,
+              })
+            }
+            items={[
+              { label: 'Upcoming Events', value: 'Upcoming' },
+              { label: 'Attending Events', value: 'Attending' },
+              { label: 'Created Events', value: 'Created' },
+            ]}
           />
           {/* Adds event list */}
           <View>
@@ -78,24 +80,31 @@ export class AllEvents extends React.Component {
             ) : (
               // depending on the dropdown menu status and user id, the event list displayed will vary
               // a SINGLE event should be displayed:
-                // if dropdown status is 'Upcoming" -OR-
-                // if dropdown status is 'Attending' & logged in user's id is in the users array for that specific event obj -OR-
-                // if dropdown status is 'Created' & logged in user's userId is the same value as the hostId for that specific event obj
-                this.props.events.filter(event => {
-                  return this.state.status === 'Upcoming' || 
-                  (this.state.status === 'Attending' && event.users[0]) || 
-                  (this.state.status === 'Created' && this.state.userId === event.hostId)
-                // then map to render out each filtered event
-                }).map((event) => (
-                // pass Props to SingleEvent component
-                  <SingleEvent key={event.id} 
-                    event={event} 
-                    user={this.state.userId} 
-                    status={this.state.status} 
+              // if dropdown status is 'Upcoming" -OR-
+              // if dropdown status is 'Attending' & logged in user's id is in the users array for that specific event obj -OR-
+              // if dropdown status is 'Created' & logged in user's userId is the same value as the hostId for that specific event obj
+              this.props.events
+                .filter((event) => {
+                  return (
+                    this.state.status === 'Upcoming' ||
+                    (this.state.status === 'Attending' && event.users[0]) ||
+                    (this.state.status === 'Created' &&
+                      this.state.userId === event.hostId)
+                  );
+                  // then map to render out each filtered event
+                })
+                .map((event) => (
+                  // pass Props to SingleEvent component
+                  <SingleEvent
+                    key={event.id}
+                    event={event}
+                    user={this.state.userId}
+                    status={this.state.status}
                     navigate={this.props.navigation}
                     getEvents={() => this.props.getEvents(this.state.userId)}
-                    /> 
-              ))
+                    userId={this.props.route.params.userId}
+                  />
+                ))
             )}
           </View>
         </ScrollView>
@@ -162,7 +171,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
     marginBottom: 15,
-    marginTop: 15
+    marginTop: 15,
   },
   eventData: {
     padding: 10,
@@ -177,6 +186,6 @@ const styles = StyleSheet.create({
     padding: 0.8,
     width: 130,
     height: 38,
-    marginLeft: 95
-    }
+    marginLeft: 95,
+  },
 });

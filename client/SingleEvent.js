@@ -27,7 +27,7 @@ class SingleEvent extends React.Component {
     try {
       // make call to update DB by unregistering user
       await axios.delete(
-        `http://localhost:3000/api/events/${this.props.user}/unregister/${this.props.event.id}`
+        `http://pocketbook-gh.herokuapp.com/api/events/${this.props.user}/unregister/${this.props.event.id}`
       );
       // if successful, need to update store so can trigger re-render -> do this by calling getEvents fx
       const res = await this.props.getEvents();
@@ -41,7 +41,7 @@ class SingleEvent extends React.Component {
     try {
       // make call to update DB by registering user
       await axios.post(
-        `http://localhost:3000/api/events/${this.props.user}/register/${this.props.event.id}`
+        `http://pocketbook-gh.herokuapp.com/api/events/${this.props.user}/register/${this.props.event.id}`
       );
       // if successful, need to update store so can trigger re-render -> do this by calling getEvents fx
       this.props.getEvents();
@@ -53,7 +53,6 @@ class SingleEvent extends React.Component {
   handleDelete() {
     let hostId = this.props.event.hostId;
     let eventId = this.props.event.id;
-    console.log('EVENT ID: ', eventId);
     this.props.delete(hostId, eventId);
   }
 

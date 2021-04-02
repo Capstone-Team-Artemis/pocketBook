@@ -16,7 +16,8 @@ import { DateTime } from 'luxon';
 
 export default class SingleEventView extends React.Component {
   render() {
-      const {eventTitle, date, description, startTime, endTime, hostId} = this.props.route.params;
+      const {id, eventTitle, date, description, startTime, endTime, hostId} = this.props.route.params;
+      console.log("this.props in single event", this.props.route.params.id)
       
       // create DateTime instance so can covert to properly formatted string
       const formattedStartTime= DateTime.fromISO(startTime).toLocaleString(DateTime.TIME_SIMPLE);
@@ -53,7 +54,7 @@ export default class SingleEventView extends React.Component {
                   <Button
                       title={'Join Now'}
                       style={styles.clickMe}
-                      onPress={() => {this.props.navigation.navigate('Chat', {title: eventTitle})}}
+                      onPress={() => {this.props.navigation.navigate('Chat', {title: eventTitle, eventId: id})}}
                       color= '#e9967a'
                       accessibilityLabel="Join Now"
                       /> 

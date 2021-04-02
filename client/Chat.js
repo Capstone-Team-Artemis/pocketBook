@@ -19,32 +19,41 @@ class Chat extends React.Component {
       chatMessage: '',
       discussion: [],
       messages: [],
-    };
+    }
   }
   componentDidMount() {
-    this.socket = io('https://pocketbook-gh.herokuapp.com/', {
+    this.socket = io('http://0715f6ca17fa.ngrok.io', {
       transports: ['websocket'],
       jsonp: false,
     });
 
     this.socket.connect();
 
+    //******send room info to backend socket
+    this.socket.emit('room', this.props.route.params.eventId)
+
     const thisComponent = this;
-
+    //connecting to the backend socket
     this.socket.on('connection', () => {
-      console.log('Connected to socket server');
+      console.log('FE: Connected to socket server');
     });
-
+    //STEP3: receiving messages from the backend 
     this.socket.on('messages', (message) => {
-      console.log('MESSAGES IN SOCKET MESSAGE -->', message);
-      console.log(
-        'THISCOMPONENT.STATE.MESSAGES -->',
-        thisComponent.state.messages
-      );
+      // console.log('MESSAGES IN SOCKET MESSAGE -->', message);
+      // console.log(
+      //   'THISCOMPONENT.STATE.MESSAGES -->',
+      //   thisComponent.state.messages
+      // );
       const messages = thisComponent.state.messages.slice();
+    //adding new message recived from the backend to the state
       thisComponent.setState({ messages: [message, ...messages] });
     });
   }
+
+  //********ROOMS
+  // componentWillUnmount() {
+  //   socket.emit('leaveChat', this.props.eventId)
+  // }
 
   // onSend = ((messages = []) => {
   //     setMessages((previousMessages) =>
@@ -57,6 +66,7 @@ class Chat extends React.Component {
   submitChatMessage(message) {
     //step1: socket is emitting chat message to the backend line6 of index.js
     this.socket.emit('chat message', message);
+
     this.setState((previousMessages) =>
       GiftedChat.append(previousMessages, message)
     );
@@ -82,6 +92,8 @@ class Chat extends React.Component {
 
   render() {
     console.log('USER ID?? -->', this.props.userId);
+    console.log("username? ==>", this.props.userName)
+    console.log("eventId?? ==>", this.props.route.params.eventId)
     return (
       <GiftedChat
         messages={this.state.messages}
@@ -100,8 +112,11 @@ class Chat extends React.Component {
 }
 
 const mapState = (state) => {
+  console.log("STATE***", state)
   return {
     userId: state.user.id,
+    //userName: state.user.userName,
+    event: state,
   };
 };
 

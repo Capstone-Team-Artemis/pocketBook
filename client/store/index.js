@@ -6,7 +6,6 @@ import userProfile from './userProfile';
 
 const rootReducer = combineReducers({
   // ... the rest of your reducers
-  event,
   events,
   userProfile,
   user,

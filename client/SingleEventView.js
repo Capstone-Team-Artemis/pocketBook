@@ -53,7 +53,7 @@ export default class SingleEventView extends React.Component {
                   <Button
                       title={'Join Now'}
                       style={styles.clickMe}
-                      onPress={() => {this.props.navigation.navigate('Chat')}}
+                      onPress={() => {this.props.navigation.navigate('Chat', {title: eventTitle})}}
                       color= '#e9967a'
                       accessibilityLabel="Join Now"
                       /> 

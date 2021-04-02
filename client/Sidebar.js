@@ -18,17 +18,9 @@ import { changeImage, fetchUser } from './store/user';
 const Sidebar = (props) => {
   // Set custom image state
   const imageURL = useSelector((state) => state.user.image);
-  // I HAVE THE IMAGE, BUT IT'S NOT SETTING IT TO IMAGE ON LINE 25
-  //console.log('IMAGE --->', imageURL);
   const dispatch = useDispatch();
-  const [image, setImage] = useState(imageURL);
-  // const [image, setImage] = useState(props.imageURL);
+  dispatch(fetchUser(props.userId));
   const { logOut } = React.useContext(AuthContext);
-
-  // Update image
-  useEffect(() => {
-    dispatch(fetchUser(props.userId));
-  }, []);
 
   // Allows user to custom pick an image from camera roll
   const pickImage = async () => {
@@ -41,9 +33,9 @@ const Sidebar = (props) => {
         allowsEditing: true,
       });
       if (!pickImage.cancelled) {
-        setImage(pickImage.uri);
         let id = Number(props.userId);
         dispatch(changeImage(id, pickImage.uri));
+        dispatch(fetchUser(props.userId));
       }
     }
   };
@@ -61,7 +53,7 @@ const Sidebar = (props) => {
           <TouchableOpacity onPress={pickImage}>
             <Image
               source={{
-                uri: image,
+                uri: imageURL,
               }}
               style={styles.profile}
             />

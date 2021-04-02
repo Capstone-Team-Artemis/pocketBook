@@ -22,8 +22,8 @@ router.get("/:googleId", async (req, res, next) => {
     //Finds book with specific user
     const userBook = await UserBook.findOne({
       where: {
-        // userId: req.user.id,
-        userId: kay.id,
+        userId: req.user.id,
+        // userId: kay.id,
         bookId: book.id,
       },
     });
@@ -50,10 +50,10 @@ router.post("/", async (req, res, next) => {
     });
 
     //hard coded
-    const kay = await User.findOne({ where: { email: "kay@pocketbook.com" } });
+    // const kay = await User.findOne({ where: { email: "kay@pocketbook.com" } });
     //uses magic method addBook to set status in userBooks model
-    await kay.addBook(book, { through: { status: req.body.status } });
-    // await req.user.addBook(book, { through: { status: req.body.status } });
+    // await kay.addBook(book, { through: { status: req.body.status } });
+    await req.user.addBook(book, { through: { status: req.body.status } });
     res.send(book);
   } catch (error) {
     next(error);

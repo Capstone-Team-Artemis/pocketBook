@@ -30,49 +30,6 @@ router.get("/:userId", async (req, res, next) => {
   }
 });
 
-// GET api/events/userId/attending --> get ALL events that you are attending
-router.get("/:userId/attending", async (req, res, next) => {
-  try {
-    const userId = req.params.userId;
-    const events = await Event.findAll({
-      include: {
-        model: User,
-        where: {
-          id: userId,
-        },
-      },
-    });
-    if (events.length >= 1) {
-      console.log(events);
-      res.json(events);
-    } else {
-      res.send("Currently not attending any events!");
-    }
-  } catch (err) {
-    next(err);
-  }
-});
-
-// GET api/events/created --> get ALL events that you CREATED (you are the HOST)
-router.get("/:userId/created", async (req, res, next) => {
-  try {
-    const userId = req.params.userId;
-    const events = await Event.findAll({
-      where: {
-        host: userId,
-      },
-    });
-    if (events.length >= 1) {
-      console.log(events);
-      res.json(events);
-    } else {
-      res.send("Currently have not created any events!");
-    }
-  } catch (err) {
-    next(err);
-  }
-});
-
 // DELETE api/events/delete/eventId --> delete SINGLE event (if you are the host) based on the event id
 router.delete("/:userId/delete/:eventId", async (req, res, next) => {
   try {
@@ -133,7 +90,15 @@ router.post("/:userId/register/:eventId", async (req, res, next) => {
 //POST api/events/createEvent
 router.post("/createEvent", async (req, res, next) => {
   try {
-    const newEvent = await Event.create(req.body)
+    // creates the new event in event model
+    const newEvent = await Event.create(req.body);
+    const eventId = newEvent.dataValues.id;
+    const userId = req.body.hostId
+    // creates the new row representing the host attending the new event she created in userEvents model
+    const newAttendeeRow = await UserEvent.create({
+      userId: userId,
+      eventId: eventId
+    }) 
     res.status(201).send(newEvent);
   } catch (error) {
     next(error);

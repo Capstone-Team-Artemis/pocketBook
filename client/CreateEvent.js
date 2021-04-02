@@ -14,15 +14,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import {
-  postEvent,
-} from "./store/event";
 
-//import GoogleAPI from '../test/GoogleAPI';
+// import thunk
+import { postEvent } from "./store/events";
 
 const { width: WIDTH } = Dimensions.get('window');
 
 class CreateEvent extends Component {
+
   constructor(props) {
     super(props);
     //assign variable path to get event information
@@ -70,7 +69,7 @@ class CreateEvent extends Component {
 
   render() {
     const {eventTitle} = this.props.route.params;
-
+    
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>

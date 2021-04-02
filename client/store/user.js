@@ -18,11 +18,9 @@ const changedImage = (image) => ({
 export const fetchUser = (userId) => {
   return async (dispatch) => {
     try {
-      console.log('FETCHING USER --->', userId);
       const { data } = await axios.get(
         `http://localhost:3000/api/users/${userId}/image`
       );
-      console.log('DATA FROM USER --->', data);
       dispatch(fetchedUser(data));
     } catch (error) {
       console.log('Error fetching user from server');

@@ -12,9 +12,8 @@ import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
 import {DateTime} from 'luxon';
-import {
-  deleteEvent,
-} from "./store/event";
+// import thunk
+import { deleteEvent } from "./store/events";
 
 class SingleEvent extends React.Component {
   constructor(props) {
@@ -51,14 +50,14 @@ class SingleEvent extends React.Component {
       console.log(error);
     }
   };
-
+  // DELETE a single event
   handleDelete() {
     let hostId = this.props.event.hostId;
     let eventId = this.props.event.id;
-    console.log('EVENT ID: ', eventId)
     this.props.delete(hostId, eventId);
   };
 
+  // DELETE CONFIRMATION POPUP ALERT 
   openTwoButtonAlert=()=>{
     Alert.alert(
       'Delete Event',
@@ -101,12 +100,12 @@ class SingleEvent extends React.Component {
                     Description: {event.description}
                     </Text>
                 
-                {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                {/* if logged in user is the HOST, button can only say 'Delete Event'.
                         if not host, button can also say 'Un/Register' */}
                 <View style={styles.registerButtonContainer}>
                     {user === event.hostId ? (
                     <Button
-                        // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
+                        // 'Delete Event' button triggers alert box to confirm you want to delete event
                         title={'Delete Event'}
                         onPress={() => {
                           this.openTwoButtonAlert()}}

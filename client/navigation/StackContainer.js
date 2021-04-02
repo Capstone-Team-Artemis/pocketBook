@@ -1,50 +1,50 @@
-import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import * as React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import LandingPage from '../LandingPage';
-import SingleBookView from '../SingleBookView';
-import AllEvents from '../AllEvents';
-import CreateEvent from '../CreateEvent';
-import SingleEventView from '../SingleBookView';
-import UserProfile from '../SingleBookView';
-import Chat from '../Chat';
+import LandingPage from "../LandingPage";
+import SingleBookView from "../SingleBookView";
+import AllEvents from "../AllEvents";
+import CreateEvent from "../CreateEvent";
+import SingleEventView from "../SingleBookView";
+import UserProfile from "../SingleBookView";
+import Chat from "../Chat";
 
 const Stack = createStackNavigator();
 
 const StackContainer = (props) => (
   <Stack.Navigator>
     <Stack.Screen
-      name="LandingPage"
+      name='LandingPage'
       component={LandingPage}
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="SingleBookView"
+      name='SingleBookView'
       component={SingleBookView}
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="AllEvents"
+      name='AllEvents'
       component={AllEvents}
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="CreateEvent"
+      name='CreateEvent'
       component={CreateEvent}
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="SingleEventView"
+      name='SingleEventView'
       component={SingleEventView}
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="UserProfile"
+      name='UserProfile'
       component={UserProfile}
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="Chat"
+      name='Chat'
       component={Chat}
       options={({ route }) => ({
         title: route.params.title,

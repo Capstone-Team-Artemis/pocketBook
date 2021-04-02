@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -9,12 +9,12 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
-} from 'react-native';
-import { connect, useDispatch } from 'react-redux';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { getBooks } from './store/userProfile';
+} from "react-native";
+import { connect, useDispatch } from "react-redux";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { getBooks } from "./store/books";
 
-const { width: WIDTH } = Dimensions.get('window');
+const { width: WIDTH } = Dimensions.get("window");
 
 const UserProfile = (props) => {
   // console.log("props in userprofile component", props)
@@ -22,8 +22,12 @@ const UserProfile = (props) => {
 
   let id = props.userId || 4;
   let mybooks = props.books || [];
+  useEffect(() => {
+    dispatch(getBooks(id));
+  }, [getBooks]);
+
   //const [user, setUser] = useState(id);
-  const [books, setbooks] = useState(mybooks);
+  // const [books, setbooks] = useState(mybooks);
 
   //do not need this if we can get the user through props
   // useEffect(()=> {
@@ -33,16 +37,12 @@ const UserProfile = (props) => {
   //gettting books by status
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getBooks(id));
-  }, [books]);
-
   //filter the saved books by status
   let currentBooks = mybooks.filter(
-    (book) => book.status === 'Currently Reading'
+    (book) => book.status === "Currently Reading"
   );
-  let futureRead = mybooks.filter((book) => book.status === 'To Read');
-  let completed = mybooks.filter((book) => book.status === 'Completed');
+  let futureRead = mybooks.filter((book) => book.status === "To Read");
+  let completed = mybooks.filter((book) => book.status === "Completed");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,10 +50,10 @@ const UserProfile = (props) => {
         <View style={styles.navbar}>
           <TouchableOpacity
             style={styles.navbar}
-            style={{ alignItems: 'flex-end', margin: 16 }}
+            style={{ alignItems: "flex-end", margin: 16 }}
             onPress={props.navigation.openDrawer}
           >
-            <Icon name="bars" size={24} color="#161924" />
+            <Icon name='bars' size={24} color='#161924' />
           </TouchableOpacity>
         </View>
 
@@ -74,7 +74,11 @@ const UserProfile = (props) => {
                   <TouchableOpacity
                     key={idx}
                     onPress={() => {
-                      props.navigation.navigate('SingleBookView', book);
+                      props.navigation.navigate("SingleBookView", {
+                        usedb: true,
+                        book: book.book,
+                        userId: Number(props.route.params.userId),
+                      });
                     }}
                   >
                     <View style={styles.bookData}>
@@ -105,7 +109,11 @@ const UserProfile = (props) => {
                   <TouchableOpacity
                     key={idx}
                     onPress={() => {
-                      props.navigation.navigate('SingleBookView', book);
+                      props.navigation.navigate("SingleBookView", {
+                        usedb: true,
+                        book: book.book,
+                        userId: Number(props.route.params.userId),
+                      });
                     }}
                   >
                     <View style={styles.bookData}>
@@ -136,7 +144,15 @@ const UserProfile = (props) => {
                   <TouchableOpacity
                     key={idx}
                     onPress={() => {
-                      props.navigation.navigate('SingleBookView', book);
+                      props.navigation.navigate(
+                        "SingleBookView",
+
+                        {
+                          usedb: true,
+                          book: book.book,
+                          userId: Number(props.route.params.userId),
+                        }
+                      );
                     }}
                   >
                     <View style={styles.bookData}>
@@ -166,8 +182,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   heading: {
     fontSize: 40,
@@ -175,30 +191,30 @@ const styles = StyleSheet.create({
   },
   content: {
     marginTop: 20,
-    flexDirection: 'row',
-    width: '80%',
+    flexDirection: "row",
+    width: "80%",
     height: 35,
     borderRadius: 50,
     borderWidth: 1.5,
-    alignItems: 'center',
+    alignItems: "center",
     paddingTop: 5,
   },
   bookList: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   text: {
     fontSize: 20,
   },
   bookData: {},
   scrollView: {
-    backgroundColor: '#f0f8ff',
+    backgroundColor: "#f0f8ff",
     marginHorizontal: 1,
     width: WIDTH - 20,
   },
 });
 
 const mapState = (state) => ({
-  books: state.userProfile,
+  books: state.books,
   userId: state.user.id,
 });
 

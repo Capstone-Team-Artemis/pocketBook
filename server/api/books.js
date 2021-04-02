@@ -1,28 +1,35 @@
-const router = require('express').Router();
-const { Book, User, UserBook } = require('../db/models');
+const router = require("express").Router();
+const { Book, User, UserBook } = require("../db/models");
 
 module.exports = router;
 
 //GET /api/googleId - Sets current status of User's book status on
 //single book page view
-router.get('/:googleId', async (req, res, next) => {
+router.get("/:googleId", async (req, res, next) => {
   try {
+    console.log("DID U FIND A GOOGLE ID? -->", req.params.googleId);
     //Finds book in Book model by googleId
     const book = await Book.findOne({
       where: {
         googleId: req.params.googleId,
       },
     });
+    if (!book) {
+      return res.status(500).send("book not found in database");
+    }
     //remove line below when login is implemented (hard coded until login is funcional)
-    const kay = await User.findOne({ where: { email: 'kay@pocketbook.com' } });
+    const kay = await User.findOne({ where: { email: "kay@pocketbook.com" } });
     //Finds book with specific user
     const userBook = await UserBook.findOne({
       where: {
-        //req.user.id
+        // userId: req.user.id,
         userId: kay.id,
         bookId: book.id,
       },
     });
+    if (!userBook) {
+      return res.status(500).send("Book does not belong to user");
+    }
     //Sends book status
     res.send(userBook.status);
   } catch (error) {
@@ -31,7 +38,7 @@ router.get('/:googleId', async (req, res, next) => {
 });
 
 //POST /api - Creates book in db and sets book status to specific login user
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const [book] = await Book.findOrCreate({
       where: {
@@ -43,7 +50,7 @@ router.post('/', async (req, res, next) => {
     });
 
     //hard coded
-    const kay = await User.findOne({ where: { email: 'kay@pocketbook.com' } });
+    const kay = await User.findOne({ where: { email: "kay@pocketbook.com" } });
     //uses magic method addBook to set status in userBooks model
     await kay.addBook(book, { through: { status: req.body.status } });
     // await req.user.addBook(book, { through: { status: req.body.status } });

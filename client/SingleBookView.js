@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import DropDownPicker from 'react-native-dropdown-picker';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import DropDownPicker from "react-native-dropdown-picker";
+import axios from "axios";
+import { addBook, deleteBook } from "./store/books";
 
 import {
   Text,
@@ -11,37 +12,52 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from "react-native-vector-icons/FontAwesome";
+import { connect } from "formik";
+import { connect as reduxConnect } from "react-redux";
 
-export default function SingleBookView(props) {
-  const [status, setStatus] = useState('Completed');
+function SingleBookView(props) {
+  const [status, setStatus] = useState("Completed");
+  const [inBookshelf, setInBookshelf] = useState(false);
+  const bookPath = props.route.params;
+  const userId = props.route.params.userId;
+  if (bookPath.usedb) {
+    bookPath.volumeInfo = undefined;
+    bookPath.id = undefined;
+    bookPath.usedb = false;
+  }
   useEffect(() => {
+    console.log(props.route);
     const getStatus = async () => {
       try {
         // MADE URL DYNAMIC TO TAKE INTO ACCOUNT NAVIGATING FROM PROFILE TO SINGLEBOOKVIEW
-        const { data } = await axios.get(
-          `https://pocketbook-gh.herokuapp.com/api/books/${
-            props.route.book ? props.route.book.googleId : props.route.params.id
-          }`
-        );
+
+        const id = bookPath.id ? bookPath.id : bookPath.book.googleId;
+        // const url = `http://localhost:3000/api/books/${id}`;
+        const url = `https://pocketbook-gh.herokuapp.com/api/books/${id}`;
+
+        const { data } = await axios.get(url);
+
         setStatus(data);
-      } catch (err) {}
+        setInBookshelf(true);
+      } catch (err) {
+        setInBookshelf(false);
+      }
     };
     getStatus();
-  }, [setStatus]);
-  const bookPath = props.route.params;
+  }, [setStatus, setInBookshelf, bookPath]);
 
   return (
     <View style={styles.container}>
       <SafeAreaView>
         <ScrollView>
           <TouchableOpacity
-            style={{ alignItems: 'flex-end', margin: 16 }}
+            style={{ alignItems: "flex-end", margin: 16 }}
             onPress={props.navigation.openDrawer}
           >
-            <Icon name="bars" size={24} color="#161924" />
+            <Icon name='bars' size={24} color='#161924' />
           </TouchableOpacity>
           <View style={styles.center}>
             <Image
@@ -74,23 +90,25 @@ export default function SingleBookView(props) {
             </Text>
           </View>
           <Text style={styles.textTitle}>Book Status</Text>
+
           <DropDownPicker
+            dropDownStyle={{ marginTop: -150 }}
             containerStyle={{ height: 40 }}
             defaultValue={status}
             onChangeItem={(item) => setStatus(item.value)}
             items={[
-              { label: 'Completed', value: 'Completed' },
-              { label: 'Currently Reading', value: 'Currently Reading' },
-              { label: 'To Read', value: 'To Read' },
+              { label: "Completed", value: "Completed" },
+              { label: "Currently Reading", value: "Currently Reading" },
+              { label: "To Read", value: "To Read" },
             ]}
           />
+
           {/* CHANGE BELOW CODE TOO */}
-          <Button
-            title="Add to Bookshelf"
-            onPress={() => {
-              axios.post('https://pocketbook-gh.herokuapp.com/api/books', {
-                status,
-                book: {
+          {!inBookshelf ? (
+            <Button
+              title='Add to Bookshelf'
+              onPress={async () => {
+                const bookToAdd = {
                   title: bookPath.volumeInfo
                     ? bookPath.volumeInfo.title
                     : bookPath.book.title,
@@ -107,22 +125,53 @@ export default function SingleBookView(props) {
                     ? bookPath.volumeInfo.description
                     : bookPath.book.description,
                   googleId: props.route.params.id,
-                },
-              });
-            }}
-          />
-          <Button
-            title="Delete from Bookshelf"
-            onPress={() => {
-              axios.delete(
-                `https://pocketbook-gh.herokuapp.com/api/${userId}/${bookPath.id}`
-              );
-            }}
-          />
-          {/* <Button
-            title="Go Back"
-            onPress={() => route.navigation.navigate('LandingPage')}
-          /> */}
+                };
+                await props.addBook({
+                  status,
+                  book: bookToAdd,
+                });
+                bookPath.book = bookToAdd;
+                setInBookshelf(true);
+              }}
+            />
+          ) : (
+            <>
+              <Button
+                title='Change Status'
+                onPress={() => {
+                  const bookToAdd = {
+                    title: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.title
+                      : bookPath.book.title,
+                    image: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.imageLinks.thumbnail
+                      : bookPath.book.image,
+                    authors: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.authors
+                      : bookPath.book.authors,
+                    rating: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.averageRating
+                      : bookPath.book.rating,
+                    description: bookPath.volumeInfo
+                      ? bookPath.volumeInfo.description
+                      : bookPath.book.description,
+                    googleId: props.route.params.id || bookPath.book.googleId,
+                  };
+                  props.addBook({
+                    status,
+                    book: bookToAdd,
+                  });
+                }}
+              />
+              <Button
+                title='Delete from Bookshelf'
+                onPress={() => {
+                  props.deleteBook(bookPath.book.id, userId);
+                  setInBookshelf(false);
+                }}
+              />
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -132,15 +181,23 @@ export default function SingleBookView(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  center: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   textTitle: {
-    fontWeight: 'bold',
-    alignContent: 'center',
-    width: '100%',
-    textAlign: 'center',
+    fontWeight: "bold",
+    alignContent: "center",
+    width: "100%",
   },
 });
+
+const mapState = (state) => ({
+  user: state.user,
+});
+
+const mapDispatch = (dispatch) => ({
+  addBook: (body) => dispatch(addBook(body)),
+  deleteBook: (bookId, userId) => dispatch(deleteBook(bookId, userId)),
+});
+
+export default reduxConnect(mapState, mapDispatch)(SingleBookView);

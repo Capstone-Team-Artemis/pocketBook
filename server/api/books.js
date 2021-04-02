@@ -22,7 +22,7 @@ router.get("/:googleId", async (req, res, next) => {
     //Finds book with specific user
     const userBook = await UserBook.findOne({
       where: {
-        //req.user.id
+        // userId: req.user.id,
         userId: kay.id,
         bookId: book.id,
       },

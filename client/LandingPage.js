@@ -73,12 +73,13 @@ export default function LandingPage({ navigation, route }) {
       .then((data) => {
         // We set array of book objects inside "result" state
         setResult(data.data.items);
+
         console.log(result);
       })
       .catch((err) => {
         console.log(err);
       });
-
+    setBook("");
     setModalVisible(true);
   }
   return (
@@ -106,6 +107,7 @@ export default function LandingPage({ navigation, route }) {
                   style={styles.inputText}
                   // placeholder='Search by Title, Author, or Keyword'
                   onChangeText={handleChange}
+                  value={book}
                 />
               </View>
               <TouchableOpacity
@@ -205,13 +207,6 @@ export default function LandingPage({ navigation, route }) {
                     >
                       <Text style={styles.submitText}>DONE</Text>
                     </TouchableOpacity>
-                    {/* <Button
-                  style={styles.published}
-                  title='DONE'
-                  onPress={() => setModalVisible(false)}
-                > */}
-                    {/* Done
-                </Button> */}
                   </ScrollView>
                 </SafeAreaView>
               </Modal>

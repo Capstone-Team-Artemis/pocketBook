@@ -1,15 +1,15 @@
-const path = require('path');
-const express = require('express');
-const morgan = require('morgan');
+const path = require("path");
+const express = require("express");
+const morgan = require("morgan");
 //const compression = require('compression')
-//const session = require('express-session')
-const passport = require('passport');
+const session = require("express-session");
+const passport = require("passport");
 //const SequelizeStore = require('connect-session-sequelize')(session.Store)
-const db = require('./db');
+const db = require("./db");
 //const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 3000;
 const app = express();
-const socketIO = require('socket.io');
+const socketIO = require("socket.io");
 module.exports = app;
 
 // This is a global Mocha hook, used for resource cleanup.
@@ -42,7 +42,7 @@ passport.deserializeUser(async (id, done) => {
 
 const createApp = () => {
   // logging middleware
-  app.use(morgan('dev'));
+  app.use(morgan("dev"));
 
   // body parsing middleware
   app.use(express.json());
@@ -52,28 +52,27 @@ const createApp = () => {
   //app.use(compression())
 
   // session middleware with passport
-  // app.use(
-  //   session({
-  //     secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-  //     store: sessionStore,
-  //     resave: false,
-  //     saveUninitialized: false,
-  //   })
-  // );
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || "my best friend is Cody",
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
   app.use(passport.initialize());
-  // app.use(passport.session());
+  app.use(passport.session());
 
   // auth and api routes
-  app.use('/auth', require('./auth'));
-  app.use('/api', require('./api'));
+  app.use("/auth", require("./auth"));
+  app.use("/api", require("./api"));
 
   // static file-serving middleware (public -> assets?)
-  app.use(express.static(path.join(__dirname, '..', 'assets')));
+  app.use(express.static(path.join(__dirname, "..", "assets")));
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {
     if (path.extname(req.path).length) {
-      const err = new Error('Not found');
+      const err = new Error("Not found");
       err.status = 404;
       next(err);
     } else {
@@ -82,15 +81,15 @@ const createApp = () => {
   });
 
   // sends index.html
-  app.use('*', (req, res) => {
-    res.send('Welcome to PocketBook');
+  app.use("*", (req, res) => {
+    res.send("Welcome to PocketBook");
   });
 
   // error handling endware
   app.use((err, req, res, next) => {
     console.error(err);
     console.error(err.stack);
-    res.status(err.status || 500).send(err.message || 'Internal server error.');
+    res.status(err.status || 500).send(err.message || "Internal server error.");
   });
 };
 
@@ -102,7 +101,7 @@ const startListening = () => {
 
   // set up our socket control center
   const io = socketIO(server);
-  require('./socket')(io);
+  require("./socket")(io);
 };
 
 const syncDb = () => db.sync();

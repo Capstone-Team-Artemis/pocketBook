@@ -20,16 +20,15 @@ const gotBooks = (books) => ({
 
 //THUNK CREATORS
 export const addBook = (body) => {
-  console.log("ADDBOOK BODY", body);
-  console.log("body.book.id", body.book.id);
-  console.log("body.book.googleId", body.book.googleId);
   return async (dispatch) => {
     try {
       if (!body.book.googleId) {
         body.book.googleId = body.book.id;
       }
+      // const { data: book } = await axios.post(
+      //   "http://localhost:3000/api/books",
       const { data: book } = await axios.post(
-        "http://localhost:3000/api/books",
+        "https://pocketbook-gh.herokuapp.com/api/books",
         {
           status: body.status,
           book: body.book,
@@ -44,10 +43,12 @@ export const addBook = (body) => {
 export const deleteBook = (bookId, userId) => {
   return async (dispatch) => {
     try {
-      await axios.delete(`http://localhost:3000/api/users/${userId}/${bookId}`);
+      // await axios.delete(`http://localhost:3000/api/users/${userId}/${bookId}`);
+      // dispatch(deletedBook(bookId));
+      await axios.delete(
+        `https://pocketbook-gh.herokuapp.com/api/${userId}/${bookId}`
+      );
       dispatch(deletedBook(bookId));
-      // const {data: bookId} = await axios.delete(`https://pocketbook-gh.herokuapp.com/api/${userId}/${bookId}`)
-      // dispatch(deletedBook(bookId))
     } catch (error) {
       console.error(error);
     }
@@ -55,7 +56,10 @@ export const deleteBook = (bookId, userId) => {
 };
 export const getBooks = (userId) => async (dispatch) => {
   try {
-    const books = await axios.get(`http://localhost:3000/api/users/${userId}`);
+    // const books = await axios.get(`http://localhost:3000/api/users/${userId}`);
+    const books = await axios.get(
+      `https://pocketbook-gh.herokuapp.com/api/${userId}`
+    );
     dispatch(gotBooks(books.data));
   } catch (error) {
     console.error(error);

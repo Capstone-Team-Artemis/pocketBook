@@ -23,13 +23,20 @@ function SingleBookView(props) {
   const [inBookshelf, setInBookshelf] = useState(false);
   const bookPath = props.route.params;
   const userId = props.route.params.userId;
+  if (bookPath.usedb) {
+    bookPath.volumeInfo = undefined;
+    bookPath.id = undefined;
+    bookPath.usedb = false;
+  }
   useEffect(() => {
+    console.log(props.route);
     const getStatus = async () => {
       try {
         // MADE URL DYNAMIC TO TAKE INTO ACCOUNT NAVIGATING FROM PROFILE TO SINGLEBOOKVIEW
 
         const id = bookPath.id ? bookPath.id : bookPath.book.googleId;
-        const url = `http://localhost:3000/api/books/${id}`;
+        // const url = `http://localhost:3000/api/books/${id}`;
+        const url = `https://pocketbook-gh.herokuapp.com/api/books/${id}`;
 
         const { data } = await axios.get(url);
 
@@ -83,7 +90,9 @@ function SingleBookView(props) {
             </Text>
           </View>
           <Text style={styles.textTitle}>Book Status</Text>
+
           <DropDownPicker
+            dropDownStyle={{ marginTop: -150 }}
             containerStyle={{ height: 40 }}
             defaultValue={status}
             onChangeItem={(item) => setStatus(item.value)}
@@ -93,6 +102,7 @@ function SingleBookView(props) {
               { label: "To Read", value: "To Read" },
             ]}
           />
+
           {/* CHANGE BELOW CODE TOO */}
           {!inBookshelf ? (
             <Button
@@ -145,7 +155,7 @@ function SingleBookView(props) {
                     description: bookPath.volumeInfo
                       ? bookPath.volumeInfo.description
                       : bookPath.book.description,
-                    googleId: props.route.params.id,
+                    googleId: props.route.params.id || bookPath.book.googleId,
                   };
                   props.addBook({
                     status,

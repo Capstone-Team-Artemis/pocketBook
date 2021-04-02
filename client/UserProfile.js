@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { getBooks } from "./store/userProfile";
+import { getBooks } from "./store/books";
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -75,7 +75,8 @@ const UserProfile = (props) => {
                     key={idx}
                     onPress={() => {
                       props.navigation.navigate("SingleBookView", {
-                        ...book,
+                        usedb: true,
+                        book: book.book,
                         userId: Number(props.route.params.userId),
                       });
                     }}
@@ -109,7 +110,8 @@ const UserProfile = (props) => {
                     key={idx}
                     onPress={() => {
                       props.navigation.navigate("SingleBookView", {
-                        ...book,
+                        usedb: true,
+                        book: book.book,
                         userId: Number(props.route.params.userId),
                       });
                     }}
@@ -142,10 +144,15 @@ const UserProfile = (props) => {
                   <TouchableOpacity
                     key={idx}
                     onPress={() => {
-                      props.navigation.navigate("SingleBookView", {
-                        ...book,
-                        userId: Number(props.route.params.userId),
-                      });
+                      props.navigation.navigate(
+                        "SingleBookView",
+
+                        {
+                          usedb: true,
+                          book: book.book,
+                          userId: Number(props.route.params.userId),
+                        }
+                      );
                     }}
                   >
                     <View style={styles.bookData}>

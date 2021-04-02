@@ -39,7 +39,7 @@ class Chat extends React.Component {
         thisComponent.state.messages
       );
       const messages = thisComponent.state.messages.slice();
-      thisComponent.setState({ messages: [...messages, message] });
+      thisComponent.setState({ messages: [message, ...messages] });
     });
   }
 

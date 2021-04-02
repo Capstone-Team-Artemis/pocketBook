@@ -7,7 +7,6 @@ module.exports = router;
 //single book page view
 router.get('/:googleId', async (req, res, next) => {
   try {
-    console.log('DID U FIND A GOOGLE ID? -->', req.params.googleId);
     //Finds book in Book model by googleId
     const book = await Book.findOne({
       where: {

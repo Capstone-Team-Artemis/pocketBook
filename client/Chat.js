@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { fetchUser } from './store/user';
 
 import { io } from 'socket.io-client';
+// const socket = io();
 // const socket = io('http://127.0.0.1:3000');
 
 // const socket = io('https://pocketbook-gh.herokuapp.com/');
@@ -21,7 +22,7 @@ class Chat extends React.Component {
     };
   }
   componentDidMount() {
-    this.socket = io('http://7c82bc981bc6.ngrok.io', {
+    this.socket = io('http://5d0f23dd9334.ngrok.io', {
       transports: ['websocket'],
       jsonp: false,
     });

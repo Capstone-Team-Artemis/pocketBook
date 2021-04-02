@@ -1,5 +1,6 @@
 // SINGLE event component (child component of AllEvents component)
 import {
+  Alert,
   Text,
   StyleSheet,
   View,
@@ -7,16 +8,25 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 import { DateTime } from 'luxon';
+=======
+import {DateTime} from 'luxon';
+// import thunk
+import { deleteEvent } from "./store/events";
+>>>>>>> 9cb7183ab34ef97c53468110789005345c9753b6
 
-export default class SingleEvent extends React.Component {
+class SingleEvent extends React.Component {
   constructor(props) {
     super(props);
     this.unregister = this.unregister.bind(this);
     this.register = this.register.bind(this);
-  }
+    this.handleDelete = this.handleDelete.bind(this);
+    this.openTwoButtonAlert = this.openTwoButtonAlert.bind(this);
+  };
   // UNREGISTER the logged in user from a specific event
   unregister = async () => {
     try {
@@ -44,70 +54,83 @@ export default class SingleEvent extends React.Component {
       console.log(error);
     }
   };
+  // DELETE a single event
+  handleDelete() {
+    let hostId = this.props.event.hostId;
+    let eventId = this.props.event.id;
+    this.props.delete(hostId, eventId);
+  };
+
+  // DELETE CONFIRMATION POPUP ALERT 
+  openTwoButtonAlert=()=>{
+    Alert.alert(
+      'Delete Event',
+      'Are you sure you want to delete this event?',
+      [
+        {text: 'Delete', onPress: () => this.handleDelete()},
+        {text: 'Cancel', onPress: () => console.log('No button clicked'), style: 'cancel'},
+      ],
+      { 
+        cancelable: true 
+      }
+    );
+  }
 
   render() {
     // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
     const { event, navigate, status, user, userId } = this.props;
     // create DateTime instance so can covert to properly formatted string
-    const formattedStartTime = DateTime.fromISO(event.startTime).toLocaleString(
-      DateTime.TIME_SIMPLE
-    );
-    const formattedEndTime = DateTime.fromISO(event.endTime).toLocaleString(
-      DateTime.TIME_SIMPLE
-    );
-    const formattedDate = DateTime.fromISO(event.date).toLocaleString(
-      DateTime.DATE_FULL
-    );
-
-    return (
-      <TouchableOpacity
-        onPress={() => navigate.navigate('SingleEventView', event, userId)}
-      >
-        <View style={styles.listContainer} key={event.id}>
-          {/* Adds book image for each event */}
-          <Image
-            source={{
-              uri:
-                'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED',
-            }}
-            style={styles.image}
-          />
-          {/* Adds event info for each event */}
-          <View style={styles.eventData}>
-            <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-            <Text style={styles.date}>Date: {formattedDate}</Text>
-            <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
-            <Text style={styles.time}>End Time: {formattedEndTime}</Text>
-            <Text style={styles.description}>
-              Description: {event.description}
-            </Text>
-
-            {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+    const formattedStartTime= DateTime.fromISO(event.startTime).toLocaleString(DateTime.TIME_SIMPLE);
+    const formattedEndTime= DateTime.fromISO(event.endTime).toLocaleString(DateTime.TIME_SIMPLE);
+    const formattedDate = DateTime.fromISO(event.date).toLocaleString(DateTime.DATE_FULL);
+        
+    return (     
+        <TouchableOpacity onPress={() => navigate.navigate('SingleEventView', event)}>
+            <View style={styles.listContainer} key={event.id}>
+                {/* Adds book image for each event */}
+                <Image
+                    source={{
+                    uri: 'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED',
+                    }}
+                    style={styles.image}
+                />
+                {/* Adds event info for each event */}
+                <View style={styles.eventData}>
+                    <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+                    <Text style={styles.date}>Date: {formattedDate}</Text>
+                    <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
+                    <Text style={styles.time}>End Time: {formattedEndTime}</Text>
+                    <Text style={styles.description}>
+                    Description: {event.description}
+                    </Text>
+                
+                {/* if logged in user is the HOST, button can only say 'Delete Event'.
                         if not host, button can also say 'Un/Register' */}
-            <View style={styles.registerButtonContainer}>
-              {user === event.hostId ? (
-                <Button
-                  // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
-                  title={'Edit/Delete'}
-                  onPress={() => {
-                    navigate.navigate('CreateEvent', event);
-                  }}
-                  color="white"
-                  accessibilityLabel="Status"
-                />
-              ) : (
-                <Button
-                  // check the event obj to see if logged-in user exists in the associated user array
-                  // if user exists, that means user is attending and button should give 'Unregister' option
-                  // else, the user isn't registered and should have the button option to 'Register' for the event
-                  title={event.users[0] ? 'Unregister' : 'Register'}
-                  onPress={() => {
-                    event.users[0] ? this.unregister() : this.register();
-                  }}
-                  color="white"
-                  accessibilityLabel="Status"
-                />
-              )}
+                <View style={styles.registerButtonContainer}>
+                    {user === event.hostId ? (
+                    <Button
+                        // 'Delete Event' button triggers alert box to confirm you want to delete event
+                        title={'Delete Event'}
+                        onPress={() => {
+                          this.openTwoButtonAlert()}}
+                        color="white"
+                        accessibilityLabel="Status"
+                    />
+                    ) : (
+                    <Button
+                        // check the event obj to see if logged-in user exists in the associated user array
+                        // if user exists, that means user is attending and button should give 'Unregister' option
+                        // else, the user isn't registered and should have the button option to 'Register' for the event
+                        title={event.users[0] ? 'Unregister' : 'Register'}
+                        onPress={() => {
+                        event.users[0] ? this.unregister() : this.register();
+                        }}
+                        color="white"
+                        accessibilityLabel="Status"
+                    />
+                    )}       
+                </View>
+                </View>
             </View>
           </View>
         </View>
@@ -171,3 +194,10 @@ const styles = StyleSheet.create({
     marginLeft: 95,
   },
 });
+
+const mapDispatch = (dispatch) => {
+  return {
+    delete: (userId, eventId) => dispatch(deleteEvent(userId, eventId)),
+  };
+};
+export default connect(null, mapDispatch)(SingleEvent);

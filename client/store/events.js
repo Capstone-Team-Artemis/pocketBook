@@ -38,12 +38,12 @@ export const postEvent = (newEventInfo) => async (dispatch) => {
   try {
     // makes the API call to create the event in the Event model and the attendee entry (row) for the event in the userEvent model
     const newEvent = await axios.post(
-      `https://pocketbook-gh.herokuapp.com/api/events/createEvent`,
+      `http://localhost:3000/api/events/createEvent`,
       newEventInfo
     );
     // makes the API call to get ALL the events and perform left join to include the attendee's info who is logged in
     const { data } = await axios.get(
-      `https://pocketbook-gh.herokuapp.com/api/events/${userId}`
+      `http://localhost:3000/api/events/${userId}`
     );
     // this updates the store state w/the new data and triggers re-rendering of the DOM
     dispatch(receivedEvents(data));
@@ -56,7 +56,7 @@ export const postEvent = (newEventInfo) => async (dispatch) => {
 export const deleteEvent = (userId, eventId) => async (dispatch) => {
   try {
     await axios.delete(
-      `https://pocketbook-gh.herokuapp.com/api/events/${userId}/delete/${eventId}`
+      `http://localhost:3000/api/events/${userId}/delete/${eventId}`
     );
     dispatch(deletedEvents(userId, eventId));
   } catch (error) {

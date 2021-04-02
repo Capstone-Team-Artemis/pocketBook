@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { connect } from 'react-redux';
+import { fetchUser } from './store/user';
 
 import { io } from 'socket.io-client';
 // const socket = io('http://127.0.0.1:3000');
@@ -78,14 +80,16 @@ class Chat extends React.Component {
   };
 
   render() {
+    console.log('USER ID?? -->', this.props.userId);
     return (
       <GiftedChat
         messages={this.state.messages}
         // onSend={(messages) => onSend(messages)}
         onSend={(message) => this.submitChatMessage(message)}
-        user={{
-          _id: 1,
-        }}
+        // user={{
+        //   _id: 1,
+        // }}
+        user={{ _id: this.props.userId }}
         // renderBubble={renderBubble}
         alwaysShowSend
         scrollToBottom
@@ -94,7 +98,20 @@ class Chat extends React.Component {
   }
 }
 
-export default Chat;
+const mapState = (state) => {
+  return {
+    userId: state.user.id,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    getUser: (userId) => dispatch(fetchUser(userId)),
+  };
+};
+
+// export default Chat;
+export default connect(mapState, mapDispatch)(Chat);
 
 const styles = StyleSheet.create({
   container: {

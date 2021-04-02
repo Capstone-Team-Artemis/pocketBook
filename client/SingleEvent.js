@@ -47,7 +47,7 @@ export default class SingleEvent extends React.Component {
 
   render() {
     // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
-    const { event, navigate, status, user } = this.props;
+    const { event, navigate, status, user, userId } = this.props;
     // create DateTime instance so can covert to properly formatted string
     const formattedStartTime = DateTime.fromISO(event.startTime).toLocaleString(
       DateTime.TIME_SIMPLE
@@ -61,7 +61,7 @@ export default class SingleEvent extends React.Component {
 
     return (
       <TouchableOpacity
-        onPress={() => navigate.navigate('SingleEventView', event)}
+        onPress={() => navigate.navigate('SingleEventView', event, userId)}
       >
         <View style={styles.listContainer} key={event.id}>
           {/* Adds book image for each event */}

@@ -19,7 +19,7 @@ const Sidebar = (props) => {
   // Set custom image state
   const imageURL = useSelector((state) => state.user.image);
   // I HAVE THE IMAGE, BUT IT'S NOT SETTING IT TO IMAGE ON LINE 25
-  console.log('IMAGE --->', imageURL);
+  //console.log('IMAGE --->', imageURL);
   const dispatch = useDispatch();
   const [image, setImage] = useState(imageURL);
   // const [image, setImage] = useState(props.imageURL);

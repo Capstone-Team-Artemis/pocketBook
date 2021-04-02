@@ -1,4 +1,11 @@
-module.exports = (io) => {
+// module.exports = (io) => {
+const http = require('http');
+const express = require('express');
+const app = express();
+const socketio = require('socket.io');
+module.exports = () => {
+  const server = http.createServer(app);
+  const io = socketio(server);
   //connection is established
   //socket is an object that has socket id
   io.on('connection', (socket) => {
@@ -7,11 +14,11 @@ module.exports = (io) => {
     );
     //step2: taking in msg(this.state.chatmessage from the front end) then it runs line 9
     socket.on('chat message', (msg) => {
-      console.log('in message backend: ', msg);
+      console.log('in message backend: ', msg[0]);
       //send messages to everyone except the one just joined
       // socket.broadcast.emit('messages');
       //step3: emiting the messages event to all the users and passing msg
-      io.emit('messages', msg);
+      io.emit('messages', msg[0]);
     });
   });
   // io.on('connection', socket => {

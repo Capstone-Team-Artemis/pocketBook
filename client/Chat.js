@@ -2,27 +2,40 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 
+import { io } from 'socket.io-client';
+// const socket = io('http://127.0.0.1:3000');
+const socket = io();
+
 const Chat = () => {
   const [messages, setMessages] = useState([]);
+  console.log('STATE MESSAGES -->', messages);
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
+    socket.connect();
+    socket.on('connect', () => {
+      console.log('Connected to socket server');
+    });
+    socket.on('messages', (message) => {
+      // setMessages([
+      //   { ...message },
+      //   {
+      //     _id: 1,
+      //     text: 'Hello developer',
+      //     createdAt: new Date(),
+      //     user: {
+      //       _id: 2,
+      //       name: 'React Native',
+      //       avatar: 'https://placeimg.com/140/140/any',
+      //     },
+      //   },
+      // ]);
+    });
   }, []);
 
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
+    socket.emit('chat message', messages);
   }, []);
 
   // Changes styling on Chat bubble messages

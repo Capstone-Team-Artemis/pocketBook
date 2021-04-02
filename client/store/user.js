@@ -22,7 +22,7 @@ export const fetchUser = (userId) => {
       const { data } = await axios.get(
         `https://pocketbook-gh.herokuapp.com/api/users/${userId}/image`
       );
-      console.log('DATA FROM USER --->', data);
+      //console.log('DATA FROM USER --->', data);
       dispatch(fetchedUser(data));
     } catch (error) {
       console.log('Error fetching user from server');

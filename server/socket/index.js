@@ -1,11 +1,5 @@
 // module.exports = (io) => {
-const http = require('http');
-const express = require('express');
-const app = express();
-const socketio = require('socket.io');
-module.exports = () => {
-  const server = http.createServer(app);
-  const io = socketio(server);
+module.exports = (io) => {
   //connection is established
   //socket is an object that has socket id
   io.on('connection', (socket) => {

@@ -2,7 +2,6 @@ import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import user from './user';
 import events from './events';
-import event from './event';
 import userProfile from './userProfile';
 
 const rootReducer = combineReducers({

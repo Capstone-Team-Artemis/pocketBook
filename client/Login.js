@@ -12,7 +12,6 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Formik } from 'formik';
 import axios from 'axios';
-
 import { AuthContext } from './context';
 
 const Login = (props) => {
@@ -43,10 +42,13 @@ const Login = (props) => {
           } else {
             // If user did, axios call to lookup user login info
             try {
-              let res = await axios.post('http://localhost:3000/auth/login/', {
-                email: values.email,
-                password: values.password,
-              });
+              let res = await axios.post(
+                'https://pocketbook-gh.herokuapp.com/auth/login/',
+                {
+                  email: values.email,
+                  password: values.password,
+                }
+              );
               // handlePress = passes user info to function that will pass to RootNavigation's logIn function
               handlePress({ user: res.data });
               // If user info is invalid:

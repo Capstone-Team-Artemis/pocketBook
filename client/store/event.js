@@ -1,14 +1,14 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 //ACTION TYPE
 
-const CREATE_EVENT = 'CREATE_EVENT';
-//const UPDATE_EVENT = 'UPDATE_EVENT';
+// const CREATE_EVENT = 'CREATE_EVENT';
+// //const UPDATE_EVENT = 'UPDATE_EVENT';
 
-const createdEvent = (newEvent) => ({
-  type: CREATE_EVENT,
-  newEvent,
-});
+// const createdEvent = (newEvent) => ({
+//   type: CREATE_EVENT,
+//   newEvent,
+// });
 
 // const updatedEvent = (updatedEvent) => ({
 //   type: UPDATE_EVENT,
@@ -16,17 +16,17 @@ const createdEvent = (newEvent) => ({
 // });
 
 //POST api/events/createEvent
-export const postEvent = (newEventInfo) => async (dispatch) => {
-  try {
-    const newEvent = await axios.post(
-      `http://localhost:3000/api/events/createEvent`,
-      newEventInfo
-    );
-    dispatch(createdEvent(newEvent.data));
-  } catch (error) {
-    throw error;
-  }
-};
+// export const postEvent = (newEventInfo) => async (dispatch) => {
+//   try {
+//     const newEvent = await axios.post(
+//       `http://localhost:3000/api/events/createEvent`,
+//       newEventInfo
+//     );
+//     dispatch(createdEvent(newEvent.data));
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 //PUT api/events/:userId/updateEvent/:eventId
 
@@ -41,23 +41,23 @@ export const postEvent = (newEventInfo) => async (dispatch) => {
 // }
 
 // DELETE api/events/delete/eventId
-export const deleteEvent = (userId, eventId) => async (dispatch) => {
-    try {
-        const deletedEvent = await axios.delete(`http://localhost:3000/api/events/${userId}/delete/${eventId}`)
-    } catch (error) {
-        console.error(error)
-    }
-}
+// export const deleteEvent = (userId, eventId) => async (dispatch) => {
+//     try {
+//         const deletedEvent = await axios.delete(`http://localhost:3000/api/events/${userId}/delete/${eventId}`)
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
 //INITIAL STATE
-const initialState = [];
+// const initialState = [];
 
-//REDUCER   
-const event = (state=initialState, action) => {
-    switch(action.type){
-        default:
-            return state
-    }
-  }
+// //REDUCER
+// const event = (state=initialState, action) => {
+//     switch(action.type){
+//         default:
+//             return state
+//     }
+//   }
 
-export default event;
+// export default event;

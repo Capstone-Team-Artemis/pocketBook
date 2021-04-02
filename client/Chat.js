@@ -1,32 +1,68 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { connect } from 'react-redux';
+import { fetchUser } from './store/user';
 
-const Chat = () => {
-  const [messages, setMessages] = useState([]);
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
-  }, []);
+import { io } from 'socket.io-client';
+// const socket = io();
+// const socket = io('http://127.0.0.1:3000');
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
+// const socket = io('https://pocketbook-gh.herokuapp.com/');
+
+// thisComponent.setState({ discussion: [...discussion, msg] });
+
+class Chat extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chatMessage: '',
+      discussion: [],
+      messages: [],
+    };
+  }
+  componentDidMount() {
+    this.socket = io('http://5d0f23dd9334.ngrok.io', {
+      transports: ['websocket'],
+      jsonp: false,
+    });
+
+    this.socket.connect();
+
+    const thisComponent = this;
+
+    this.socket.on('connection', () => {
+      console.log('Connected to socket server');
+    });
+
+    this.socket.on('messages', (message) => {
+      console.log('MESSAGES IN SOCKET MESSAGE -->', message);
+      console.log(
+        'THISCOMPONENT.STATE.MESSAGES -->',
+        thisComponent.state.messages
+      );
+      const messages = thisComponent.state.messages.slice();
+      thisComponent.setState({ messages: [message, ...messages] });
+    });
+  }
+
+  // onSend = ((messages = []) => {
+  //     setMessages((previousMessages) =>
+  //       GiftedChat.append(previousMessages, messages)
+  //     );
+  //     socket.emit('chat message', messages);
+  //   },
+  //   []);
+
+  submitChatMessage(message) {
+    //step1: socket is emitting chat message to the backend line6 of index.js
+    this.socket.emit('chat message', message);
+    this.setState((previousMessages) =>
+      GiftedChat.append(previousMessages, message)
     );
-  }, []);
+  }
 
-  // Changes styling on Chat bubble messages
-  const renderBubble = (props) => {
+  renderBubble = (props) => {
     return (
       <Bubble
         {...props}
@@ -44,21 +80,39 @@ const Chat = () => {
     );
   };
 
-  return (
-    <GiftedChat
-      messages={messages}
-      onSend={(messages) => onSend(messages)}
-      user={{
-        _id: 1,
-      }}
-      renderBubble={renderBubble}
-      alwaysShowSend
-      scrollToBottom
-    />
-  );
+  render() {
+    console.log('USER ID?? -->', this.props.userId);
+    return (
+      <GiftedChat
+        messages={this.state.messages}
+        // onSend={(messages) => onSend(messages)}
+        onSend={(message) => this.submitChatMessage(message)}
+        // user={{
+        //   _id: 1,
+        // }}
+        user={{ _id: this.props.userId }}
+        // renderBubble={renderBubble}
+        alwaysShowSend
+        scrollToBottom
+      />
+    );
+  }
+}
+
+const mapState = (state) => {
+  return {
+    userId: state.user.id,
+  };
 };
 
-export default Chat;
+const mapDispatch = (dispatch) => {
+  return {
+    getUser: (userId) => dispatch(fetchUser(userId)),
+  };
+};
+
+// export default Chat;
+export default connect(mapState, mapDispatch)(Chat);
 
 const styles = StyleSheet.create({
   container: {

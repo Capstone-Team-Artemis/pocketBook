@@ -11,10 +11,13 @@ import {
 import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
+import { DateTime } from 'luxon';
+=======
 import {DateTime} from 'luxon';
-import {
-  deleteEvent,
-} from "./store/event";
+// import thunk
+import { deleteEvent } from "./store/events";
+>>>>>>> 9cb7183ab34ef97c53468110789005345c9753b6
 
 class SingleEvent extends React.Component {
   constructor(props) {
@@ -29,7 +32,7 @@ class SingleEvent extends React.Component {
     try {
       // make call to update DB by unregistering user
       await axios.delete(
-        `http://localhost:3000/api/events/${this.props.user}/unregister/${this.props.event.id}`
+        `https://pocketbook-gh.herokuapp.com/api/events/${this.props.user}/unregister/${this.props.event.id}`
       );
       // if successful, need to update store so can trigger re-render -> do this by calling getEvents fx
       const res = await this.props.getEvents();
@@ -43,7 +46,7 @@ class SingleEvent extends React.Component {
     try {
       // make call to update DB by registering user
       await axios.post(
-        `http://localhost:3000/api/events/${this.props.user}/register/${this.props.event.id}`
+        `https://pocketbook-gh.herokuapp.com/api/events/${this.props.user}/register/${this.props.event.id}`
       );
       // if successful, need to update store so can trigger re-render -> do this by calling getEvents fx
       this.props.getEvents();
@@ -51,14 +54,14 @@ class SingleEvent extends React.Component {
       console.log(error);
     }
   };
-
+  // DELETE a single event
   handleDelete() {
     let hostId = this.props.event.hostId;
     let eventId = this.props.event.id;
-    console.log('EVENT ID: ', eventId)
     this.props.delete(hostId, eventId);
   };
 
+  // DELETE CONFIRMATION POPUP ALERT 
   openTwoButtonAlert=()=>{
     Alert.alert(
       'Delete Event',
@@ -73,9 +76,9 @@ class SingleEvent extends React.Component {
     );
   }
 
-  render() {    
+  render() {
     // passed down event, navigate, and dropdown menu status as props from AllEvents componenet
-    const {event, navigate, status, user} = this.props;
+    const { event, navigate, status, user, userId } = this.props;
     // create DateTime instance so can covert to properly formatted string
     const formattedStartTime= DateTime.fromISO(event.startTime).toLocaleString(DateTime.TIME_SIMPLE);
     const formattedEndTime= DateTime.fromISO(event.endTime).toLocaleString(DateTime.TIME_SIMPLE);
@@ -101,12 +104,12 @@ class SingleEvent extends React.Component {
                     Description: {event.description}
                     </Text>
                 
-                {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                {/* if logged in user is the HOST, button can only say 'Delete Event'.
                         if not host, button can also say 'Un/Register' */}
                 <View style={styles.registerButtonContainer}>
                     {user === event.hostId ? (
                     <Button
-                        // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
+                        // 'Delete Event' button triggers alert box to confirm you want to delete event
                         title={'Delete Event'}
                         onPress={() => {
                           this.openTwoButtonAlert()}}
@@ -129,7 +132,9 @@ class SingleEvent extends React.Component {
                 </View>
                 </View>
             </View>
-        </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableOpacity>
     );
   }
 }

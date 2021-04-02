@@ -38,7 +38,6 @@ export const changeImage = (userId, imageURL) => {
           image: imageURL,
         }
       );
-      console.log('CHANGED THE IMAGE -->', data);
       // dispatch(changedImage(data));
     } catch (error) {
       console.log('Error saving image to server');

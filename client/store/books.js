@@ -46,7 +46,7 @@ export const deleteBook = (bookId, userId) => {
       // await axios.delete(`http://localhost:3000/api/users/${userId}/${bookId}`);
       // dispatch(deletedBook(bookId));
       await axios.delete(
-        `https://pocketbook-gh.herokuapp.com/api/${userId}/${bookId}`
+        `https://pocketbook-gh.herokuapp.com/api/users/${userId}/${bookId}`
       );
       dispatch(deletedBook(bookId));
     } catch (error) {
@@ -58,7 +58,7 @@ export const getBooks = (userId) => async (dispatch) => {
   try {
     // const books = await axios.get(`http://localhost:3000/api/users/${userId}`);
     const books = await axios.get(
-      `https://pocketbook-gh.herokuapp.com/api/${userId}`
+      `https://pocketbook-gh.herokuapp.com/api/users/${userId}`
     );
     dispatch(gotBooks(books.data));
   } catch (error) {

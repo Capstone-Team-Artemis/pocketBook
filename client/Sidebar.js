@@ -46,7 +46,7 @@ const Sidebar = (props) => {
         <ImageBackground
           source={{
             uri:
-              'https://png.pngtree.com/thumb_back/fw800/back_pic/04/00/88/6157ff435466669.jpg',
+              'https://media.istockphoto.com/vectors/interior-illustration-of-a-workspace-vector-id1167352352?k=6&m=1167352352&s=612x612&w=0&h=W5TFLBZx_vgB51-fgInOeuc8X_hE2PsCPR-ptaqkWdY=',
           }}
           style={{ width: undefined, padding: 20, paddingTop: 50 }}
         >

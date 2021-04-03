@@ -49,17 +49,17 @@ async function seed() {
   const events = [
     {
       eventTitle: 'Harry Potter and the Deathly Hallows',
-      date: '2021-04-03',
-      startTime: '13:15',
-      endTime: '13:30',
+      date: '2021-04-09',
+      startTime: '15:00',
+      endTime: '16:00',
       description:
-        'Muggles of Pocketbook, what did you think of the series? Were you satisfied with the ending? Let’s discuss our favorite scenes, characters, and more! If we have time, I would love to discuss which houses you belong to!',
+        'Muggles of Pocketbook, what did you think of the series? Were you satisfied with the ending? Let’s discuss our favorite scenes, characters, and more! If we have time, I would love to discuss which house you belong to!',
       hostId: 1,
       image: 'https://i.ibb.co/YL7sfM1/harrypotter.jpg',
     },
     {
       eventTitle: 'The Little Prince',
-      date: '2021-04-09',
+      date: '2021-04-10',
       startTime: '12:30',
       endTime: '14:30',
       description:
@@ -69,7 +69,7 @@ async function seed() {
     },
     {
       eventTitle: 'And Then There Were None',
-      date: '2021-09-27',
+      date: '2021-05-27',
       startTime: '17:00',
       endTime: '18:00',
       description:
@@ -79,7 +79,7 @@ async function seed() {
     },
     {
       eventTitle: 'Atomic Habits',
-      date: '2021-10-15',
+      date: '2021-7-15',
       startTime: '18:00',
       endTime: '20:00',
       description:
@@ -89,23 +89,43 @@ async function seed() {
     },
     {
       eventTitle: 'Becoming',
-      date: '2021-10-20',
+      date: '2021-8-20',
       startTime: '13:00',
       endTime: '15:00',
       description:
-        "With over 10,000,000 copies sold, what are your thoughts on the Michelle Obama's memoir, Becoming? I have came prepared with discussion questions so I look forward to meeting and chatting with you all!",
+        "With over 10,000,000 copies sold, what are your thoughts on the Michelle Obama's memoir, Becoming? I have came prepared with discussion questions so I look forward to meeting and chatting with you!",
       hostId: 3,
       image: 'https://i.ibb.co/8dNyCBT/becoming.jpg',
     },
     {
       eventTitle: 'Why We Sleep',
-      date: '2021-11-02',
+      date: '2021-9-02',
       startTime: '16:00',
       endTime: '18:00',
       description:
         "Do you think you are getting enough sleep every night? Because after reading this book, I am shocked at the impact sleep has on our lives. I would love to hear your inputs. Also, if you have any tips on getting a good night's rest, please share!!",
-      hostId: 4,
+      hostId: 1,
       image: 'https://i.ibb.co/vhHkZbr/whywesleep.jpg',
+    },
+    {
+      eventTitle: 'To Kill A Mockingbird',
+      date: '2021-10-16',
+      startTime: '19:00',
+      endTime: '20:00',
+      description:
+        "So..I finally read Harper Lee's classic and it definitely is a must read! For those who have read it and want to discuss, I would love to explore the themes of race, injustice, human nature, and more with everyone.",
+      hostId: 2,
+      image: 'https://i.ibb.co/2S1SSxq/tokillamockingbird.jpg',
+    },
+    {
+      eventTitle: 'The Intelligent Investor',
+      date: '2021-11-01',
+      startTime: '17:00',
+      endTime: '18:00',
+      description:
+        'Book was a little dense but interesting. I think I understand a bit more about investing, but would still love some tips and your thoughts on it. Thanks yall, see you there!',
+      hostId: 4,
+      image: 'https://i.ibb.co/bNn4pKF/intelligentinvestor.jpg',
     },
     {
       eventTitle: 'Best Books of 2021',

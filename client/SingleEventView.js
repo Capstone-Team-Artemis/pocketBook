@@ -28,8 +28,6 @@ export default class SingleEventView extends React.Component {
     } = this.props.route.params;
     console.log('this.props in single event', this.props.route.params.id);
 
-    console.log('image --->', image);
-
     // create DateTime instance so can covert to properly formatted string
     const formattedStartTime = DateTime.fromISO(startTime).toLocaleString(
       DateTime.TIME_SIMPLE
@@ -45,12 +43,6 @@ export default class SingleEventView extends React.Component {
     const todaysDate = DateTime.now().toLocaleString(DateTime.DATE_FULL);
     const todaysTime = DateTime.now().toLocaleString(DateTime.TIME_SIMPLE);
 
-    console.log('TODAYS DATE --->', todaysDate);
-    console.log("EVENT'S DATE ---->", formattedDate);
-    console.log("TODAY'S TIME ---->", todaysTime);
-    console.log("EVENT'S START TIME -->", formattedStartTime);
-    console.log('COMPARING START TIME --->', todaysTime >= formattedStartTime);
-    console.log('COMPARING END TIME --->', todaysTime <= formattedEndTime);
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
@@ -83,22 +75,22 @@ export default class SingleEventView extends React.Component {
           <Text>
             *Live chat shows up below at the exact date and time of the event!
           </Text>
-          {todaysDate === formattedDate &&
+          {/* {todaysDate === formattedDate &&
           todaysTime >= formattedStartTime &&
-          todaysTime <= formattedEndTime ? (
-            <Button
-              title={'Join Now'}
-              style={styles.clickMe}
-              onPress={() => {
-                this.props.navigation.navigate('Chat', {
-                  title: eventTitle,
-                  eventId: id,
-                });
-              }}
-              color="#e9967a"
-              accessibilityLabel="Join Now"
-            />
-          ) : null}
+          todaysTime <= formattedEndTime ? ( */}
+          <Button
+            title={'Join Now'}
+            style={styles.clickMe}
+            onPress={() => {
+              this.props.navigation.navigate('Chat', {
+                title: eventTitle,
+                eventId: id,
+              });
+            }}
+            color="#e9967a"
+            accessibilityLabel="Join Now"
+          />
+          {/* ) : null} */}
           <Button
             title="Go Back"
             onPress={() => {

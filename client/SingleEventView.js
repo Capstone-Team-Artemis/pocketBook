@@ -24,8 +24,11 @@ export default class SingleEventView extends React.Component {
       startTime,
       endTime,
       hostId,
+      image,
     } = this.props.route.params;
     console.log('this.props in single event', this.props.route.params.id);
+
+    console.log('image --->', image);
 
     // create DateTime instance so can covert to properly formatted string
     const formattedStartTime = DateTime.fromISO(startTime).toLocaleString(
@@ -46,7 +49,8 @@ export default class SingleEventView extends React.Component {
     console.log("EVENT'S DATE ---->", formattedDate);
     console.log("TODAY'S TIME ---->", todaysTime);
     console.log("EVENT'S START TIME -->", formattedStartTime);
-    console.log('COMPARING TIMES --->', todaysTime >= formattedStartTime);
+    console.log('COMPARING START TIME --->', todaysTime >= formattedStartTime);
+    console.log('COMPARING END TIME --->', todaysTime <= formattedEndTime);
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
@@ -71,8 +75,7 @@ export default class SingleEventView extends React.Component {
             {/* Adds book image for each event */}
             <Image
               source={{
-                uri:
-                  'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED',
+                uri: image,
               }}
               style={styles.image}
             />
@@ -81,8 +84,8 @@ export default class SingleEventView extends React.Component {
             *Live chat shows up below at the exact date and time of the event!
           </Text>
           {todaysDate === formattedDate &&
-          (todaysTime >= formattedStartTime ||
-            todaysTime <= formattedEndTime) ? (
+          todaysTime >= formattedStartTime &&
+          todaysTime <= formattedEndTime ? (
             <Button
               title={'Join Now'}
               style={styles.clickMe}
@@ -118,9 +121,8 @@ const styles = StyleSheet.create({
   image: {
     padding: 0,
     width: 100,
-    height: 100,
+    height: 160,
     marginTop: 10,
-    marginLeft: 8,
   },
   eventTitle: {
     fontSize: 30,

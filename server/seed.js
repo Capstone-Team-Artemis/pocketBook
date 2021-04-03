@@ -42,58 +42,74 @@ async function seed() {
 
   const events = [
     {
-      eventTitle: 'Welcome to Hogwarts!',
-      date: '2021-04-08',
-      startTime: '18:00',
-      endTime: '20:00',
+      eventTitle: 'Harry Potter and the Deathly Hallows',
+      date: '2021-04-03',
+      startTime: '13:15',
+      endTime: '13:30',
       description:
-        'Muggles of Pocketbook, what did you think of that ending? Let’s discuss our favorite scenes, characters, and more! If we have time, let’s take the Sorting Hat quiz in the end to share our houses!',
+        'Muggles of Pocketbook, what did you think of the series? Were you satisfied with the ending? Let’s discuss our favorite scenes, characters, and more! If we have time, I would love to discuss which houses you belong to!',
       hostId: 1,
+      image: 'https://i.ibb.co/YL7sfM1/harrypotter.jpg',
     },
     {
-      eventTitle: 'Reality and Make Believe',
+      eventTitle: 'The Little Prince',
       date: '2021-04-09',
-      startTime: '12:00',
-      endTime: '14:00',
+      startTime: '12:30',
+      endTime: '14:30',
       description:
-        'The Little Prince introduces a variety of philosophical concepts including authority, loneliness, and ownership. Did you read this classic? If so, when? What was your opinion of the book? Looking forward to discussing with you all!',
+        'The Little Prince introduces a variety of philosophical concepts including authority, loneliness, and ownership. Did you read this classic? If so, what was your opinion of the book? Looking forward to discussing with you all!',
       hostId: 2,
+      image: 'https://i.ibb.co/9pgMGkM/thelittleprince.jpg',
     },
     {
-      eventTitle: 'Who Did It?',
+      eventTitle: 'And Then There Were None',
       date: '2021-09-27',
-      startTime: '18:00',
-      endTime: '20:00',
+      startTime: '17:00',
+      endTime: '18:00',
       description:
-        "Welcome, our thrill seekers! Let's talk about And Then There Were None. Even though this was Agatha Christie's most difficult book to write, her hard work pays off! Let's talk about the world's best-selling mystery. Were you able to identify the killer? Which alliances did you think were the strongest? Excited to chat with you then!",
+        "Welcome, our thrill seekers! Let's talk about an Agatha Christie classic, and also the world's best-selling mystery. Were you able to identify the killer? Which alliances did you think were the strongest? Excited to chat with you all!",
       hostId: 1,
+      image: 'https://i.ibb.co/zZ6ff8q/andthentherewerenone.jpg',
     },
     {
-      eventTitle: "Let's Talk Habits!",
+      eventTitle: 'Atomic Habits',
       date: '2021-10-15',
       startTime: '18:00',
       endTime: '20:00',
       description:
-        'For those who have read Atomic Habits, how did you enjoy it? How much of what you read did you apply into your daily lives? Everyone is welcome to join in as we will discuss building better habits and stopping bad ones. ',
+        'For those who have read Atomic Habits, how did you enjoy it? How much of what you read did you apply into your daily lives? Everyone is welcome to join in as we discuss building better habits and stopping bad ones.',
       hostId: 3,
+      image: 'https://i.ibb.co/NxCn16Q/atomichabits.jpg',
     },
     {
-      eventTitle: 'Becoming Us',
+      eventTitle: 'Becoming',
       date: '2021-10-20',
       startTime: '13:00',
       endTime: '15:00',
       description:
-        'With over 10,000,000 copies sold, what are your thoughts on the most successful memoir, Becoming? I have came prepared with discussion questions so I look forward to meeting and chatting with you all!',
+        "With over 10,000,000 copies sold, what are your thoughts on the Michelle Obama's memoir, Becoming? I have came prepared with discussion questions so I look forward to meeting and chatting with you all!",
       hostId: 3,
+      image: 'https://i.ibb.co/8dNyCBT/becoming.jpg',
     },
     {
-      eventTitle: 'The Power Of Sleep',
+      eventTitle: 'Why We Sleep',
       date: '2021-11-02',
       startTime: '16:00',
       endTime: '18:00',
       description:
         "Do you think you are getting enough sleep every night? Because after reading this book, I am shocked at the impact sleep has on our lives. I would love to hear your inputs. Also, if you have any tips on getting a good night's rest, please share!!",
       hostId: 4,
+      image: 'https://i.ibb.co/vhHkZbr/whywesleep.jpg',
+    },
+    {
+      eventTitle: 'Best Books of 2021',
+      date: '2021-12-26',
+      startTime: '12:00',
+      endTime: '13:00',
+      description:
+        'Book lovers, I am so excited to discuss our top favorite reads of the year together! Were you able to meet your reading goals? What are your plans for 2022?',
+      hostId: 2,
+      image: 'https://i.ibb.co/n0WtgXZ/2021books.jpg',
     },
   ];
 

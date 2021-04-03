@@ -7,8 +7,8 @@ module.exports = (io) => {
     );
 
     //setting up rooms
-    socket.on('room', (room) => {
-      socket.join(room);
+    socket.on('room', async (room) => {
+      await socket.join(room);
       console.log('ROOM BACKEND', room);
     });
 
@@ -21,13 +21,13 @@ module.exports = (io) => {
     //step2: taking in msg(this.state.chatmessage from the front end) then it runs line 9
     socket.on('chat message', (msg) => {
       let message = msg[0]
+      let eventTitle = message.eventTitle
       console.log('in message backend: ', message);
       //send messages to everyone except the one just joined
       // socket].broadcast.emit('messages');
 
       //step3: emiting the messages event to all the users and passing msg in the same room
-      io.to(message.eventId.toString()).emit('messages', message);
-      //io.emit('messages', message);
+      io.to(eventTitle).emit('messages', message);
     });
 
     //user disconnected?

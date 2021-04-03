@@ -96,8 +96,8 @@ class SingleEvent extends React.Component {
           {/* Adds book image for each event */}
           <Image
             source={{
-              uri:
-                "https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED",
+
+
             }}
             style={styles.image}
           />
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   image: {
     padding: 0,
     width: 100,
-    height: 100,
+    height: 160,
     marginTop: 10,
     marginLeft: 10,
   },

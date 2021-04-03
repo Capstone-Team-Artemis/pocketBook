@@ -9,10 +9,10 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
-} from "react-native";
-import React from "react";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { DateTime } from "luxon";
+} from 'react-native';
+import React from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { DateTime } from 'luxon';
 
 export default class SingleEventView extends React.Component {
   render() {
@@ -24,8 +24,9 @@ export default class SingleEventView extends React.Component {
       startTime,
       endTime,
       hostId,
+      image,
     } = this.props.route.params;
-    console.log("this.props in single event", this.props.route.params.id);
+    console.log('this.props in single event', this.props.route.params.id);
 
     // create DateTime instance so can covert to properly formatted string
     const formattedStartTime = DateTime.fromISO(startTime).toLocaleString(
@@ -37,15 +38,20 @@ export default class SingleEventView extends React.Component {
     const formattedDate = DateTime.fromISO(date).toLocaleString(
       DateTime.DATE_FULL
     );
+
+    // Getting current time and date
+    const todaysDate = DateTime.now().toLocaleString(DateTime.DATE_FULL);
+    const todaysTime = DateTime.now().toLocaleString(DateTime.TIME_SIMPLE);
+
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
           {/* Adds Navbar */}
           <TouchableOpacity
-            style={{ alignItems: "flex-end", margin: 16 }}
+            style={{ alignItems: 'flex-end', margin: 16 }}
             onPress={this.props.navigation.openDrawer}
           >
-            <Icon name='bars' size={24} color='#161924' />
+            <Icon name="bars" size={24} color="#161924" />
           </TouchableOpacity>
           <View style={styles.listContainer}>
             {/* Adds event info */}
@@ -61,8 +67,7 @@ export default class SingleEventView extends React.Component {
             {/* Adds book image for each event */}
             <Image
               source={{
-                uri:
-                  "https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED",
+                uri: image,
               }}
               style={styles.image}
             />
@@ -70,22 +75,26 @@ export default class SingleEventView extends React.Component {
           <Text>
             *Live chat shows up below at the exact date and time of the event!
           </Text>
+          {/* {todaysDate === formattedDate &&
+          todaysTime >= formattedStartTime &&
+          todaysTime <= formattedEndTime ? ( */}
           <Button
-            title={"Join Now"}
+            title={'Join Now'}
             style={styles.clickMe}
             onPress={() => {
-              this.props.navigation.navigate("Chat", {
+              this.props.navigation.navigate('Chat', {
                 title: eventTitle,
                 eventId: id,
               });
             }}
-            color='#e9967a'
-            accessibilityLabel='Join Now'
+            color="#e9967a"
+            accessibilityLabel="Join Now"
           />
+          {/* ) : null} */}
           <Button
-            title='Go Back'
+            title="Go Back"
             onPress={() => {
-              this.props.navigation.navigate("AllEvents");
+              this.props.navigation.navigate('AllEvents');
             }}
           />
         </ScrollView>
@@ -104,14 +113,13 @@ const styles = StyleSheet.create({
   image: {
     padding: 0,
     width: 100,
-    height: 100,
+    height: 160,
     marginTop: 10,
-    marginLeft: 8,
   },
   eventTitle: {
     fontSize: 30,
     marginBottom: 5,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   date: {
     fontSize: 15,
@@ -130,7 +138,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   listContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 15,
     marginTop: 15,
   },
@@ -139,7 +147,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   clickMe: {
-    backgroundColor: "#ff00ff",
+    backgroundColor: '#ff00ff',
     borderRadius: 15,
     padding: 0.8,
     width: 200,

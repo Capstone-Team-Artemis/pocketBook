@@ -19,10 +19,10 @@ class Chat extends React.Component {
       chatMessage: '',
       discussion: [],
       messages: [],
-    }
+    };
   }
   componentDidMount() {
-    this.socket = io('http://0715f6ca17fa.ngrok.io', {
+    this.socket = io('http://127.0.0.1:3000', {
       transports: ['websocket'],
       jsonp: false,
     });
@@ -30,14 +30,14 @@ class Chat extends React.Component {
     this.socket.connect();
 
     //******send room info to backend socket
-    this.socket.emit('room', this.props.route.params.eventId)
+    this.socket.emit('room', this.props.route.params.eventId);
 
     const thisComponent = this;
     //connecting to the backend socket
     this.socket.on('connection', () => {
       console.log('FE: Connected to socket server');
     });
-    //STEP3: receiving messages from the backend 
+    //STEP3: receiving messages from the backend
     this.socket.on('messages', (message) => {
       // console.log('MESSAGES IN SOCKET MESSAGE -->', message);
       // console.log(
@@ -45,7 +45,7 @@ class Chat extends React.Component {
       //   thisComponent.state.messages
       // );
       const messages = thisComponent.state.messages.slice();
-    //adding new message recived from the backend to the state
+      //adding new message recived from the backend to the state
       thisComponent.setState({ messages: [message, ...messages] });
     });
   }
@@ -92,8 +92,8 @@ class Chat extends React.Component {
 
   render() {
     console.log('USER ID?? -->', this.props.userId);
-    console.log("username? ==>", this.props.userName)
-    console.log("eventId?? ==>", this.props.route.params.eventId)
+    console.log('username? ==>', this.props.userName);
+    console.log('eventId?? ==>', this.props.route.params.eventId);
     return (
       <GiftedChat
         messages={this.state.messages}
@@ -112,7 +112,7 @@ class Chat extends React.Component {
 }
 
 const mapState = (state) => {
-  console.log("STATE***", state)
+  console.log('STATE***', state);
   return {
     userId: state.user.id,
     //userName: state.user.userName,

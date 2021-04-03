@@ -1,4 +1,3 @@
-// module.exports = (io) => {
 module.exports = (io) => {
   //connection is established
   //socket is an object that has socket id
@@ -7,17 +6,17 @@ module.exports = (io) => {
       `BE: A socket connection to the server has been made: ${socket.id}`
     );
 
-    //setting up rooms 
-    socket.on('room', room => {
-      socket.join(room)
-      console.log("ROOM BACKEND", room)
-    })
+    //setting up rooms
+    socket.on('room', (room) => {
+      socket.join(room);
+      console.log('ROOM BACKEND', room);
+    });
 
-    socket.on('leaveRoom', room => {
+    socket.on('leaveRoom', (room) => {
       socket.leave(room, () => {
-        console.log('Left Chat ', room)
-      })
-    })
+        console.log('Left Chat ', room);
+      });
+    });
 
     //step2: taking in msg(this.state.chatmessage from the front end) then it runs line 9
     socket.on('chat message', (msg) => {
@@ -32,9 +31,9 @@ module.exports = (io) => {
     });
 
     //user disconnected?
-    socket.on("disconnect", () => {
-      console.log(`Connection ${socket.id} has left the building`)
-    })
+    socket.on('disconnect', () => {
+      console.log(`Connection ${socket.id} has left the building`);
+    });
   });
 };
 

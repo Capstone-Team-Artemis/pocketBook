@@ -21,14 +21,14 @@ module.exports = (io) => {
 
     //step2: taking in msg(this.state.chatmessage from the front end) then it runs line 9
     socket.on('chat message', (msg) => {
-      console.log('in message backend: ', msg[0]);
+      let message = msg[0]
+      console.log('in message backend: ', message);
       //send messages to everyone except the one just joined
       // socket].broadcast.emit('messages');
 
-      //step3: emiting the messages event to all the users and passing msg
-      // *******
-      io.to(msg[0].eventId.toString()).emit('messages', msg[0]);
-      io.emit('messages', msg[0]);
+      //step3: emiting the messages event to all the users and passing msg in the same room
+      io.to(message.eventId.toString()).emit('messages', message);
+      //io.emit('messages', message);
     });
 
     //user disconnected?

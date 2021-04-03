@@ -23,11 +23,11 @@ module.exports = (io) => {
     socket.on('chat message', (msg) => {
       console.log('in message backend: ', msg[0]);
       //send messages to everyone except the one just joined
-      // socket.broadcast.emit('messages');
+      // socket].broadcast.emit('messages');
 
       //step3: emiting the messages event to all the users and passing msg
       // *******
-      //io.to(msg.eventId.toString()).emit('messages', msg[0]);
+      io.to(msg[0].eventId.toString()).emit('messages', msg[0]);
       io.emit('messages', msg[0]);
     });
 

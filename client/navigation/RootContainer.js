@@ -154,7 +154,7 @@ const RootContainer = () => {
             <Drawer.Navigator
               drawerContent={(props) => <Sidebar {...props} {...loginState} />}
             >
-              {/* <Drawer.Screen name='Home' component={StackContainer} /> */}
+              <Drawer.Screen name='Home' component={StackContainer} />
               <Drawer.Screen
                 name='LandingPage'
                 initialParams={{ userId: loginState.userId }}

@@ -44,11 +44,15 @@ const Sidebar = (props) => {
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <ImageBackground
+          imageStyle={{ opacity: 0.9 }}
           source={{
             uri:
-              'https://png.pngtree.com/thumb_back/fw800/back_pic/04/00/88/6157ff435466669.jpg',
+              'https://media.istockphoto.com/vectors/interior-illustration-of-a-workspace-vector-id1167352352?k=6&m=1167352352&s=612x612&w=0&h=W5TFLBZx_vgB51-fgInOeuc8X_hE2PsCPR-ptaqkWdY=',
           }}
-          style={{ width: undefined, padding: 20, paddingTop: 50 }}
+          style={{
+            padding: 20,
+            paddingTop: 50,
+          }}
         >
           <TouchableOpacity onPress={pickImage}>
             <Image
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
     borderColor: '#FFF',
   },
   name: {
-    color: 'black',
+    color: 'white',
     fontSize: 20,
     fontWeight: '800',
   },

@@ -54,6 +54,10 @@ class CreateEvent extends Component {
           hour12: false,
         }),
       });
+      this.setState({
+        eventTitle: "",
+        description: "",
+      });
       //after creating an event, navigate to the all events page
       this.props.navigation.navigate("AllEvents");
     } catch (error) {
@@ -85,6 +89,7 @@ class CreateEvent extends Component {
         <View style={styles.inputContainer}>
           {/* <GoogleAPI /> */}
           <TextInput
+            value={this.state.eventTitle}
             style={styles.input}
             placeholder={"Title"}
             onChangeText={(eventTitle) => {
@@ -125,6 +130,7 @@ class CreateEvent extends Component {
           />
 
           <TextInput
+            value={this.state.description}
             style={[styles.input, description]}
             placeholder={"Description"}
             onChangeText={(description) => {

@@ -16,69 +16,71 @@ class Chat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chatMessage: '',
-      discussion: [],
       messages: [],
     };
   }
   componentDidMount() {
-    this.socket = io('http://aab8ba0e6b4a.ngrok.io', {
+    // Place ngrok or deployed link here!
+    this.socket = io('http://874f31212d3f.ngrok.io', {
       transports: ['websocket'],
       jsonp: false,
     });
 
     this.socket.connect();
 
-    //******send room info to backend socket
-    // this.socket.emit('room', this.props.route.params.eventId);
-    this.socket.emit('room', this.props.route.params.title);
+    //******Send room info to backend socket
+    let roomName = this.props.route.params.title;
+    this.socket.emit('room', roomName);
 
     const thisComponent = this;
-    //connecting to the backend socket
+
+    //Connecting to the backend socket
     this.socket.on('connection', () => {
       console.log('FE: Connected to socket server');
     });
+
     //STEP3: receiving messages from the backend
     this.socket.on('messages', (message) => {
-      // console.log('MESSAGES IN SOCKET MESSAGE -->', message);
-      // console.log(
-      //   'THISCOMPONENT.STATE.MESSAGES -->',
-      //   thisComponent.state.messages
-      // );
       const messages = thisComponent.state.messages.slice();
-      //adding new message recived from the backend to the state
+      //Adding new message recived from the backend to the state
       thisComponent.setState({ messages: [message, ...messages] });
     });
   }
 
-  //********ROOMS
-  // componentWillUnmount() {
-  //   socket.emit('leaveChat', this.props.eventId)
-  // }
-
-  // onSend = ((messages = []) => {
-  //     setMessages((previousMessages) =>
-  //       GiftedChat.append(previousMessages, messages)
-  //     );
-  //     socket.emit('chat message', messages);
-  //   },
-  //   []);
-
   submitChatMessage(message) {
-    // let eventId = this.props.route.params.eventId;
+    //Step1: socket is emitting chat message to the backend line6 of index.js
     let eventTitle = this.props.route.params.title;
     let submittedMessage = message[0];
-    // let addRoom = { ...submittedMessage, eventId };
     let addRoom = { ...submittedMessage, eventTitle };
 
     let newMessage = [];
     newMessage.push(addRoom);
-    //step1: socket is emitting chat message to the backend line6 of index.js
+
+    // Emit chat message event to backend
     this.socket.emit('chat message', newMessage);
 
     this.setState((previousMessages) =>
       GiftedChat.append(previousMessages, message)
     );
+  }
+
+  //User gets different background color for their text message based on the number of characters of their username
+  getColor() {
+    let username = this.props.username;
+    let sumChars = 0;
+    for (let i = 0; i < username.length; i++) {
+      sumChars += username.charCodeAt(i);
+    }
+
+    const colors = [
+      '#Ef5c2b', // flamingo
+      '#2ecc71', // emerald
+      '#e74c3c', // alizarin
+      '#16a085', // green tea
+      '#002850', // dark blue
+      '#6646ee', // purple
+    ];
+    return colors[sumChars % colors.length];
   }
 
   renderBubble = (props) => {
@@ -87,13 +89,44 @@ class Chat extends React.Component {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#6475a5',
+            backgroundColor: '#24aae2',
+            borderTopRightRadius: 15,
           },
+          left: {
+            backgroundColor: this.getColor(),
+            borderTopLeftRadius: 15,
+          },
+        }}
+        timeTextStyle={{
+          left: {
+            color: '#FFF',
+          },
+          right: {
+            color: '#FFF',
+          },
+        }}
+        usernameStyle={{
+          color: '#FFF',
         }}
         textStyle={{
           right: {
             color: '#fff',
           },
+          left: {
+            color: '#fff',
+          },
+        }}
+        containerToPreviousStyle={{
+          right: { borderTopRightRadius: 15 },
+          left: { borderTopLeftRadius: 15 },
+        }}
+        containerToNextStyle={{
+          right: { borderTopRightRadius: 15 },
+          left: { borderTopLeftRadius: 15 },
+        }}
+        containerStyle={{
+          right: { borderTopRightRadius: 15 },
+          left: { borderTopLeftRadius: 15 },
         }}
       />
     );
@@ -126,7 +159,6 @@ class Chat extends React.Component {
 }
 
 const mapState = (state) => {
-  // console.log('STATE***', state);
   return {
     userId: state.user.id,
     username: state.user.username,
@@ -140,7 +172,6 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-// export default Chat;
 export default connect(mapState, mapDispatch)(Chat);
 
 const styles = StyleSheet.create({
@@ -150,115 +181,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-// import { Text, TextInput, StyleSheet, View } from 'react-native';
-// import React, { Component } from 'react';
-
-// if (!window.location) {
-//   // App is running in simulator
-//   window.navigator.userAgent = 'react-native';
-// }
-
-// import { io } from 'socket.io-client';
-
-// // const io = require('socket.io-client/socket.io');
-
-// class Chat extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       chatMessage: '',
-//       discussion: [],
-//     };
-//   }
-
-//   componentDidMount() {
-//     // Instead of connecting with local backend server...
-//     // We are connecting with NGROK (allows us to access local backend server)
-//     // MAKE SURE to have ngrok installed on your terminal
-//     // After installed, run 'ngrok http 3000' on your terminal
-//     // Paste generated URL into 'this.socket = io('****HERE***')' (line 36)
-
-//     // this.socket = io('http://127.0.0.1:3000', {
-//     //   transports: ['websocket'],
-//     //   jsonp: false,
-//     // });
-//     this.socket = io('http://721e1df4d08b.ngrok.io', {
-//       transports: ['websocket'],
-//       jsonp: false,
-//     });
-//     this.socket.connect();
-
-//     const thisComponent = this;
-
-//     //connection between client and server starts
-//     // Step4: (putting msg to the front end) listening for the 'messages' event from the backend index.js line 10
-//     this.socket.on('connect', () => {
-//       console.log('Connected to socket server');
-//     });
-//     this.socket.on('messages', (msg) => {
-//       //[listening..]it's adding emitted discussion to the discussion already exist
-//       console.log('**msg**', msg);
-//       console.log(
-//         'THISCOMPONENT.STATE.DISCUSSION ->',
-//         thisComponent.state.discussion
-//       );
-//       // console.log('thisComponent ->', this);
-//       const discussion = thisComponent.state.discussion.slice();
-//       thisComponent.setState({ discussion: [...discussion, msg] });
-//       console.log('**discussion!', thisComponent.state.discussion);
-//     });
-//   }
-
-//   submitChatMessage() {
-//     //step1: socket is emitting chat message to the backend line6 of index.js
-//     this.socket.emit('chat message', this.state.chatMessage);
-//     console.log('in submit chat message: ', this.state.chatMessage);
-//     this.setState({ chatMessage: '' });
-//   }
-
-//   render() {
-//     const discussion = this.state.discussion.map((chatMessage, index) => (
-//       <Text key={index} style={styles.chatStyle}>
-//         {chatMessage}
-//       </Text>
-//     ));
-//     return (
-//       <View style={styles.container}>
-//         {discussion}
-//         <TextInput
-//           style={{
-//             height: 40,
-//             width: '100%',
-//             borderWidth: 2,
-//             top: 500,
-//             position: 'absolute',
-//             justifyContent: 'center',
-//           }}
-//           autoCorrect={false}
-//           value={this.state.chatMessage}
-//           onSubmitEditing={() => this.submitChatMessage()}
-//           onChangeText={(chatMessage) => {
-//             this.setState({ chatMessage });
-//           }}
-//         />
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     // height: 400,
-//     flex: 1,
-//     backgroundColor: '#F5FCFF',
-//   },
-//   chatStyle: {
-//     height: 30,
-//     borderWidth: 2,
-//     marginTop: 20,
-//     backgroundColor: '#F5FCFF',
-//   },
-// });
-
-// export default Chat;

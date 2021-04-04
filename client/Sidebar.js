@@ -12,7 +12,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from './context';
 import { useDispatch, useSelector } from 'react-redux';
-// import { connect } from 'react-redux';
 import { changeImage, fetchUser } from './store/user';
 import { useFonts } from 'expo-font';
 

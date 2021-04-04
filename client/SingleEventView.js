@@ -13,8 +13,30 @@ import {
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DateTime } from 'luxon';
+import * as Font from 'expo-font';
 
 export default class SingleEventView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fontsLoaded: false,
+    }
+  }
+
+  componentDidMount() {
+    this.loadFonts();
+  }
+
+  async loadFonts() {
+    await Font.loadAsync({
+      // Load a font `Roboto` from a static resource
+      'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+      'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
+    });
+    this.setState({ fontsLoaded: true });
+  }
+
   render() {
     const {
       id,
@@ -26,8 +48,7 @@ export default class SingleEventView extends React.Component {
       hostId,
       image,
     } = this.props.route.params;
-    console.log('this.props in single event', this.props.route.params.id);
-
+    
     // create DateTime instance so can covert to properly formatted string
     const formattedStartTime = DateTime.fromISO(startTime).toLocaleString(
       DateTime.TIME_SIMPLE
@@ -87,7 +108,7 @@ export default class SingleEventView extends React.Component {
                 eventId: id,
               });
             }}
-            color="#e9967a"
+            color="#E92228"
             accessibilityLabel="Join Now"
           />
           {/* ) : null} */}
@@ -119,23 +140,27 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 30,
     marginBottom: 5,
-    fontWeight: 'bold',
+    fontFamily: 'Roboto-Bold'
   },
   date: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   startTime: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   endTime: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   description: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   listContainer: {
     flexDirection: 'row',

@@ -12,16 +12,36 @@ import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
 import { DateTime } from 'luxon';
+import * as Font from 'expo-font';
+// import thunk 
 import { deleteEvent } from './store/events';
 
 class SingleEvent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      fontsLoaded: false,
+    }
     this.unregister = this.unregister.bind(this);
     this.register = this.register.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.openTwoButtonAlert = this.openTwoButtonAlert.bind(this);
   }
+
+  componentDidMount() {
+    this.loadFonts();
+  }
+  async loadFonts() {
+    await Font.loadAsync({
+      // Load a font `Roboto` from a static resource
+      'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+      'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
+      'Roboto-Black': require('../assets/fonts/Roboto-Black.ttf'),
+    });
+    this.setState({ fontsLoaded: true });
+  }
+
   // UNREGISTER the logged in user from a specific event
   unregister = async () => {
     try {
@@ -87,7 +107,7 @@ class SingleEvent extends React.Component {
     const formattedDate = DateTime.fromISO(event.date).toLocaleString(
       DateTime.DATE_FULL
     );
-
+    
     return (
       <TouchableOpacity
         onPress={() => navigate.navigate('SingleEventView', event)}
@@ -139,6 +159,7 @@ class SingleEvent extends React.Component {
   }
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -156,24 +177,28 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 20,
     marginBottom: 2,
-    fontWeight: 'bold',
+    fontFamily: 'Roboto-Bold'
+
   },
   date: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   time: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   description: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   listContainer: {
     flexDirection: 'row',
     borderStyle: 'solid',
-    borderColor: 'black',
+    borderColor: '#E92228',
     borderWidth: 1,
     marginBottom: 15,
     marginTop: 15,
@@ -186,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   registerButtonContainer: {
-    backgroundColor: '#6475a5',
+    backgroundColor: '#24aae2',
     borderRadius: 15,
     padding: 0.8,
     width: 130,

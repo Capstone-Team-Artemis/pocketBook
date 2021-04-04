@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SingleEvent from './SingleEvent';
-// import thunk creator
+import * as Font from 'expo-font';
+// import thunk 
 import { fetchEvents } from './store/events';
 
 export class AllEvents extends React.Component {
@@ -21,10 +22,21 @@ export class AllEvents extends React.Component {
     this.state = {
       status: 'Upcoming', // state for dropdown menu
       userId: Number(this.props.route.params.userId), // convert from string
+      fontsLoaded: false,
     };
+  }
+  async loadFonts() {
+    await Font.loadAsync({
+      // Load a font from a static resource
+      'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+      'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
+    });
+    this.setState({ fontsLoaded: true });
   }
 
   componentDidMount() {
+    this.loadFonts();
     // get all events (regardless of attending/created status) for a specific user
     this.props.getEvents(this.state.userId);
   }
@@ -58,6 +70,7 @@ export class AllEvents extends React.Component {
             itemStyle={{ justifyContent: 'flex-start' }}
             dropDownStyle={{ backgroundColor: '#fafafa' }}
             containerStyle={{ height: 40 }}
+            labelStyle={{fontFamily: 'Roboto-Medium'}}
             activeLabelStyle={{ color: 'red' }}
             defaultValue={this.state.status}
             onChangeItem={(item) =>
@@ -113,6 +126,7 @@ export class AllEvents extends React.Component {
   }
 }
 
+
 const mapState = (state) => {
   return {
     events: state.events.all,
@@ -141,37 +155,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
   },
-  eventTitle: {
-    fontSize: 20,
-    marginBottom: 2,
-    fontWeight: 'bold',
-  },
-  date: {
-    fontSize: 15,
-    marginBottom: 5,
-  },
-  time: {
-    fontSize: 15,
-    marginBottom: 5,
-  },
-  description: {
-    fontSize: 15,
-    marginBottom: 5,
-  },
   createButtonContainer: {
-    backgroundColor: '#6475a5',
+    backgroundColor: '#Faea26',
     marginBottom: 20,
     borderRadius: 15,
     width: 125,
     height: 40,
-  },
-  listContainer: {
-    flexDirection: 'row',
-    borderStyle: 'solid',
-    borderColor: 'black',
-    borderWidth: 1,
-    marginBottom: 15,
-    marginTop: 15,
   },
   eventData: {
     padding: 10,
@@ -179,13 +168,5 @@ const styles = StyleSheet.create({
   },
   noEvents: {
     fontSize: 20,
-  },
-  attendingButtonContainer: {
-    backgroundColor: '#6475a5',
-    borderRadius: 15,
-    padding: 0.8,
-    width: 130,
-    height: 38,
-    marginLeft: 95,
   },
 });

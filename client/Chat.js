@@ -22,7 +22,7 @@ class Chat extends React.Component {
     };
   }
   componentDidMount() {
-    this.socket = io('http://127.0.0.1:3000', {
+    this.socket = io('http://928ab6865087.ngrok.io', {
       transports: ['websocket'],
       jsonp: false,
     });
@@ -30,7 +30,8 @@ class Chat extends React.Component {
     this.socket.connect();
 
     //******send room info to backend socket
-    this.socket.emit('room', this.props.route.params.eventId);
+    // this.socket.emit('room', this.props.route.params.eventId);
+    this.socket.emit('room', this.props.route.params.title);
 
     const thisComponent = this;
     //connecting to the backend socket
@@ -64,8 +65,16 @@ class Chat extends React.Component {
   //   []);
 
   submitChatMessage(message) {
+    // let eventId = this.props.route.params.eventId;
+    let eventTitle = this.props.route.params.title;
+    let submittedMessage = message[0];
+    // let addRoom = { ...submittedMessage, eventId };
+    let addRoom = { ...submittedMessage, eventTitle };
+
+    let newMessage = [];
+    newMessage.push(addRoom);
     //step1: socket is emitting chat message to the backend line6 of index.js
-    this.socket.emit('chat message', message);
+    this.socket.emit('chat message', newMessage);
 
     this.setState((previousMessages) =>
       GiftedChat.append(previousMessages, message)
@@ -92,7 +101,7 @@ class Chat extends React.Component {
 
   render() {
     console.log('USER ID?? -->', this.props.userId);
-    console.log('username? ==>', this.props.userName);
+    console.log('username? ==>', this.props.username);
     console.log('eventId?? ==>', this.props.route.params.eventId);
     return (
       <GiftedChat
@@ -102,21 +111,26 @@ class Chat extends React.Component {
         // user={{
         //   _id: 1,
         // }}
-        user={{ _id: this.props.userId }}
-        // renderBubble={renderBubble}
+        user={{
+          _id: this.props.userId,
+          name: this.props.username,
+          avatar: this.props.image,
+        }}
+        renderBubble={this.renderBubble}
         alwaysShowSend
         scrollToBottom
+        renderUsernameOnMessage={true}
       />
     );
   }
 }
 
 const mapState = (state) => {
-  console.log('STATE***', state);
+  // console.log('STATE***', state);
   return {
     userId: state.user.id,
-    //userName: state.user.userName,
-    event: state,
+    username: state.user.username,
+    image: state.user.image,
   };
 };
 

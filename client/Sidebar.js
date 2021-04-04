@@ -12,10 +12,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from './context';
 import { useDispatch, useSelector } from 'react-redux';
-// import { connect } from 'react-redux';
 import { changeImage, fetchUser } from './store/user';
+import { useFonts } from 'expo-font';
 
 const Sidebar = (props) => {
+  // Loading fonts:
+  const [loaded] = useFonts({
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+    'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+  });
+
   // Set custom image state
   const imageURL = useSelector((state) => state.user.image);
   const dispatch = useDispatch();
@@ -40,63 +46,74 @@ const Sidebar = (props) => {
     }
   };
 
+  // For when font can't load:
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <ImageBackground
-          imageStyle={{ opacity: 0.9 }}
+          imageStyle={{ opacity: 0.6 }}
           source={{
-            uri:
-              'https://png.pngtree.com/thumb_back/fw800/back_pic/04/00/88/6157ff435466669.jpg',
+            uri: 'https://i.ibb.co/S7JTqyM/desk.jpg',
           }}
-          style={{
-            padding: 20,
-            paddingTop: 50,
-          }}
+          style={{ padding: 20, paddingTop: 50 }}
         >
-          <TouchableOpacity onPress={pickImage}>
+          <View>
             <Image
               source={{
                 uri: imageURL,
               }}
               style={styles.profile}
             />
+          </View>
+          <TouchableOpacity onPress={pickImage}>
+            <Image
+              source={{
+                uri: 'https://i.ibb.co/rfwKq09/camera.png',
+              }}
+              style={styles.camera}
+            />
           </TouchableOpacity>
-          <Text style={styles.name}>{props.userToken}</Text>
           <View style={{ flexDirection: 'row' }}></View>
+          <Text style={styles.name}>{props.userToken}</Text>
         </ImageBackground>
-        <Drawer.Section style={styles.drawerSection}>
+        <Drawer.Section>
           <DrawerItem
-            icon={({ color, size }) => (
-              <Icon name="search" color={color} size={size} />
+            icon={({ size }) => (
+              <Icon name="search" color={'#000'} size={size} />
             )}
+            labelStyle={styles.drawerSection}
             label="Find a Book"
             onPress={() => {
               props.navigation.navigate('LandingPage');
             }}
           />
           <DrawerItem
-            icon={({ color, size }) => (
-              <Icon name="book" color={color} size={size} />
-            )}
+            icon={({ size }) => <Icon name="book" color={'#000'} size={size} />}
+            labelStyle={styles.drawerSection}
             label="My Bookshelf"
             onPress={() => {
               props.navigation.navigate('UserProfile');
             }}
           />
           <DrawerItem
-            icon={({ color, size }) => (
-              <Icon name="calendar" color={color} size={size} />
+            icon={({ size }) => (
+              <Icon name="calendar" color={'#000'} size={size} />
             )}
+            labelStyle={styles.drawerSection}
             label="Events"
             onPress={() => {
               props.navigation.navigate('AllEvents');
             }}
           />
           <DrawerItem
-            icon={({ color, size }) => (
-              <Icon name="sign-out" color={color} size={size} />
+            icon={({ size }) => (
+              <Icon name="sign-out" color={'#000'} size={size} />
             )}
+            labelStyle={styles.drawerSection}
             label="Sign Out"
             onPress={() => {
               logOut();
@@ -108,20 +125,7 @@ const Sidebar = (props) => {
   );
 };
 
-// const mapState = (state) => {
-//   return {
-//     image: state.image,
-//   };
-// };
-
-// const mapDispatch = (dispatch) => {
-//   return {
-//     changeImage: (userId, imageURL) => dispatch(changeImage(userId, imageURL)),
-//   };
-// };
-
 export default Sidebar;
-// export default connect(mapState, mapDispatch)(Sidebar);
 
 const styles = StyleSheet.create({
   container: {
@@ -131,18 +135,32 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    borderWidth: 3,
-    borderColor: '#FFF',
+    borderWidth: 1.5,
+    borderColor: 'rgba(50, 50, 50, 100)',
   },
   name: {
-    color: 'white',
+    color: '#000',
     fontSize: 20,
-    fontWeight: '800',
+    fontFamily: 'Roboto-Regular',
+    textShadowOffset: { width: 0.9, height: 0.5 },
+    textShadowColor: '#000',
   },
   followers: {
-    color: 'black',
+    color: '#000',
     fontSize: 13,
     fontWeight: '700',
     marginRight: 4,
+  },
+  drawerSection: {
+    fontFamily: 'Roboto-Light',
+    fontSize: 15,
+    color: '#000',
+  },
+  camera: {
+    width: 19,
+    height: 19,
+    position: 'absolute',
+    marginTop: -20,
+    marginLeft: 55,
   },
 });

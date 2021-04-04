@@ -24,7 +24,7 @@ module.exports = (io) => {
       let eventTitle = message.eventTitle
       console.log('in message backend: ', message);
       //send messages to everyone except the one just joined
-      // socket].broadcast.emit('messages');
+      socket.broadcast.emit('messages');
 
       //step3: emiting the messages event to all the users and passing msg in the same room
       io.to(eventTitle).emit('messages', message);

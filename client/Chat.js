@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
-import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
 import { connect } from 'react-redux';
 import { fetchUser } from './store/user';
-
+import { IconButton } from 'react-native-paper';
 import { io } from 'socket.io-client';
 // const socket = io();
 // const socket = io('http://127.0.0.1:3000');
@@ -61,6 +61,34 @@ class Chat extends React.Component {
       GiftedChat.append(previousMessages, message)
     );
   }
+//user get's different background color for their text message based on the number of characters of their username
+  getColor(){
+    let username = this.props.userName
+    let sumChars = 0;
+    for(let i = 0;i < username.length; i++){
+      sumChars += username.charCodeAt(i);
+    }
+
+    const colors = [
+      '#Faea26', // candlelight
+      '#Ef5c2b', // flamingo
+      '#2ecc71', // emerald
+      '#e74c3c', // alizarin
+      '#16a085', // green tea
+      '#002850', // dark blue
+      '#6646ee', // purple
+    ];
+    return colors[sumChars % colors.length];
+  }
+
+  renderSend= (props) => {
+    return (
+      <Send {...props}>
+        <View style={styles.sendingContainer}>
+          <IconButton icon='send-circle' size={32} color='#6646ee' />
+        </View>
+    </Send>
+  )}
 
   renderBubble = (props) => {
     return (
@@ -68,21 +96,40 @@ class Chat extends React.Component {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#6475a5',
+            backgroundColor: '#24aae2',
+            borderTopRightRadius: 15,
+          },
+          left: {
+            backgroundColor: this.getColor(),
+            borderTopLeftRadius: 15,
           },
         }}
         textStyle={{
           right: {
             color: '#fff',
           },
+          left: {
+            color: '#fff',
+          },
+        }}
+        containerToPreviousStyle={{
+          right: { borderTopRightRadius: 15 },
+          left: { borderTopLeftRadius: 15 },
+        }}
+        containerToNextStyle={{
+          right: { borderTopRightRadius: 15 },
+          left: { borderTopLeftRadius: 15 },
+        }}
+        containerStyle={{
+          right: { borderTopRightRadius: 15 },
+          left: { borderTopLeftRadius: 15 },
         }}
       />
     );
   };
 
   render() {
-    console.log('USER ID?? -->', this.props.userId);
-    console.log("eventId?? ==>", this.props.route.params.eventId)
+
     return (
       <GiftedChat
         messages={this.state.messages}
@@ -123,6 +170,10 @@ const mapDispatch = (dispatch) => {
 export default connect(mapState, mapDispatch)(Chat);
 
 const styles = StyleSheet.create({
+  sendingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   container: {
     flex: 1,
     alignItems: 'center',

@@ -4,13 +4,11 @@ import {
   StyleSheet,
   Text,
   Image,
-  ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   ImageBackground,
   Alert,
 } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Formik } from 'formik';
 import axios from 'axios';
@@ -22,6 +20,7 @@ const Login = (props) => {
   const [loaded] = useFonts({
     'Asap-Bold': require('../assets/fonts/Asap-Bold.ttf'),
     'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+    'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
   });
 
   const [secureTextEntry, setSecure] = React.useState(true);
@@ -90,7 +89,9 @@ const Login = (props) => {
               style={styles.image}
             />
             <Text style={styles.heading}>Login</Text>
-            <Text style={{ marginLeft: 20 }}>Welcome back to Pocketbook!</Text>
+            <Text style={{ marginLeft: 20, fontFamily: 'Roboto-Light' }}>
+              Welcome back to Pocketbook!
+            </Text>
 
             {/* Email Address Input */}
             <View style={styles.inputContainer}>
@@ -98,7 +99,10 @@ const Login = (props) => {
                 label="Email"
                 selectionColor="#000"
                 style={styles.inputText}
-                theme={{ colors: { primary: '#000', placeholder: '#000' } }}
+                theme={{
+                  colors: { primary: '#000', placeholder: '#000' },
+                  fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                }}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -113,7 +117,13 @@ const Login = (props) => {
               <TextInput
                 label="Password"
                 style={styles.inputText}
-                theme={{ colors: { primary: '#000', placeholder: '#000' } }}
+                theme={{
+                  colors: {
+                    primary: '#000',
+                    placeholder: '#000',
+                  },
+                  fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                }}
                 secureTextEntry={secureTextEntry ? true : false}
                 returnKeyType="go"
                 onChangeText={props.handleChange('password')}
@@ -134,20 +144,31 @@ const Login = (props) => {
             </View>
 
             {/* Login Button */}
-            <TouchableOpacity
-              style={[styles.inputContainer, styles.submitContainer]}
-              onPress={props.handleSubmit}
-            >
-              <Text style={styles.submitText}>LOGIN</Text>
-            </TouchableOpacity>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Button
+                mode="contained"
+                style={styles.submitContainer}
+                onPress={props.handleSubmit}
+              >
+                <Text style={styles.submitText}>Login</Text>
+              </Button>
+            </View>
           </View>
         )}
       </Formik>
       {/* Don't have an account? Navigates to Sign Up component */}
       <View style={styles.navContainer}>
-        <Text>Don't have an account?</Text>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>
+          Don't have an account?
+        </Text>
         <Text
-          style={[{ color: 'blue' }, { marginLeft: 3 }]}
+          style={[
+            {
+              color: '#Ef5c2b',
+              fontFamily: 'Roboto-Medium',
+            },
+            { marginLeft: 3 },
+          ]}
           onPress={() =>
             props.navigation.navigate('SignUp', { loggedIn: false })
           }
@@ -186,26 +207,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     width: '90%',
     backgroundColor: '#FFF',
+    fontFamily: 'Roboto-Light',
   },
   submitContainer: {
-    backgroundColor: '#6475a5',
+    marginTop: 20,
+    borderRadius: 350,
+    width: 200,
+    backgroundColor: '#24aae2',
   },
   submitText: {
+    fontFamily: 'Roboto-Light',
     color: 'white',
     fontSize: 18,
-    fontWeight: 'bold',
     textAlign: 'center',
-    bottom: 2,
   },
   navContainer: {
     flexDirection: 'row',
     marginVertical: 5,
-    marginLeft: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   btnEye: {
     position: 'absolute',
     top: 25,
-    right: 40,
+    right: 45,
     color: '#000',
   },
   background: {

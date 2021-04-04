@@ -4,9 +4,10 @@ import {
   View,
   ScrollView,
   SafeAreaView,
-  Button,
+  // Button,
   TouchableOpacity,
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { connect } from 'react-redux';
 import React from 'react';
@@ -54,15 +55,13 @@ export class AllEvents extends React.Component {
           </TouchableOpacity>
           {/* Adds create event button */}
           <View style={styles.createButtonContainer}>
-            <Button
-              title="Create Event"
-              // takes user to CreateEvents page
-              onPress={() => {
+            <Button onPress={() => {
                 this.props.navigation.navigate('CreateEvent');
               }}
-              color="white"
-              accessibilityLabel="Create Event"
-            />
+              color="black"
+              accessibilityLabel="Create Event">
+              Create Event       
+            </Button>
           </View>
           {/* Adds Dropdown menu */}
           <DropDownPicker
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#Faea26',
     marginBottom: 20,
     borderRadius: 15,
-    width: 125,
+    width: 150,
     height: 40,
   },
   eventData: {

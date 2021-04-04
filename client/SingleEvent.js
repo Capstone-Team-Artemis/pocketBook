@@ -4,10 +4,11 @@ import {
   Text,
   StyleSheet,
   View,
-  Button,
+  // Button,
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
@@ -130,26 +131,24 @@ class SingleEvent extends React.Component {
             <View style={styles.registerButtonContainer}>
               {user === event.hostId ? (
                 <Button
-                  // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
-                  title={'Delete Event'}
-                  onPress={() => {
-                    this.openTwoButtonAlert();
-                  }}
-                  color="white"
-                  accessibilityLabel="Status"
-                />
+                onPress={() => {
+                  this.openTwoButtonAlert();
+                }}
+                color="black"
+                accessibilityLabel="Status">
+                  Delete 
+                </Button>
               ) : (
-                <Button
-                  // check the event obj to see if logged-in user exists in the associated user array
+                <Button onPress={() => {
+                  event.users[0] ? this.unregister() : this.register();
+                }}
+                color="black"
+                accessibilityLabel="Status">
+                  {/* // check the event obj to see if logged-in user exists in the associated user array
                   // if user exists, that means user is attending and button should give 'Unregister' option
-                  // else, the user isn't registered and should have the button option to 'Register' for the event
-                  title={event.users[0] ? 'Unregister' : 'Register'}
-                  onPress={() => {
-                    event.users[0] ? this.unregister() : this.register();
-                  }}
-                  color="white"
-                  accessibilityLabel="Status"
-                />
+                  // else, the user isn't registered and should have the button option to 'Register' for the event */}
+                  {event.users[0] ? 'Unregister' : 'Register'}
+                </Button>
               )}
             </View>
           </View>
@@ -198,7 +197,7 @@ const styles = StyleSheet.create({
   listContainer: {
     flexDirection: 'row',
     borderStyle: 'solid',
-    borderColor: '#E92228',
+    borderColor: '#Ef5c2b',
     borderWidth: 1,
     marginBottom: 15,
     marginTop: 15,
@@ -214,9 +213,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#24aae2',
     borderRadius: 15,
     padding: 0.8,
-    width: 130,
+    width: 135,
     height: 38,
-    marginLeft: 95,
+    marginLeft: 90,
   },
 });
 

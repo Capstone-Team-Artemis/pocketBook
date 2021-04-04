@@ -22,7 +22,7 @@ class Chat extends React.Component {
     };
   }
   componentDidMount() {
-    this.socket = io('http://aab8ba0e6b4a.ngrok.io', {
+    this.socket = io('http://928ab6865087.ngrok.io', {
       transports: ['websocket'],
       jsonp: false,
     });

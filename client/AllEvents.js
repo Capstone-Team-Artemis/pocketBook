@@ -46,13 +46,13 @@ export class AllEvents extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
-            {/* Adds Navbar */}
-            <TouchableOpacity
-              style={{ alignItems: 'flex-end', margin: 16 }}
-              onPress={this.props.navigation.openDrawer}
-            >
-              <Icon name="bars" size={24} color="#161924" />
-            </TouchableOpacity>
+              {/* Adds Navbar */}
+              <TouchableOpacity
+                style={{ alignItems: 'flex-end', margin: 16 }}
+                onPress={this.props.navigation.openDrawer}
+              >
+                <Icon name="bars" size={24} color="#161924" />
+              </TouchableOpacity>
             {/* Adds create event button */}
             <View style={styles.createButtonContainer}>
               <Button onPress={() => {
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
   },
   createButtonContainer: {
     backgroundColor: '#Ef5c2b',
+    marginTop: 20,
     marginBottom: 20,
     borderRadius: 15,
     width: 150,

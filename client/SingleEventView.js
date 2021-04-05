@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   ImageBackground
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DateTime } from 'luxon';
@@ -76,6 +76,7 @@ export default class SingleEventView extends React.Component {
           <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
               {/* Adds Navbar */}
+              {/* <Icon name='arrow-left' size={24} color='#161924' /> */}
               <TouchableOpacity
                 style={{ alignItems: 'flex-end', margin: 16 }}
                 onPress={this.props.navigation.openDrawer}

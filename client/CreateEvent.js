@@ -190,23 +190,18 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 40,
+    textAlign: 'center'
   },
   input: {
     width: WIDTH - 45,
     height: 55,
     marginTop: 20,
     backgroundColor: "#fff",
-    
+    alignSelf: 'center'
   },
   button: {
-    // alignItems: "center",
-    // backgroundColor: "#6475a5",
-    // padding: 10,
-    // borderRadius: 45,
-    // marginTop: 20,
-    // borderWidth: 1.5,
     width: 200,
-    alignItems: 'center',
+    alignSelf: 'center',
     justifyContent: 'center',
     backgroundColor: '#E92228',
     marginTop: 30,

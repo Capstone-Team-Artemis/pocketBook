@@ -13,29 +13,24 @@ import {
 import { connect, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getBooks } from "./store/books";
+import { Card, Title } from 'react-native-paper';
+import { useFonts } from 'expo-font';
 
 const { width: WIDTH } = Dimensions.get("window");
 
 const UserProfile = (props) => {
-  // console.log("props in userprofile component", props)
+  console.log("props in userprofile component", props.username)
   //hardcode it to 1 since no user loged in
 
   let id = props.userId || 4;
   let mybooks = props.books || [];
+  let username = props.username || '';
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getBooks(id));
   }, [getBooks]);
-
-  //const [user, setUser] = useState(id);
-  // const [books, setbooks] = useState(mybooks);
-
-  //do not need this if we can get the user through props
-  // useEffect(()=> {
-  //     dispatch(getUser)
-  // })
-
-  //gettting books by status
-  const dispatch = useDispatch();
 
   //filter the saved books by status
   let currentBooks = mybooks.filter(
@@ -44,13 +39,42 @@ const UserProfile = (props) => {
   let futureRead = mybooks.filter((book) => book.status === "To Read");
   let completed = mybooks.filter((book) => book.status === "Completed");
 
+  // Loading fonts:
+   const [loaded] = useFonts({
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+    'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+  });
+
+  // For when font can't load:
+  if (!loaded) {
+    return null;
+  }
+
+//  const getColor = (bookTitle) => {
+//     let sumChars = 0;
+//     for(let i = 0;i < bookTitle.length; i++){
+//       sumChars += bookTitle.charCodeAt(i);
+//     }
+
+//     const colors = [
+//       '#Ef5c2b', // flamingo
+//       '#2ecc71', // emerald
+//       '#e74c3c', // alizarin
+//       '#16a085', // green tea
+//       '#002850', // dark blue
+//       '#6646ee', // purple
+//     ];
+//     return colors[sumChars % colors.length];
+
+//{backgroundColor: getColor(book.book.title)
+// }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <View style={styles.navbar}>
+        <View>
           <TouchableOpacity
-            style={styles.navbar}
-            style={{ alignItems: "flex-end", margin: 16 }}
+            style={styles.nav}
             onPress={props.navigation.openDrawer}
           >
             <Icon name='bars' size={24} color='#161924' />
@@ -58,7 +82,7 @@ const UserProfile = (props) => {
         </View>
 
         <View>
-          <Text style={styles.heading}>My Bookshelf</Text>
+          <Text style={styles.heading}>{`${username}'s Bookshelf`}</Text>
         </View>
 
         {/* <View>
@@ -71,8 +95,8 @@ const UserProfile = (props) => {
             <View style={styles.bookList}>
               {currentBooks.length > 0 ? (
                 currentBooks.map((book, idx) => (
+                  <Card key={idx} style={styles.cardContainer}>
                   <TouchableOpacity
-                    key={idx}
                     onPress={() => {
                       props.navigation.navigate("SingleBookView", {
                         usedb: true,
@@ -81,17 +105,21 @@ const UserProfile = (props) => {
                       });
                     }}
                   >
-                    <View style={styles.bookData}>
-                      <Image
-                        alt={book.book.title}
-                        style={{ width: 100, height: 150 }}
+                    
+                    {/* <View style={styles.bookData}> */}
+                      <Card.Cover
+                        // alt={book.book.title}
+                        style={styles.image}
                         source={{
                           uri: book.book.image,
                         }}
                       />
-                      <Text>{book.book.title}</Text>
-                    </View>
+                    <Card.Content> 
+                      <Title style={styles.title}>{book.book.title}</Title>
+                    {/* </View> */}
+                    </Card.Content>
                   </TouchableOpacity>
+                  </Card>
                 ))
               ) : (
                 <Text>No books</Text>
@@ -186,8 +214,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   heading: {
-    fontSize: 40,
+    fontSize: 30,
     margin: 0,
+    alignSelf: "center",
+    fontFamily: 'Roboto-Regular',
   },
   content: {
     marginTop: 20,
@@ -199,15 +229,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
   },
+  nav: {
+    alignItems: "flex-end", 
+    margin: 16
+  },
   bookList: {
     flexDirection: "row",
   },
   text: {
     fontSize: 20,
+    fontFamily: 'Roboto-Light', 
+    marginBottom: 20,
+    alignSelf: "center",
+    },
+  cardContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: 'center',
+    padding: 5,
+    marginBottom: 20,
+    marginLeft: 10,
   },
-  bookData: {},
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 20
+  },
+  image: {
+    width: 250, 
+    height: 150, 
+    resizeMode: 'contain',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    alignSelf: "center",
+  },
   scrollView: {
-    backgroundColor: "#f0f8ff",
+    backgroundColor: "#fff",
     marginHorizontal: 1,
     width: WIDTH - 20,
   },
@@ -216,6 +274,7 @@ const styles = StyleSheet.create({
 const mapState = (state) => ({
   books: state.books,
   userId: state.user.id,
+  username: state.user.username
 });
 
 const mapDispatch = (dispatch) => ({

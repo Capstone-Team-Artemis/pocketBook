@@ -1,11 +1,10 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
 import { connect } from 'react-redux';
 import { fetchUser } from './store/user';
 import { IconButton } from 'react-native-paper';
 import { io } from 'socket.io-client';
-
 
 // const socket = io();
 // const socket = io('http://127.0.0.1:3000');
@@ -20,14 +19,14 @@ class Chat extends Component {
     this.state = {
       messages: [],
     };
-    this.submitChatMessage.bind(this)
-    this.getColor.bind(this)
-    this.scrollToBottomComponent.bind(this)
-    this.renderBubble.bind(this)
-    this.renderSend.bind(this)
+    this.submitChatMessage.bind(this);
+    this.getColor.bind(this);
+    this.scrollToBottomComponent.bind(this);
+    this.renderBubble.bind(this);
+    this.renderSend.bind(this);
   }
   componentDidMount() {
-    // place ngrok or deployed link here! 
+    // place ngrok or deployed link here!
     this.socket = io('https://pocketbook-gh.herokuapp.com/', {
       transports: ['websocket'],
       jsonp: false,
@@ -36,7 +35,7 @@ class Chat extends Component {
     this.socket.connect();
 
     //******send room info to backend socket
-    let roomName = this.props.route.params.title
+    let roomName = this.props.route.params.title;
     this.socket.emit('room', roomName);
 
     const thisComponent = this;
@@ -48,7 +47,6 @@ class Chat extends Component {
 
     //STEP3: receiving messages from the backend
     this.socket.on('messages', (message) => {
-
       const messages = thisComponent.state.messages.slice();
       //adding new message recived from the backend to the state
       thisComponent.setState({ messages: [message, ...messages] });
@@ -56,7 +54,7 @@ class Chat extends Component {
   }
 
   submitChatMessage(message) {
-    // let eventId = this.props.route.params.eventId;
+    //step1: socket is emitting chat message to the backend line6 of index.js
     let eventTitle = this.props.route.params.title;
     let submittedMessage = message[0];
     let addRoom = { ...submittedMessage, eventTitle };
@@ -70,11 +68,11 @@ class Chat extends Component {
       GiftedChat.append(previousMessages, message)
     );
   }
-//user get's different background color for their text message based on the number of characters of their username
-  getColor(){
-    let username = this.props.userName
+  //user get's different background color for their text message based on the number of characters of their username
+  getColor() {
+    let username = this.props.userName;
     let sumChars = 0;
-    for(let i = 0;i < username.length; i++){
+    for (let i = 0; i < username.length; i++) {
       sumChars += username.charCodeAt(i);
     }
 
@@ -92,19 +90,20 @@ class Chat extends Component {
   scrollToBottomComponent() {
     return (
       <View style={styles.bottomComponentContainer}>
-        <IconButton icon='chevron-double-down' size={36} color='#24aae2' />
+        <IconButton icon="chevron-double-down" size={36} color="#24aae2" />
       </View>
     );
   }
 
-  renderSend= (props) => {
+  renderSend = (props) => {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
-          <IconButton icon='send-circle' size={32} color='#24aae2' />
+          <IconButton icon="send-circle" size={32} color="#24aae2" />
         </View>
-    </Send>
-  )}
+      </Send>
+    );
+  };
 
   renderBubble = (props) => {
     return (
@@ -133,10 +132,10 @@ class Chat extends Component {
         }}
         timeTextStyle={{
           left: {
-            color: '#FFF'
+            color: '#FFF',
           },
           right: {
-            color: '#FFF'
+            color: '#FFF',
           },
         }}
         containerToPreviousStyle={{
@@ -160,12 +159,11 @@ class Chat extends Component {
       <GiftedChat
         messages={this.state.messages}
         onSend={(message) => this.submitChatMessage(message)}
-
-        user={{ 
+        user={{
           _id: this.props.userId,
           name: this.props.userName,
           avatar: this.props.image,
-         }}
+        }}
         renderBubble={this.renderBubble}
         renderSend={this.renderSend}
         showUserAvatar
@@ -199,7 +197,7 @@ export default connect(mapState, mapDispatch)(Chat);
 const styles = StyleSheet.create({
   sendingContainer: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   container: {
     flex: 1,
@@ -208,6 +206,6 @@ const styles = StyleSheet.create({
   },
   bottomComponentContainer: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 });

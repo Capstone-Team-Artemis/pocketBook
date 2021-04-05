@@ -4,19 +4,28 @@ import {
   StyleSheet,
   Text,
   Image,
-  ScrollView,
-  TextInput,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Animatable from 'react-native-animatable';
+import { TextInput, Button } from 'react-native-paper';
 import { Formik } from 'formik';
 import axios from 'axios';
+import { useFonts } from 'expo-font';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { AuthContext } from './context';
 
 const SignUp = (props) => {
+  // Loading fonts:
+  const [loaded] = useFonts({
+    'Asap-Bold': require('../assets/fonts/Asap-Bold.ttf'),
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+    'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
+  });
+
   const { signUp } = React.useContext(AuthContext);
 
   const [validate, setValidate] = React.useState({
@@ -82,256 +91,283 @@ const SignUp = (props) => {
     signUp(user);
   };
 
+  // For when font can't load:
+  if (!loaded) {
+    return null;
+  }
+
   return (
-    <ScrollView>
-      <Formik
-        initialValues={{
-          email: '',
-          password: '',
-          username: '',
-          firstName: '',
-          lastName: '',
-        }}
-        onSubmit={async (values) => {
-          // Adding user validation (>= 4 chars) and password validation (>= 8 chars)
-          if (!validate.isValidUser || !validate.isValidPassword) {
-            Alert.alert('Error', 'Please fix the error(s) and try again.');
-            // Once that's validated, axios runs call to signup and navigate to App screen
-          } else {
-            try {
-              let res = await axios.post(
-                'https://pocketbook-gh.herokuapp.com/auth/signup/',
-                {
-                  email: values.email,
-                  password: values.password,
-                  username: values.username,
-                  firstName: values.firstName,
-                  lastName: values.lastName,
-                }
-              );
-              // handlePress = passes user info to function that will navigate to DrawerNavigaton
-              handlePress({ user: res.data });
-              // If there was a problem signing up, display an alert error
-            } catch (err) {
-              alert(err);
-              // Alert.alert('Error', 'Please fix the errors and try again.');
-            }
-          }
+    <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={false}
+      contentContainerStyle={styles.scrollContainer}
+    >
+      <ImageBackground
+        source={{ uri: 'https://i.ibb.co/3cP8BQC/booksignupscreen.jpg' }}
+        style={styles.background}
+        imageStyle={{
+          resizeMode: 'stretch',
         }}
       >
-        {(props) => (
-          <View style={styles.container}>
-            {/* Icon Image */}
-            <Image
-              source={{
-                uri: 'https://i.ibb.co/rpJ7vjb/signupbook.png',
-              }}
-              style={styles.image}
-            />
-            <Text style={styles.heading}>Sign Up</Text>
-            <Text>to join the book lovers community!</Text>
-
-            <View style={styles.name}>
-              {/* First Name Input */}
-              <View style={styles.nameContainer}>
-                <TextInput
-                  style={styles.nameText}
-                  placeholder={'First Name'}
-                  onChangeText={props.handleChange('firstName')}
-                  value={props.values.firstName}
+        <View style={styles.container}>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+              username: '',
+              firstName: '',
+              lastName: '',
+            }}
+            onSubmit={async (values) => {
+              // Adding user validation (>= 4 chars) and password validation (>= 8 chars)
+              if (!validate.isValidUser || !validate.isValidPassword) {
+                Alert.alert('Error', 'Please fix the error(s) and try again.');
+                // Once that's validated, axios runs call to signup and navigate to App screen
+              } else {
+                try {
+                  let res = await axios.post(
+                    'https://pocketbook-gh.herokuapp.com/auth/signup/',
+                    {
+                      email: values.email,
+                      password: values.password,
+                      username: values.username,
+                      firstName: values.firstName,
+                      lastName: values.lastName,
+                    }
+                  );
+                  // handlePress = passes user info to function that will navigate to DrawerNavigaton
+                  handlePress({ user: res.data });
+                  // If there was a problem signing up, display an alert error
+                } catch (err) {
+                  Alert.alert('Error', 'Please fix the errors and try again.');
+                }
+              }
+            }}
+          >
+            {(props) => (
+              <View style={styles.container}>
+                {/* Icon Image */}
+                <Image
+                  source={{
+                    uri: 'https://i.ibb.co/yWQvLJL/POCKETBOOK-1-IN-01.png',
+                  }}
+                  style={styles.image}
                 />
-              </View>
-
-              {/* Last Name Input */}
-              <View style={styles.nameContainer}>
-                <TextInput
-                  style={styles.nameText}
-                  placeholder={'Last Name'}
-                  onChangeText={props.handleChange('lastName')}
-                  value={props.values.lastName}
-                />
-              </View>
-            </View>
-
-            {/* Email Input */}
-            <View style={styles.inputContainer}>
-              <Icon
-                name={'envelope'}
-                size={19}
-                color={'grey'}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.inputText}
-                placeholder={'Email Address'}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                onChangeText={props.handleChange('email')}
-                onEndEditing={(e) => handleEmail(e.nativeEvent.text)}
-                value={props.values.email}
-              />
-            </View>
-            {validate.isValidEmail ? null : (
-              <Animatable.View animation="zoomIn" duration={500}>
-                <Text style={styles.errorMsg}>Please enter a valid email.</Text>
-              </Animatable.View>
-            )}
-
-            {/* Username Input */}
-            <View style={styles.inputContainer}>
-              <Icon
-                name={'user'}
-                size={19}
-                color={'grey'}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.inputText}
-                placeholder={'Username'}
-                autoCapitalize="none"
-                onChangeText={props.handleChange('username')}
-                onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
-                value={props.values.username}
-              />
-            </View>
-            {/* Text shows up if username is < 4 chars */}
-            {validate.isValidUser ? null : (
-              <Animatable.View animation="zoomIn" duration={500}>
-                <Text style={styles.errorMsg}>
-                  Username must be 4 characters long.
+                <Text style={styles.heading}>Sign Up</Text>
+                <Text style={{ fontFamily: 'Roboto-Light' }}>
+                  to join the book lovers community!
                 </Text>
-              </Animatable.View>
-            )}
 
-            {/* Password Input */}
-            <View style={styles.inputContainer}>
-              <Icon
-                name={'lock'}
-                size={20}
-                color={'grey'}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.inputText}
-                secureTextEntry={validate.secureTextEntry ? true : false}
-                placeholder={'Password'}
-                onChangeText={props.handleChange('password')}
-                onEndEditing={(e) => handleValidPassword(e.nativeEvent.text)}
-                value={props.values.password}
-              />
-              {/* Adds eye button that toggles whether password input is hidden or not */}
-              <TouchableOpacity
-                style={styles.btnEye}
-                onPress={updateSecureTextEntry}
-              >
-                <Icon
-                  name={validate.secureTextEntry ? 'eye-slash' : 'eye'}
-                  size={15}
-                  color={'grey'}
-                />
-              </TouchableOpacity>
-            </View>
-            {/* Text shows up if password is < 8 chars */}
-            {validate.isValidPassword ? null : (
-              <Animatable.View animation="zoomIn" duration={500}>
-                <Text style={styles.errorMsg}>
-                  Password must be 8 characters long.
-                </Text>
-              </Animatable.View>
-            )}
+                <View style={styles.name}>
+                  {/* First Name Input */}
+                  <View style={styles.nameContainer}>
+                    <TextInput
+                      label="First Name"
+                      style={styles.nameText}
+                      theme={{
+                        colors: { primary: '#000', placeholder: '#000' },
+                        fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                      }}
+                      onChangeText={props.handleChange('firstName')}
+                      value={props.values.firstName}
+                      left={<TextInput.Icon name="alpha-f-circle" />}
+                    />
+                  </View>
 
-            {/* Sign Up Button */}
-            <TouchableOpacity
-              style={[styles.inputContainer, styles.submitContainer]}
-              onPress={props.handleSubmit}
+                  {/* Last Name Input */}
+                  <View style={styles.nameContainer}>
+                    <TextInput
+                      label="Last Name"
+                      style={styles.nameText}
+                      theme={{
+                        colors: { primary: '#000', placeholder: '#000' },
+                        fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                      }}
+                      onChangeText={props.handleChange('lastName')}
+                      value={props.values.lastName}
+                      left={<TextInput.Icon name="alpha-l-circle" />}
+                    />
+                  </View>
+                </View>
+
+                {/* Email Input */}
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Email"
+                    style={[styles.inputText, styles.email]}
+                    theme={{
+                      colors: { primary: '#000', placeholder: '#000' },
+                      fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                    }}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    onChangeText={props.handleChange('email')}
+                    onEndEditing={(e) => handleEmail(e.nativeEvent.text)}
+                    value={props.values.email}
+                    left={<TextInput.Icon name="email" />}
+                  />
+                </View>
+                {validate.isValidEmail ? null : (
+                  <Animatable.View animation="zoomIn" duration={500}>
+                    <Text style={styles.errorMsg}>
+                      Please enter a valid email.
+                    </Text>
+                  </Animatable.View>
+                )}
+
+                {/* Username Input */}
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Username"
+                    style={styles.inputText}
+                    theme={{
+                      colors: { primary: '#000', placeholder: '#000' },
+                      fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                    }}
+                    autoCapitalize="none"
+                    onChangeText={props.handleChange('username')}
+                    onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
+                    value={props.values.username}
+                    left={<TextInput.Icon name="account-circle" />}
+                  />
+                </View>
+                {/* Text shows up if username is < 4 chars */}
+                {validate.isValidUser ? null : (
+                  <Animatable.View animation="zoomIn" duration={500}>
+                    <Text style={styles.errorMsg}>
+                      Username must be 4 characters long.
+                    </Text>
+                  </Animatable.View>
+                )}
+
+                {/* Password Input */}
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Password"
+                    style={styles.inputText}
+                    theme={{
+                      colors: { primary: '#000', placeholder: '#000' },
+                      fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                    }}
+                    secureTextEntry={validate.secureTextEntry ? true : false}
+                    onChangeText={props.handleChange('password')}
+                    onEndEditing={(e) =>
+                      handleValidPassword(e.nativeEvent.text)
+                    }
+                    value={props.values.password}
+                    left={<TextInput.Icon name="lock" />}
+                  />
+                  {/* Adds eye button that toggles whether password input is hidden or not */}
+                  <TouchableOpacity
+                    style={styles.btnEye}
+                    onPress={updateSecureTextEntry}
+                  >
+                    <Icon
+                      name={validate.secureTextEntry ? 'eye' : 'eye-slash'}
+                      size={16}
+                      color={'#000'}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {/* Text shows up if password is < 8 chars */}
+                {validate.isValidPassword ? null : (
+                  <Animatable.View animation="zoomIn" duration={500}>
+                    <Text style={styles.errorMsg}>
+                      Password must be 8 characters long.
+                    </Text>
+                  </Animatable.View>
+                )}
+
+                {/* Sign Up Button */}
+                <Button
+                  mode="contained"
+                  style={styles.submitContainer}
+                  onPress={props.handleSubmit}
+                >
+                  <Text style={styles.submitText}>Sign Up</Text>
+                </Button>
+              </View>
+            )}
+          </Formik>
+          {/* Already have an account? Navigates to Login component */}
+          <View style={styles.navContainer}>
+            <Text style={{ fontFamily: 'Roboto-Light' }}>
+              Already have an account?
+            </Text>
+            <Text
+              style={[
+                { color: '#24aae2', fontFamily: 'Roboto-Medium', fontSize: 14 },
+                { marginLeft: 3 },
+              ]}
+              onPress={() => props.navigation.navigate('Login')}
             >
-              <Text style={styles.submitText}>SIGN UP</Text>
-            </TouchableOpacity>
+              Login!
+            </Text>
           </View>
-        )}
-      </Formik>
-      {/* Already have an account? Navigates to Login component */}
-      <View style={styles.navContainer}>
-        <Text> Already have an account?</Text>
-        <Text
-          style={[{ color: 'blue' }, { marginLeft: 3 }]}
-          onPress={() => props.navigation.navigate('Login')}
-        >
-          Login!
-        </Text>
-      </View>
-    </ScrollView>
+        </View>
+      </ImageBackground>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   image: {
-    padding: 0,
-    width: 100,
-    height: 100,
-    marginTop: 50,
+    marginTop: 10,
+    marginBottom: -50,
+    width: 180,
+    height: 180,
   },
   heading: {
-    margin: 0,
     fontSize: 40,
+    fontFamily: 'Asap-Bold',
   },
   name: {
-    display: 'flex',
+    // display: 'flex',
     flexDirection: 'row',
+    marginBottom: -10,
   },
   nameText: {
-    fontWeight: 'bold',
-    marginLeft: 10,
-    marginTop: 8,
-    width: '80%',
+    height: 55,
+    backgroundColor: '#FFF',
   },
   inputContainer: {
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 10,
     flexDirection: 'row',
-    width: '80%',
-    height: 35,
-    borderRadius: 50,
-    borderWidth: 1.5,
-    // justifyContent: 'center',
+    width: '95%',
+    height: 10,
     alignItems: 'center',
-    paddingTop: 5,
+    paddingTop: 40,
   },
   nameContainer: {
     marginTop: 20,
     marginRight: 5,
+    marginBottom: -5,
     width: 145,
-    height: 35,
-    borderRadius: 50,
-    borderWidth: 1.5,
-  },
-  icon: {
-    top: 5,
-    left: 20,
-    position: 'absolute',
   },
   inputText: {
-    fontWeight: 'bold',
-    marginBottom: 4,
-    marginLeft: 50,
+    height: 50,
     width: '80%',
+    backgroundColor: '#FFF',
   },
   submitContainer: {
+    width: 200,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6475a5',
+    backgroundColor: '#Ef5c2b',
+    marginTop: 30,
+    borderRadius: 350,
   },
   submitText: {
+    fontFamily: 'Roboto-Light',
     color: 'white',
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 18,
     textAlign: 'center',
-    bottom: 2,
   },
   navContainer: {
     flexDirection: 'row',
@@ -340,30 +376,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   errorMsg: {
-    color: '#FF0000',
+    marginTop: 15,
+    color: '#E92228',
     fontSize: 12,
     marginBottom: -5,
+    fontFamily: 'Roboto-Light',
   },
   btnEye: {
     position: 'absolute',
-    top: 7,
-    right: 15,
+    top: 32,
+    right: 10,
+  },
+  background: {
+    width: '100%',
+    height: '100%',
+  },
+  scrollContainer: {
+    backgroundColor: '#FFF',
+    flexGrow: 1,
   },
 });
 
-// const mapStateToProps = (state) => ({
-//   method: 'SignUp',
-//   user: state.user,
-// });
-
-// const mapDispatchToProps = (dispatch) =>
-//   bindActionCreators(
-//     {
-//       auth,
-//     },
-//     dispatch
-//   );
-
 export default SignUp;
-
-// export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

@@ -20,8 +20,8 @@ module.exports = (io) => {
 
     //step2: taking in msg(this.state.chatmessage from the front end) then it runs line 9
     socket.on('chat message', (msg) => {
-      let message = msg[0]
-      let eventTitle = message.eventTitle
+      let message = msg[0];
+      let eventTitle = message.eventTitle;
 
       //send messages to everyone except the one just joined
       socket.broadcast.emit('messages');
@@ -36,5 +36,3 @@ module.exports = (io) => {
     });
   });
 };
-
-

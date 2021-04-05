@@ -12,6 +12,7 @@ async function seed() {
       username: 'byeonse',
       email: 'selina@pocketbook.com',
       password: 'password',
+      image: 'https://i.ibb.co/mvXzTLD/selina.jpg',
     },
     {
       firstName: 'Catherine',
@@ -19,6 +20,7 @@ async function seed() {
       username: 'csmart1986',
       email: 'catherine@pocketbook.com',
       password: 'password',
+      image: 'https://i.ibb.co/30jn0FW/catherine.jpg',
     },
     {
       firstName: 'Sandy',
@@ -26,6 +28,7 @@ async function seed() {
       username: 'sandaiiyahh',
       email: 'sandy@pocketbook.com',
       password: 'password',
+      image: 'https://i.ibb.co/KbPGTfK/sandy.jpg',
     },
     {
       firstName: 'Kay',
@@ -33,6 +36,7 @@ async function seed() {
       username: 'hellokay27',
       email: 'kay@pocketbook.com',
       password: 'password',
+      image: 'https://i.ibb.co/h1GCBb2/kay.jpg',
     },
   ];
 
@@ -120,6 +124,16 @@ async function seed() {
         'Book was a little dense but interesting. I think I understand a bit more about investing, but would still love some tips and your thoughts on it. Thanks yall, see you there!',
       hostId: 4,
       image: 'https://i.ibb.co/bNn4pKF/intelligentinvestor.jpg',
+    },
+    {
+      eventTitle: 'Cracking the Coding Interview',
+      date: '2021-11-15',
+      startTime: '10:00',
+      endTime: '11:00',
+      description:
+        'lol help. But in all seriousness, this was a solid book and I definitely learned a lot! For anyone who read it, have you also found it useful? I would love to chat and maybe we can find a time to code together too!',
+      hostId: 3,
+      image: 'https://i.ibb.co/0ft34Dp/crackingthecoding.jpg',
     },
     {
       eventTitle: 'Best Books of 2021',

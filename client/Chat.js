@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
 import { connect } from 'react-redux';
 import { fetchUser } from './store/user';
-import { Button } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { io } from 'socket.io-client';
 
 
@@ -20,10 +20,11 @@ class Chat extends Component {
     this.state = {
       messages: [],
     };
-    // this.submitChatMessage.bind(this)
-    // this.getColor.bind(this)
-    // this.renderBubble.bind(this)
-    // this.renderSend.bind(this)
+    this.submitChatMessage.bind(this)
+    this.getColor.bind(this)
+    this.scrollToBottomComponent.bind(this)
+    this.renderBubble.bind(this)
+    this.renderSend.bind(this)
   }
   componentDidMount() {
     // place ngrok or deployed link here! 
@@ -87,20 +88,19 @@ class Chat extends Component {
     return colors[sumChars % colors.length];
   }
 
+  scrollToBottomComponent() {
+    return (
+      <View style={styles.bottomComponentContainer}>
+        <IconButton icon='chevron-double-down' size={36} color='#24aae2' />
+      </View>
+    );
+  }
+
   renderSend= (props) => {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
-          <Button icon='send-circle' size={20} color='#6646ee' />
-          {/* <Button
-            icon={({ size, color }) => (
-              <Image
-                source={require('../assets/send.png')}
-                style={{ width: size, height: size, tintColor: color }}
-              />
-            )}
-          > */}
-          {/* </Button> */}
+          <IconButton icon='send-circle' size={32} color='#24aae2' />
         </View>
     </Send>
   )}
@@ -163,6 +163,7 @@ class Chat extends Component {
         showUserAvatar
         alwaysShowSend
         scrollToBottom
+        scrollToBottomComponent={this.scrollToBottomComponent}
         renderUsernameOnMessage={true}
       />
     );
@@ -196,5 +197,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  bottomComponentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });

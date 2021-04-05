@@ -8,7 +8,6 @@ import {
   StatusBar,
   Dimensions,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -104,11 +103,9 @@ const UserProfile = (props) => {
                         userId: Number(props.route.params.userId),
                       });
                     }}
-                  >
-                    
-                    {/* <View style={styles.bookData}> */}
+                  >           
                       <Card.Cover
-                        // alt={book.book.title}
+                        alt={book.book.title}
                         style={styles.image}
                         source={{
                           uri: book.book.image,
@@ -116,13 +113,12 @@ const UserProfile = (props) => {
                       />
                     <Card.Content> 
                       <Title style={styles.title}>{book.book.title}</Title>
-                    {/* </View> */}
                     </Card.Content>
                   </TouchableOpacity>
                   </Card>
                 ))
               ) : (
-                <Text>No books</Text>
+                <Text style={styles.text}>No books</Text>
               )}
             </View>
           </ScrollView>
@@ -134,8 +130,8 @@ const UserProfile = (props) => {
             <View style={styles.bookList}>
               {futureRead.length > 0 ? (
                 futureRead.map((book, idx) => (
+                  <Card key={idx} style={styles.cardContainer}>
                   <TouchableOpacity
-                    key={idx}
                     onPress={() => {
                       props.navigation.navigate("SingleBookView", {
                         usedb: true,
@@ -143,21 +139,22 @@ const UserProfile = (props) => {
                         userId: Number(props.route.params.userId),
                       });
                     }}
-                  >
-                    <View style={styles.bookData}>
-                      <Image
+                  >           
+                      <Card.Cover
                         alt={book.book.title}
-                        style={{ width: 100, height: 150 }}
+                        style={styles.image}
                         source={{
                           uri: book.book.image,
                         }}
                       />
-                      <Text>{book.book.title}</Text>
-                    </View>
+                    <Card.Content> 
+                      <Title style={styles.title}>{book.book.title}</Title>
+                    </Card.Content>
                   </TouchableOpacity>
+                  </Card>
                 ))
               ) : (
-                <Text>No books</Text>
+                <Text style={styles.text}>No books</Text>
               )}
             </View>
           </ScrollView>
@@ -169,34 +166,31 @@ const UserProfile = (props) => {
             <View style={styles.bookList}>
               {completed.length > 0 ? (
                 completed.map((book, idx) => (
+                  <Card key={idx} style={styles.cardContainer}>
                   <TouchableOpacity
-                    key={idx}
                     onPress={() => {
-                      props.navigation.navigate(
-                        "SingleBookView",
-
-                        {
-                          usedb: true,
-                          book: book.book,
-                          userId: Number(props.route.params.userId),
-                        }
-                      );
+                      props.navigation.navigate("SingleBookView", {
+                        usedb: true,
+                        book: book.book,
+                        userId: Number(props.route.params.userId),
+                      });
                     }}
-                  >
-                    <View style={styles.bookData}>
-                      <Image
+                  >           
+                      <Card.Cover
                         alt={book.book.title}
-                        style={{ width: 100, height: 150 }}
+                        style={styles.image}
                         source={{
                           uri: book.book.image,
                         }}
                       />
-                      <Text>{book.book.title}</Text>
-                    </View>
+                    <Card.Content> 
+                      <Title style={styles.title}>{book.book.title}</Title>
+                    </Card.Content>
                   </TouchableOpacity>
+                  </Card>
                 ))
               ) : (
-                <Text>No books</Text>
+                <Text style={styles.text}>No books</Text>
               )}
             </View>
           </ScrollView>
@@ -213,35 +207,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  scrollView: {
+    backgroundColor: "#fff",
+    marginHorizontal: 1,
+    width: WIDTH - 20,
+  },
+  nav: {
+    alignItems: "flex-end", 
+    margin: 16
+  },
   heading: {
     fontSize: 30,
     margin: 0,
     alignSelf: "center",
     fontFamily: 'Roboto-Regular',
   },
-  content: {
-    marginTop: 20,
-    flexDirection: "row",
-    width: "80%",
-    height: 35,
-    borderRadius: 50,
-    borderWidth: 1.5,
-    alignItems: "center",
-    paddingTop: 5,
-  },
-  nav: {
-    alignItems: "flex-end", 
-    margin: 16
-  },
-  bookList: {
-    flexDirection: "row",
-  },
   text: {
     fontSize: 20,
     fontFamily: 'Roboto-Light', 
     marginBottom: 20,
     alignSelf: "center",
-    },
+    textAlign: 'center',
+  },
+  bookList: {
+    flexDirection: "row",
+  },
   cardContainer: {
     flex: 1,
     alignItems: "center",
@@ -263,11 +253,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     alignSelf: "center",
-  },
-  scrollView: {
-    backgroundColor: "#fff",
-    marginHorizontal: 1,
-    width: WIDTH - 20,
   },
 });
 

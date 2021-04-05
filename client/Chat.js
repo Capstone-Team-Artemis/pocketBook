@@ -54,7 +54,7 @@ class Chat extends Component {
   }
 
   submitChatMessage(message) {
-    // let eventId = this.props.route.params.eventId;
+    //step1: socket is emitting chat message to the backend line6 of index.js
     let eventTitle = this.props.route.params.title;
     let submittedMessage = message[0];
     let addRoom = { ...submittedMessage, eventTitle };

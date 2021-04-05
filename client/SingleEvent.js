@@ -108,53 +108,56 @@ class SingleEvent extends React.Component {
     const formattedDate = DateTime.fromISO(event.date).toLocaleString(
       DateTime.DATE_FULL
     );
-    
-    return (
-      <TouchableOpacity
-        onPress={() => navigate.navigate('SingleEventView', event)}
-      >
-        <View style={styles.listContainer} key={event.id}>
-          {/* Adds book image for each event */}
-          <Image source={{ uri: event.image }} style={styles.image} />
-          {/* Adds event info for each event */}
-          <View style={styles.eventData}>
-            <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-            <Text style={styles.date}>Date: {formattedDate}</Text>
-            <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
-            <Text style={styles.time}>End Time: {formattedEndTime}</Text>
-            <Text style={styles.description}>
-              Description: {event.description}
-            </Text>
+    if (this.state.fontsLoaded) {
+      return (
+        <TouchableOpacity
+          onPress={() => navigate.navigate('SingleEventView', event)}
+        >
+          <View style={styles.listContainer} key={event.id}>
+            {/* Adds book image for each event */}
+            <Image source={{ uri: event.image }} style={styles.image} />
+            {/* Adds event info for each event */}
+            <View style={styles.eventData}>
+              <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+              <Text style={styles.date}>Date: {formattedDate}</Text>
+              <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
+              <Text style={styles.time}>End Time: {formattedEndTime}</Text>
+              <Text style={styles.description}>
+                Description: {event.description}
+              </Text>
 
-            {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
-                        if not host, button can also say 'Un/Register' */}
-            <View style={styles.registerButtonContainer}>
-              {user === event.hostId ? (
-                <Button
-                onPress={() => {
-                  this.openTwoButtonAlert();
-                }}
-                color="black"
-                accessibilityLabel="Status">
-                  Delete 
-                </Button>
-              ) : (
-                <Button onPress={() => {
-                  event.users[0] ? this.unregister() : this.register();
-                }}
-                color="black"
-                accessibilityLabel="Status">
-                  {/* // check the event obj to see if logged-in user exists in the associated user array
-                  // if user exists, that means user is attending and button should give 'Unregister' option
-                  // else, the user isn't registered and should have the button option to 'Register' for the event */}
-                  {event.users[0] ? 'Unregister' : 'Register'}
-                </Button>
-              )}
+              {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                          if not host, button can also say 'Un/Register' */}
+              <View style={styles.registerButtonContainer}>
+                {user === event.hostId ? (
+                  <Button
+                  onPress={() => {
+                    this.openTwoButtonAlert();
+                  }}
+                  color="black"
+                  accessibilityLabel="Status">
+                    Delete 
+                  </Button>
+                ) : (
+                  <Button onPress={() => {
+                    event.users[0] ? this.unregister() : this.register();
+                  }}
+                  color="black"
+                  accessibilityLabel="Status">
+                    {/* // check the event obj to see if logged-in user exists in the associated user array
+                    // if user exists, that means user is attending and button should give 'Unregister' option
+                    // else, the user isn't registered and should have the button option to 'Register' for the event */}
+                    {event.users[0] ? 'Unregister' : 'Register'}
+                  </Button>
+                )}
+              </View>
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
-    );
+        </TouchableOpacity>
+      );
+    } else {
+      return null;
+    }
   }
 }
 

@@ -43,85 +43,90 @@ export class AllEvents extends React.Component {
   }
 
   render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          {/* Adds Navbar */}
-          <TouchableOpacity
-            style={{ alignItems: 'flex-end', margin: 16 }}
-            onPress={this.props.navigation.openDrawer}
-          >
-            <Icon name="bars" size={24} color="#161924" />
-          </TouchableOpacity>
-          {/* Adds create event button */}
-          <View style={styles.createButtonContainer}>
-            <Button onPress={() => {
-                this.props.navigation.navigate('CreateEvent');
-              }}
-              color="black"
-              accessibilityLabel="Create Event">
-              Create Event       
-            </Button>
-          </View>
-          {/* Adds Dropdown menu */}
-          <DropDownPicker
-            style={{ backgroundColor: '#fafafa' }}
-            itemStyle={{ justifyContent: 'flex-start' }}
-            dropDownStyle={{ backgroundColor: '#fafafa' }}
-            containerStyle={{ height: 40 }}
-            labelStyle={{fontFamily: 'Roboto-Medium'}}
-            activeLabelStyle={{ color: 'red' }}
-            defaultValue={this.state.status}
-            onChangeItem={(item) =>
-              this.setState({
-                status: item.value,
-              })
-            }
-            items={[
-              { label: 'Upcoming Events', value: 'Upcoming' },
-              { label: 'Attending Events', value: 'Attending' },
-              { label: 'Created Events', value: 'Created' },
-            ]}
-          />
-          {/* Adds event list */}
-          <View>
-            {this.props.events === 'There are currently no upcoming events!' ? (
-              <Text style={styles.noEvents}>
-                There are currently no upcoming events!
-              </Text>
-            ) : (
-              // depending on the dropdown menu status and user id, the event list displayed will vary
-              // a SINGLE event should be displayed:
-              // if dropdown status is 'Upcoming" -OR-
-              // if dropdown status is 'Attending' & logged in user's id is in the users array for that specific event obj -OR-
-              // if dropdown status is 'Created' & logged in user's userId is the same value as the hostId for that specific event obj
-              this.props.events
-                .filter((event) => {
-                  return (
-                    this.state.status === 'Upcoming' ||
-                    (this.state.status === 'Attending' && event.users[0]) ||
-                    (this.state.status === 'Created' &&
-                      this.state.userId === event.hostId)
-                  );
-                  // then map to render out each filtered event
+    if (this.state.fontsLoaded) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <ScrollView style={styles.scrollView}>
+            {/* Adds Navbar */}
+            <TouchableOpacity
+              style={{ alignItems: 'flex-end', margin: 16 }}
+              onPress={this.props.navigation.openDrawer}
+            >
+              <Icon name="bars" size={24} color="#161924" />
+            </TouchableOpacity>
+            {/* Adds create event button */}
+            <View style={styles.createButtonContainer}>
+              <Button onPress={() => {
+                  this.props.navigation.navigate('CreateEvent');
+                }}
+                color="black"
+                accessibilityLabel="Create Event">
+                Create Event       
+              </Button>
+            </View>
+            {/* Adds Dropdown menu */}
+            <DropDownPicker
+              style={{ backgroundColor: '#fafafa' }}
+              itemStyle={{ justifyContent: 'flex-start' }}
+              dropDownStyle={{ backgroundColor: '#fafafa' }}
+              containerStyle={{ height: 40 }}
+              labelStyle={{fontFamily: 'Roboto-Medium'}}
+              activeLabelStyle={{ color: 'red' }}
+              defaultValue={this.state.status}
+              onChangeItem={(item) =>
+                this.setState({
+                  status: item.value,
                 })
-                .map((event) => (
-                  // pass Props to SingleEvent component
-                  <SingleEvent
-                    key={event.id}
-                    event={event}
-                    user={this.state.userId}
-                    status={this.state.status}
-                    navigate={this.props.navigation}
-                    getEvents={() => this.props.getEvents(this.state.userId)}
-                    userId={this.props.route.params.userId}
-                  />
-                ))
-            )}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    );
+              }
+              items={[
+                { label: 'Upcoming Events', value: 'Upcoming' },
+                { label: 'Attending Events', value: 'Attending' },
+                { label: 'Created Events', value: 'Created' },
+              ]}
+            />
+            {/* Adds event list */}
+            <View>
+              {this.props.events === 'There are currently no upcoming events!' ? (
+                <Text style={styles.noEvents}>
+                  There are currently no upcoming events!
+                </Text>
+              ) : (
+                // depending on the dropdown menu status and user id, the event list displayed will vary
+                // a SINGLE event should be displayed:
+                // if dropdown status is 'Upcoming" -OR-
+                // if dropdown status is 'Attending' & logged in user's id is in the users array for that specific event obj -OR-
+                // if dropdown status is 'Created' & logged in user's userId is the same value as the hostId for that specific event obj
+                this.props.events
+                  .filter((event) => {
+                    return (
+                      this.state.status === 'Upcoming' ||
+                      (this.state.status === 'Attending' && event.users[0]) ||
+                      (this.state.status === 'Created' &&
+                        this.state.userId === event.hostId)
+                    );
+                    // then map to render out each filtered event
+                  })
+                  .map((event) => (
+                    // pass Props to SingleEvent component
+                    <SingleEvent
+                      key={event.id}
+                      event={event}
+                      user={this.state.userId}
+                      status={this.state.status}
+                      navigate={this.props.navigation}
+                      getEvents={() => this.props.getEvents(this.state.userId)}
+                      userId={this.props.route.params.userId}
+                    />
+                  ))
+              )}
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      );
+    }
+    else {
+      return null;
+    }
   }
 }
 

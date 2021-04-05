@@ -37,6 +37,7 @@ class SingleEvent extends React.Component {
   async loadFonts() {
     await Font.loadAsync({
       // Load a font `Roboto` from a static resource
+      'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
       'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
       'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
     });
@@ -131,23 +132,23 @@ class SingleEvent extends React.Component {
               <View style={styles.registerButtonContainer}>
                 {user === event.hostId ? (
                   <Button
-   onPress={() => {
+                  onPress={() => {
                     this.openTwoButtonAlert();
                   }}
-                  color="black"
+                  color="white"
                   accessibilityLabel="Status">
-                    Delete 
+                  <Text style={styles.deleteText}>Delete </Text>
                   </Button>
                 ) : (
                   <Button onPress={() => {
                     event.users[0] ? this.unregister() : this.register();
                   }}
-                  color="black"
+                  color="white"
                   accessibilityLabel="Status">
                     {/* // check the event obj to see if logged-in user exists in the associated user array
                     // if user exists, that means user is attending and button should give 'Unregister' option
                     // else, the user isn't registered and should have the button option to 'Register' for the event */}
-                    {event.users[0] ? 'Unregister' : 'Register'}
+                    <Text style={styles.registerText}>{event.users[0] ? 'Unregister' : 'Register'} </Text>
                   </Button>
                 )}
               </View>
@@ -212,6 +213,12 @@ const styles = StyleSheet.create({
   },
   noEvents: {
     fontSize: 20,
+  },
+  deleteText: {
+    fontFamily: 'Roboto-Regular',
+  },
+  registerText: {
+    fontFamily: 'Roboto-Regular',
   },
   registerButtonContainer: {
     backgroundColor: '#24aae2',

@@ -29,6 +29,7 @@ export class AllEvents extends React.Component {
   async loadFonts() {
     await Font.loadAsync({
       // Load a font from a static resource
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
       'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
     });
     this.setState({ fontsLoaded: true });
@@ -57,9 +58,9 @@ export class AllEvents extends React.Component {
               <Button onPress={() => {
                   this.props.navigation.navigate('CreateEvent');
                 }}
-                color="black"
+                color="white"
                 accessibilityLabel="Create Event">
-                Create Event       
+                <Text style={styles.createText}>Create Event </Text>  
               </Button>
             </View>
             {/* Adds Dropdown menu */}
@@ -159,11 +160,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   createButtonContainer: {
-    backgroundColor: '#Faea26',
+    backgroundColor: '#Ef5c2b',
     marginBottom: 20,
     borderRadius: 15,
     width: 150,
     height: 40,
+  },
+  createText: {
+    fontFamily: 'Roboto-Regular',
   },
   eventData: {
     padding: 10,

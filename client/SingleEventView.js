@@ -8,9 +8,9 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  Button,
   ImageBackground
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DateTime } from 'luxon';
@@ -107,24 +107,30 @@ export default class SingleEventView extends React.Component {
               {/* {todaysDate === formattedDate &&
               todaysTime >= formattedStartTime &&
               todaysTime <= formattedEndTime ? ( */}
-              <Button
-                title={'Join Now'}
-                style={styles.clickMe}
-                onPress={() => {
-                  this.props.navigation.navigate('Chat', {
-                    title: eventTitle,
-                  });
-                }}
-                color="#E92228"
-                accessibilityLabel="Join Now"
-              />
+              <View style={styles.joinButtonContainer}>
+                <Button
+                  onPress={() => {
+                    this.props.navigation.navigate('Chat', {
+                      title: eventTitle,
+                    });
+                  }}
+                  color="white"
+                  accessibilityLabel="Join Now"
+                  >
+                  <Text style={styles.joinNowText}>Join Now</Text>
+                </Button>
+              </View>
               {/* ) : null} */}
-              <Button
-                title="Go Back"
-                onPress={() => {
-                  this.props.navigation.navigate('AllEvents');
-                }}
-              />
+              <View style={styles.backButtonContainer}>
+                <Button
+                  onPress={() => {
+                    this.props.navigation.navigate('AllEvents');
+                  }}
+                  color='white'
+                  > 
+                  <Text style={styles.goBackText}>Go Back</Text>
+                </Button>
+              </View>
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>
@@ -186,12 +192,27 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 250,
   },
-  clickMe: {
-    backgroundColor: '#ff00ff',
+  joinButtonContainer: {
+    backgroundColor: '#Ef5c2b',
+    marginTop: 30,
+    marginLeft: 100,
     borderRadius: 15,
-    padding: 0.8,
-    width: 200,
-    height: 100,
-    marginLeft: 95,
+    width: 150,
+    height: 40,
   },
+  backButtonContainer: {
+    backgroundColor: '#24aae2',
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 100,
+    borderRadius: 15,
+    width: 150,
+    height: 40,
+  },
+  goBackText: {
+    fontFamily: 'Roboto-Regular'
+  },
+  joinNowText: {
+    fontFamily: 'Roboto-Regular'
+  }
 });

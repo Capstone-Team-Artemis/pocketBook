@@ -61,6 +61,7 @@ class Chat extends Component {
 
     let newMessage = [];
     newMessage.push(addRoom);
+    //step1: socket is emitting chat message to the backend line6 of index.js
     this.socket.emit('chat message', newMessage);
 
     this.setState((previousMessages) =>
@@ -119,7 +120,7 @@ class Chat extends Component {
           },
         }}
         usernameStyle={{
-          color: '#8c8f94', //gray30
+          color: '#fff', //gray30
         }}
         textStyle={{
           right: {
@@ -127,6 +128,14 @@ class Chat extends Component {
           },
           left: {
             color: '#fff',
+          },
+        }}
+        timeTextStyle={{
+          left: {
+            color: '#FFF',
+          },
+          right: {
+            color: '#FFF',
           },
         }}
         containerToPreviousStyle={{

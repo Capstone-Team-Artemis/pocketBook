@@ -8,8 +8,8 @@ module.exports = (io) => {
 
     //setting up rooms
     socket.on('room', async (room) => {
-      console.log('ROOM BACKEND', room);
       await socket.join(room);
+      console.log('Joined room', room);
     });
 
     socket.on('leaveRoom', (room) => {
@@ -22,7 +22,7 @@ module.exports = (io) => {
     socket.on('chat message', (msg) => {
       let message = msg[0];
       let eventTitle = message.eventTitle;
-      console.log('in message backend: ', message);
+
       //send messages to everyone except the one just joined
       socket.broadcast.emit('messages');
 
@@ -36,11 +36,3 @@ module.exports = (io) => {
     });
   });
 };
-
-// io.on('connection', socket => {
-//   console.log(`A socket connection to the server has been made: ${socket.id}`)
-
-//   socket.on('disconnect', () => {
-//     console.log(`Connection ${socket.id} has left the building`)
-//   })
-// })

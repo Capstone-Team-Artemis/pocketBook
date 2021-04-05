@@ -4,24 +4,45 @@ import {
   Text,
   StyleSheet,
   View,
-  Button,
+  // Button,
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
 import { DateTime } from 'luxon';
+import * as Font from 'expo-font';
+// import thunk 
 import { deleteEvent } from './store/events';
 
+//SingleEvent component
 class SingleEvent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      fontsLoaded: false,
+    }
     this.unregister = this.unregister.bind(this);
     this.register = this.register.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.openTwoButtonAlert = this.openTwoButtonAlert.bind(this);
   }
+
+  componentDidMount() {
+    this.loadFonts();
+  }
+
+  async loadFonts() {
+    await Font.loadAsync({
+      // Load a font `Roboto` from a static resource
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+      'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
+    });
+    this.setState({ fontsLoaded: true });
+  }
+
   // UNREGISTER the logged in user from a specific event
   unregister = async () => {
     try {
@@ -87,61 +108,64 @@ class SingleEvent extends React.Component {
     const formattedDate = DateTime.fromISO(event.date).toLocaleString(
       DateTime.DATE_FULL
     );
+    if (this.state.fontsLoaded) {
+      return (
+        <TouchableOpacity
+          onPress={() => navigate.navigate('SingleEventView', event)}
+        >
+          <View style={styles.listContainer} key={event.id}>
+            {/* Adds book image for each event */}
+            <Image source={{ uri: event.image }} style={styles.image} />
+            {/* Adds event info for each event */}
+            <View style={styles.eventData}>
+              <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+              <Text style={styles.date}>Date: {formattedDate}</Text>
+              <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
+              <Text style={styles.time}>End Time: {formattedEndTime}</Text>
+              <Text style={styles.description}>
+                Description: {event.description}
+              </Text>
 
-    return (
-      <TouchableOpacity
-        onPress={() => navigate.navigate('SingleEventView', event)}
-      >
-        <View style={styles.listContainer} key={event.id}>
-          {/* Adds book image for each event */}
-          <Image source={{ uri: event.image }} style={styles.image} />
-          {/* Adds event info for each event */}
-          <View style={styles.eventData}>
-            <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-            <Text style={styles.date}>Date: {formattedDate}</Text>
-            <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
-            <Text style={styles.time}>End Time: {formattedEndTime}</Text>
-            <Text style={styles.description}>
-              Description: {event.description}
-            </Text>
-
-            {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
-                        if not host, button can also say 'Un/Register' */}
-            <View style={styles.registerButtonContainer}>
-              {user === event.hostId ? (
-                <Button
-                  // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
-                  title={'Delete Event'}
-                  onPress={() => {
+              {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                          if not host, button can also say 'Un/Register' */}
+              <View style={styles.registerButtonContainer}>
+                {user === event.hostId ? (
+                  <Button
+   onPress={() => {
                     this.openTwoButtonAlert();
                   }}
-                  color="white"
-                  accessibilityLabel="Status"
-                />
-              ) : (
-                <Button
-                  // check the event obj to see if logged-in user exists in the associated user array
-                  // if user exists, that means user is attending and button should give 'Unregister' option
-                  // else, the user isn't registered and should have the button option to 'Register' for the event
-                  title={event.users[0] ? 'Unregister' : 'Register'}
-                  onPress={() => {
+                  color="black"
+                  accessibilityLabel="Status">
+                    Delete 
+                  </Button>
+                ) : (
+                  <Button onPress={() => {
                     event.users[0] ? this.unregister() : this.register();
                   }}
-                  color="white"
-                  accessibilityLabel="Status"
-                />
-              )}
+                  color="black"
+                  accessibilityLabel="Status">
+                    {/* // check the event obj to see if logged-in user exists in the associated user array
+                    // if user exists, that means user is attending and button should give 'Unregister' option
+                    // else, the user isn't registered and should have the button option to 'Register' for the event */}
+                    {event.users[0] ? 'Unregister' : 'Register'}
+                  </Button>
+                )}
+              </View>
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
-    );
+        </TouchableOpacity>
+      );
+    } else {
+      return null;
+    }
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white'
   },
   scrollView: {
     marginHorizontal: 10,
@@ -156,24 +180,28 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 20,
     marginBottom: 2,
-    fontWeight: 'bold',
+    fontFamily: 'Roboto-Bold'
+
   },
   date: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   time: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   description: {
     fontSize: 15,
     marginBottom: 5,
+    fontFamily: 'Roboto-Regular'
   },
   listContainer: {
     flexDirection: 'row',
     borderStyle: 'solid',
-    borderColor: 'black',
+    borderColor: '#Ef5c2b',
     borderWidth: 1,
     marginBottom: 15,
     marginTop: 15,
@@ -186,12 +214,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   registerButtonContainer: {
-    backgroundColor: '#6475a5',
+    backgroundColor: '#24aae2',
     borderRadius: 15,
     padding: 0.8,
-    width: 130,
+    width: 135,
     height: 38,
-    marginLeft: 95,
+    marginLeft: 90,
   },
 });
 

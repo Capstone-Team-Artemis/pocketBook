@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
+import React, { Component } from "react";
+import { View, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
 import { connect } from 'react-redux';
 import { fetchUser } from './store/user';
-import { IconButton } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { io } from 'socket.io-client';
+
+
 // const socket = io();
 // const socket = io('http://127.0.0.1:3000');
 //'http://5d0f23dd9334.ngrok.io'
@@ -12,14 +14,16 @@ import { io } from 'socket.io-client';
 
 // thisComponent.setState({ discussion: [...discussion, msg] });
 
-class Chat extends React.Component {
+class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      //chatMessage: '',
-      //discussion: [],
       messages: [],
     };
+    // this.submitChatMessage.bind(this)
+    // this.getColor.bind(this)
+    // this.renderBubble.bind(this)
+    // this.renderSend.bind(this)
   }
   componentDidMount() {
     // place ngrok or deployed link here! 
@@ -29,15 +33,18 @@ class Chat extends React.Component {
     });
 
     this.socket.connect();
-    let roomName = this.props.route.params.title
+
     //******send room info to backend socket
+    let roomName = this.props.route.params.title
     this.socket.emit('room', roomName);
 
     const thisComponent = this;
+
     //connecting to the backend socket
     this.socket.on('connection', () => {
       console.log('FE: Connected to socket server');
     });
+
     //STEP3: receiving messages from the backend
     this.socket.on('messages', (message) => {
 
@@ -70,7 +77,6 @@ class Chat extends React.Component {
     }
 
     const colors = [
-      '#Faea26', // candlelight
       '#Ef5c2b', // flamingo
       '#2ecc71', // emerald
       '#e74c3c', // alizarin
@@ -85,7 +91,16 @@ class Chat extends React.Component {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
-          <IconButton icon='send-circle' size={32} color='#6646ee' />
+          <Button icon='send-circle' size={20} color='#6646ee' />
+          {/* <Button
+            icon={({ size, color }) => (
+              <Image
+                source={require('../assets/send.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            )}
+          > */}
+          {/* </Button> */}
         </View>
     </Send>
   )}
@@ -103,6 +118,9 @@ class Chat extends React.Component {
             backgroundColor: this.getColor(),
             borderTopLeftRadius: 15,
           },
+        }}
+        usernameStyle={{
+          color: '#8c8f94', //gray30
         }}
         textStyle={{
           right: {
@@ -141,6 +159,7 @@ class Chat extends React.Component {
           avatar: this.props.image,
          }}
         renderBubble={this.renderBubble}
+        renderSend={this.renderSend}
         showUserAvatar
         alwaysShowSend
         scrollToBottom
@@ -151,12 +170,11 @@ class Chat extends React.Component {
 }
 
 const mapState = (state) => {
-  console.log("STATE***", state)
+  //console.log("STATE***", state)
   return {
     userId: state.user.id,
     userName: state.user.username,
     image: state.user.image,
-    event: state,
   };
 };
 

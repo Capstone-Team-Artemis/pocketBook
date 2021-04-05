@@ -17,6 +17,7 @@ import { TextInput, Button } from 'react-native-paper'
 // import thunk
 import { postEvent } from "./store/events";
 import * as Font from 'expo-font';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -90,6 +91,11 @@ class CreateEvent extends Component {
   render() {
 
     return (
+      <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={false}
+      contentContainerStyle={styles.scrollContainer}
+    >
       <SafeAreaView style={styles.container}>
       <ImageBackground source={{ uri: 'https://i.ibb.co/3cP8BQC/booksignupscreen.jpg' }} style={styles.backgroundImg} >
         
@@ -101,9 +107,14 @@ class CreateEvent extends Component {
           }}
           style={styles.image}
         />
+
+          <TouchableOpacity style={styles.arrow} onPress={() => this.handleGoBack()}>
+          <Icon name='arrow-left' size={24} color='#161924' />
+          </TouchableOpacity>
+          
           <TouchableOpacity
-            style={styles.navbar}
-            style={{ alignItems: "flex-end", margin: 16 }}
+            // style={styles.navbar}
+            // style={{  margin: 10 }}
             onPress={this.props.navigation.openDrawer}
           >
             <Icon name='bars' size={24} color='#161924' />
@@ -176,10 +187,13 @@ class CreateEvent extends Component {
             <Text style={styles.submitText}>Submit</Text>
           </Button>
 
-          <Button title='Go Back' onPress={() => this.handleGoBack()} />
+          {/* <Button mode="contained" style={styles.button} onPress={() => this.handleGoBack()}>
+          <Text style={styles.submitText}>Go Back</Text>
+          </Button> */}
         </View>
         </ImageBackground>
       </SafeAreaView>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -197,15 +211,25 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
   },
   image: {
-    //marginTop: 10,
+    marginTop: 20,
     marginBottom: -50,
     width: 180,
     height: 100,
+    left: -77
   },
   navbar: {
+    top: -50,
+    marginBottom: -10,
     paddingLeft: 300,
+    alignItems: "center",
+    //backgroundColor: '#6646ee'
+  },
+  arrow: {
+    left: -310,
+    bottom: -23
   },
   heading: {
+    top: -20,
     fontSize: 35,
     textAlign: 'center',
     fontFamily: 'Roboto-Light'

@@ -28,7 +28,7 @@ class Chat extends Component {
   }
   componentDidMount() {
     // place ngrok or deployed link here! 
-    this.socket = io('http://127.0.0.1:3000', {
+    this.socket = io('https://pocketbook-gh.herokuapp.com/', {
       transports: ['websocket'],
       jsonp: false,
     });
@@ -120,7 +120,7 @@ class Chat extends Component {
           },
         }}
         usernameStyle={{
-          color: '#8c8f94', //gray30
+          color: '#fff', //gray30
         }}
         textStyle={{
           right: {
@@ -128,6 +128,14 @@ class Chat extends Component {
           },
           left: {
             color: '#fff',
+          },
+        }}
+        timeTextStyle={{
+          left: {
+            color: '#FFF'
+          },
+          right: {
+            color: '#FFF'
           },
         }}
         containerToPreviousStyle={{

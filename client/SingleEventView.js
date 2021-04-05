@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
+  ImageBackground
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -65,61 +66,69 @@ export default class SingleEventView extends React.Component {
     const todaysTime = DateTime.now().toLocaleString(DateTime.TIME_SIMPLE);
 
     return (
-      <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          {/* Adds Navbar */}
-          <TouchableOpacity
-            style={{ alignItems: 'flex-end', margin: 16 }}
-            onPress={this.props.navigation.openDrawer}
-          >
-            <Icon name="bars" size={24} color="#161924" />
-          </TouchableOpacity>
-          <View style={styles.listContainer}>
-            {/* Adds event info */}
-            <View style={styles.eventData}>
-              <Text style={styles.eventTitle}>{eventTitle}</Text>
-              <Text style={styles.date}>Date: {formattedDate}</Text>
-              <Text style={styles.startTime}>
-                Start Time: {formattedStartTime}
-              </Text>
-              <Text style={styles.endTime}>End Time: {formattedEndTime}</Text>
-              <Text style={styles.description}>{description}</Text>
+      <ImageBackground
+          source={{ uri: 'https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg' }}
+          style={styles.background}
+          imageStyle={{
+            resizeMode: 'stretch',
+          }}
+      >
+        <SafeAreaView style={styles.container}>
+          <ScrollView style={styles.scrollView}>
+            {/* Adds Navbar */}
+            <TouchableOpacity
+              style={{ alignItems: 'flex-end', margin: 16 }}
+              onPress={this.props.navigation.openDrawer}
+            >
+              <Icon name="bars" size={24} color="#161924" />
+            </TouchableOpacity>
+            <View style={styles.listContainer}>
+              {/* Adds event info */}
+              <View style={styles.eventData}>
+                <Text style={styles.eventTitle}>{eventTitle}</Text>
+                <Text style={styles.date}>Date: {formattedDate}</Text>
+                <Text style={styles.startTime}>
+                  Start Time: {formattedStartTime}
+                </Text>
+                <Text style={styles.endTime}>End Time: {formattedEndTime}</Text>
+                <Text style={styles.description}>{description}</Text>
+              </View>
+              {/* Adds book image for each event */}
+              <Image
+                source={{
+                  uri: image,
+                }}
+                style={styles.image}
+              />
             </View>
-            {/* Adds book image for each event */}
-            <Image
-              source={{
-                uri: image,
+            <Text>
+              *Live chat shows up below at the exact date and time of the event!
+            </Text>
+            {/* {todaysDate === formattedDate &&
+            todaysTime >= formattedStartTime &&
+            todaysTime <= formattedEndTime ? ( */}
+            <Button
+              title={'Join Now'}
+              style={styles.clickMe}
+              onPress={() => {
+                this.props.navigation.navigate('Chat', {
+                  title: eventTitle,
+                  eventId: id,
+                });
               }}
-              style={styles.image}
+              color="#E92228"
+              accessibilityLabel="Join Now"
             />
-          </View>
-          <Text>
-            *Live chat shows up below at the exact date and time of the event!
-          </Text>
-          {/* {todaysDate === formattedDate &&
-          todaysTime >= formattedStartTime &&
-          todaysTime <= formattedEndTime ? ( */}
-          <Button
-            title={'Join Now'}
-            style={styles.clickMe}
-            onPress={() => {
-              this.props.navigation.navigate('Chat', {
-                title: eventTitle,
-                eventId: id,
-              });
-            }}
-            color="#E92228"
-            accessibilityLabel="Join Now"
-          />
-          {/* ) : null} */}
-          <Button
-            title="Go Back"
-            onPress={() => {
-              this.props.navigation.navigate('AllEvents');
-            }}
-          />
-        </ScrollView>
-      </SafeAreaView>
+            {/* ) : null} */}
+            <Button
+              title="Go Back"
+              onPress={() => {
+                this.props.navigation.navigate('AllEvents');
+              }}
+            />
+          </ScrollView>
+        </SafeAreaView>
+      </ImageBackground>
     );
   }
 }
@@ -127,7 +136,10 @@ export default class SingleEventView extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+  },
+  background: {
+    width: '100%',
+    height: '100%',
   },
   scrollView: {
     marginHorizontal: 10,

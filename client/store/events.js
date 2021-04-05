@@ -1,6 +1,8 @@
 // ALL EVENTS SUB REDUCER
 import axios from "axios";
 
+//event.js
+
 // ACTION TYPES
 const RECEIVED_EVENTS = "RECEIVED_EVENTS";
 const DELETED_EVENT = "DELETED_EVENT";

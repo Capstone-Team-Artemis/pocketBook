@@ -14,6 +14,7 @@ import axios from "axios";
 import { DateTime } from "luxon";
 import { deleteEvent } from "./store/events";
 
+//SingleEvent component
 class SingleEvent extends React.Component {
   constructor(props) {
     super(props);
@@ -94,13 +95,7 @@ class SingleEvent extends React.Component {
       >
         <View style={styles.listContainer} key={event.id}>
           {/* Adds book image for each event */}
-          <Image
-            source={{
-
-
-            }}
-            style={styles.image}
-          />
+          <Image source={{}} style={styles.image} />
           {/* Adds event info for each event */}
           <View style={styles.eventData}>
             <Text style={styles.eventTitle}>{event.eventTitle}</Text>

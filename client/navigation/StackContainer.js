@@ -48,7 +48,6 @@ const StackContainer = (props) => (
       component={Chat}
       options={({ route }) => ({
         title: route.params.title,
-        eventId: route.params.eventId,
         headerBackTitleVisible: false,
       })}
     />

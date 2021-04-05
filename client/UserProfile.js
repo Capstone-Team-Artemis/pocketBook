@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -8,34 +8,31 @@ import {
   StatusBar,
   Dimensions,
   TouchableOpacity,
-  Image,
+  ImageBackground,
 } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getBooks } from "./store/books";
+import { Card, Title } from 'react-native-paper';
+import { useFonts } from 'expo-font';
 
 const { width: WIDTH } = Dimensions.get("window");
 
+const img = { uri: "https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg"}
+
 const UserProfile = (props) => {
-  // console.log("props in userprofile component", props)
+
   //hardcode it to 1 since no user loged in
 
   let id = props.userId || 4;
   let mybooks = props.books || [];
+  let username = props.username || '';
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getBooks(id));
   }, [getBooks]);
-
-  //const [user, setUser] = useState(id);
-  // const [books, setbooks] = useState(mybooks);
-
-  //do not need this if we can get the user through props
-  // useEffect(()=> {
-  //     dispatch(getUser)
-  // })
-
-  //gettting books by status
-  const dispatch = useDispatch();
 
   //filter the saved books by status
   let currentBooks = mybooks.filter(
@@ -44,13 +41,24 @@ const UserProfile = (props) => {
   let futureRead = mybooks.filter((book) => book.status === "To Read");
   let completed = mybooks.filter((book) => book.status === "Completed");
 
+  // Loading fonts:
+   const [loaded] = useFonts({
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+    'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+  });
+
+  // For when font can't load:
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
+      <ImageBackground source={img} style={styles.backgroundImg}>
       <ScrollView style={styles.scrollView}>
-        <View style={styles.navbar}>
+        <View>
           <TouchableOpacity
-            style={styles.navbar}
-            style={{ alignItems: "flex-end", margin: 16 }}
+            style={styles.nav}
             onPress={props.navigation.openDrawer}
           >
             <Icon name='bars' size={24} color='#161924' />
@@ -58,12 +66,9 @@ const UserProfile = (props) => {
         </View>
 
         <View>
-          <Text style={styles.heading}>My Bookshelf</Text>
+          <Text style={styles.heading}>{`${username}'s Bookshelf`}</Text>
         </View>
 
-        {/* <View>
-                <Text style={styles.text}>My Bookshelf</Text>
-                </View> */}
         <View>
           <Text>{props.id}</Text>
           <Text style={styles.text}>Currently Reading</Text>
@@ -71,8 +76,8 @@ const UserProfile = (props) => {
             <View style={styles.bookList}>
               {currentBooks.length > 0 ? (
                 currentBooks.map((book, idx) => (
+                  <Card key={idx} style={styles.cardContainer}>
                   <TouchableOpacity
-                    key={idx}
                     onPress={() => {
                       props.navigation.navigate("SingleBookView", {
                         usedb: true,
@@ -80,21 +85,22 @@ const UserProfile = (props) => {
                         userId: Number(props.route.params.userId),
                       });
                     }}
-                  >
-                    <View style={styles.bookData}>
-                      <Image
+                  >           
+                      <Card.Cover
                         alt={book.book.title}
-                        style={{ width: 100, height: 150 }}
+                        style={styles.image}
                         source={{
                           uri: book.book.image,
                         }}
                       />
-                      <Text>{book.book.title}</Text>
-                    </View>
+                    <Card.Content> 
+                      <Title style={styles.title}>{book.book.title}</Title>
+                    </Card.Content>
                   </TouchableOpacity>
+                  </Card>
                 ))
               ) : (
-                <Text>No books</Text>
+                <Text style={styles.text}>No books</Text>
               )}
             </View>
           </ScrollView>
@@ -106,8 +112,8 @@ const UserProfile = (props) => {
             <View style={styles.bookList}>
               {futureRead.length > 0 ? (
                 futureRead.map((book, idx) => (
+                  <Card key={idx} style={styles.cardContainer}>
                   <TouchableOpacity
-                    key={idx}
                     onPress={() => {
                       props.navigation.navigate("SingleBookView", {
                         usedb: true,
@@ -115,21 +121,22 @@ const UserProfile = (props) => {
                         userId: Number(props.route.params.userId),
                       });
                     }}
-                  >
-                    <View style={styles.bookData}>
-                      <Image
+                  >           
+                      <Card.Cover
                         alt={book.book.title}
-                        style={{ width: 100, height: 150 }}
+                        style={styles.image}
                         source={{
                           uri: book.book.image,
                         }}
                       />
-                      <Text>{book.book.title}</Text>
-                    </View>
+                    <Card.Content> 
+                      <Title style={styles.title}>{book.book.title}</Title>
+                    </Card.Content>
                   </TouchableOpacity>
+                  </Card>
                 ))
               ) : (
-                <Text>No books</Text>
+                <Text style={styles.text}>No books</Text>
               )}
             </View>
           </ScrollView>
@@ -141,81 +148,103 @@ const UserProfile = (props) => {
             <View style={styles.bookList}>
               {completed.length > 0 ? (
                 completed.map((book, idx) => (
+                  <Card key={idx} style={styles.cardContainer}>
                   <TouchableOpacity
-                    key={idx}
                     onPress={() => {
-                      props.navigation.navigate(
-                        "SingleBookView",
-
-                        {
-                          usedb: true,
-                          book: book.book,
-                          userId: Number(props.route.params.userId),
-                        }
-                      );
+                      props.navigation.navigate("SingleBookView", {
+                        usedb: true,
+                        book: book.book,
+                        userId: Number(props.route.params.userId),
+                      });
                     }}
-                  >
-                    <View style={styles.bookData}>
-                      <Image
+                  >           
+                      <Card.Cover
                         alt={book.book.title}
-                        style={{ width: 100, height: 150 }}
+                        style={styles.image}
                         source={{
                           uri: book.book.image,
                         }}
                       />
-                      <Text>{book.book.title}</Text>
-                    </View>
+                    <Card.Content> 
+                      <Title style={styles.title}>{book.book.title}</Title>
+                    </Card.Content>
                   </TouchableOpacity>
+                  </Card>
                 ))
               ) : (
-                <Text>No books</Text>
+                <Text style={styles.text}>No books</Text>
               )}
             </View>
           </ScrollView>
         </View>
       </ScrollView>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingTop: StatusBar.currentHeight,
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: "center",
+    backgroundColor: '#fff',
+  },
+  scrollView: {
+    marginHorizontal: 1,
+    width: WIDTH,
+  },
+  nav: {
+    alignItems: 'flex-end', 
+    margin: 16,
+  },
+  backgroundImg:{
+    resizeMode: 'stretch',
   },
   heading: {
-    fontSize: 40,
+    fontSize: 30,
     margin: 0,
-  },
-  content: {
-    marginTop: 20,
-    flexDirection: "row",
-    width: "80%",
-    height: 35,
-    borderRadius: 50,
-    borderWidth: 1.5,
-    alignItems: "center",
-    paddingTop: 5,
-  },
-  bookList: {
-    flexDirection: "row",
+    alignSelf: 'center',
+    fontFamily: 'Roboto-Regular',
   },
   text: {
     fontSize: 20,
+    fontFamily: 'Roboto-Light', 
+    marginBottom: 20,
+    alignSelf: 'center',
+    textAlign: 'center',
   },
-  bookData: {},
-  scrollView: {
-    backgroundColor: "#f0f8ff",
-    marginHorizontal: 1,
-    width: WIDTH - 20,
+  bookList: {
+    flexDirection: 'row',
+  },
+  cardContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    marginBottom: 20,
+    marginLeft: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 20
+  },
+  image: {
+    width: 250, 
+    height: 150, 
+    resizeMode: 'contain',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    alignSelf: "center",
   },
 });
 
 const mapState = (state) => ({
   books: state.books,
   userId: state.user.id,
+  username: state.user.username
 });
 
 const mapDispatch = (dispatch) => ({

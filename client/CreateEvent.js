@@ -20,6 +20,7 @@ import { postEvent } from "./store/events";
 
 const { width: WIDTH } = Dimensions.get("window");
 
+//CreateEvent Component
 class CreateEvent extends Component {
   constructor(props) {
     super(props);

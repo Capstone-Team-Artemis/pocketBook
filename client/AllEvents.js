@@ -29,8 +29,6 @@ export class AllEvents extends React.Component {
   async loadFonts() {
     await Font.loadAsync({
       // Load a font from a static resource
-      'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
-      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
       'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
     });
     this.setState({ fontsLoaded: true });

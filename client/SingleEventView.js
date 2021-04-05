@@ -31,9 +31,8 @@ export default class SingleEventView extends React.Component {
   async loadFonts() {
     await Font.loadAsync({
       // Load a font `Roboto` from a static resource
-      'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
-      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
       'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
     });
     this.setState({ fontsLoaded: true });
   }

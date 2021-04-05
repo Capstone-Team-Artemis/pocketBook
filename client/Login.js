@@ -14,6 +14,7 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from './context';
 import { useFonts } from 'expo-font';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login = (props) => {
   // Loading fonts:
@@ -41,149 +42,154 @@ const Login = (props) => {
   }
 
   return (
-    <ImageBackground
-      source={{ uri: 'https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg' }}
-      style={styles.background}
-      imageStyle={{
-        resizeMode: 'stretch',
-      }}
+    <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={false}
+      contentContainerStyle={styles.scrollContainer}
     >
-      <Formik
-        initialValues={{
-          email: '',
-          password: '',
-        }}
-        onSubmit={async (values) => {
-          // If user didn't input anything:
-          if (values.email === '' || values.password === '') {
-            Alert.alert('Error', 'Username and/or password cannot be empty.');
-          } else {
-            // If user did, axios call to lookup user login info
-            try {
-              let res = await axios.post(
-                'https://pocketbook-gh.herokuapp.com/auth/login/',
-                {
-                  email: values.email,
-                  password: values.password,
-                }
-              );
-              // handlePress = passes user info to function that will pass to RootNavigation's logIn function
-              handlePress({ user: res.data });
-              // If user info is invalid:
-            } catch {
-              Alert.alert(
-                'Error',
-                'Incorrect username or password. Please try again.'
-              );
-            }
-          }
+      <ImageBackground
+        source={{ uri: 'https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg' }}
+        style={styles.background}
+        imageStyle={{
+          resizeMode: 'stretch',
         }}
       >
-        {(props) => (
-          <View>
-            {/* Icon Image */}
-            <Image
-              source={{
-                uri: 'https://i.ibb.co/Gn9bqym/pocketbook-icon.png',
-              }}
-              style={styles.image}
-            />
-            <Text style={styles.heading}>Login</Text>
-            <Text style={{ marginLeft: 20, fontFamily: 'Roboto-Light' }}>
-              Welcome back to Pocketbook!
-            </Text>
-
-            {/* Email Address Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                label="Email"
-                selectionColor="#000"
-                style={styles.inputText}
-                theme={{
-                  colors: { primary: '#000', placeholder: '#000' },
-                  fonts: { regular: { fontFamily: 'Roboto-Light' } },
-                }}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                onChangeText={props.handleChange('email')}
-                value={props.values.email}
-                left={<TextInput.Icon name="account-circle" />}
-              />
-            </View>
-
-            {/* Password Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                label="Password"
-                style={styles.inputText}
-                theme={{
-                  colors: {
-                    primary: '#000',
-                    placeholder: '#000',
-                  },
-                  fonts: { regular: { fontFamily: 'Roboto-Light' } },
-                }}
-                secureTextEntry={secureTextEntry ? true : false}
-                returnKeyType="go"
-                onChangeText={props.handleChange('password')}
-                value={props.values.password}
-                left={<TextInput.Icon name="lock" />}
-              />
-              {/* Adds eye button that toggles whether password input is hidden or not */}
-              <TouchableOpacity
-                style={styles.btnEye}
-                onPress={updateSecureTextEntry}
-              >
-                <Icon
-                  name={secureTextEntry ? 'eye' : 'eye-slash'}
-                  size={20}
-                  color={'#000'}
-                />
-              </TouchableOpacity>
-            </View>
-
-            {/* Login Button */}
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <Button
-                mode="contained"
-                style={styles.submitContainer}
-                onPress={props.handleSubmit}
-              >
-                <Text style={styles.submitText}>Login</Text>
-              </Button>
-            </View>
-          </View>
-        )}
-      </Formik>
-      {/* Don't have an account? Navigates to Sign Up component */}
-      <View style={styles.navContainer}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>
-          Don't have an account?
-        </Text>
-        <Text
-          style={[
-            {
-              color: '#Ef5c2b',
-              fontFamily: 'Roboto-Medium',
-            },
-            { marginLeft: 3 },
-          ]}
-          onPress={() =>
-            props.navigation.navigate('SignUp', { loggedIn: false })
-          }
+        <Formik
+          initialValues={{
+            email: '',
+            password: '',
+          }}
+          onSubmit={async (values) => {
+            // If user didn't input anything:
+            if (values.email === '' || values.password === '') {
+              Alert.alert('Error', 'Username and/or password cannot be empty.');
+            } else {
+              // If user did, axios call to lookup user login info
+              try {
+                let res = await axios.post(
+                  'https://pocketbook-gh.herokuapp.com/auth/login/',
+                  {
+                    email: values.email,
+                    password: values.password,
+                  }
+                );
+                // handlePress = passes user info to function that will pass to RootNavigation's logIn function
+                handlePress({ user: res.data });
+                // If user info is invalid:
+              } catch {
+                Alert.alert(
+                  'Error',
+                  'Incorrect username or password. Please try again.'
+                );
+              }
+            }
+          }}
         >
-          Sign Up!
-        </Text>
-      </View>
-    </ImageBackground>
+          {(props) => (
+            <View>
+              {/* Icon Image */}
+              <Image
+                source={{
+                  uri: 'https://i.ibb.co/Gn9bqym/pocketbook-icon.png',
+                }}
+                style={styles.image}
+              />
+              <Text style={styles.heading}>Login</Text>
+              <Text style={{ marginLeft: 20, fontFamily: 'Roboto-Light' }}>
+                Welcome back to Pocketbook!
+              </Text>
+
+              {/* Email Address Input */}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  label="Email"
+                  selectionColor="#000"
+                  style={styles.inputText}
+                  theme={{
+                    colors: { primary: '#000', placeholder: '#000' },
+                    fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                  }}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  onChangeText={props.handleChange('email')}
+                  value={props.values.email}
+                  left={<TextInput.Icon name="email" />}
+                />
+              </View>
+
+              {/* Password Input */}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  label="Password"
+                  style={styles.inputText}
+                  theme={{
+                    colors: {
+                      primary: '#000',
+                      placeholder: '#000',
+                    },
+                    fonts: { regular: { fontFamily: 'Roboto-Light' } },
+                  }}
+                  secureTextEntry={secureTextEntry ? true : false}
+                  returnKeyType="go"
+                  onChangeText={props.handleChange('password')}
+                  value={props.values.password}
+                  left={<TextInput.Icon name="lock" />}
+                />
+                {/* Adds eye button that toggles whether password input is hidden or not */}
+                <TouchableOpacity
+                  style={styles.btnEye}
+                  onPress={updateSecureTextEntry}
+                >
+                  <Icon
+                    name={secureTextEntry ? 'eye' : 'eye-slash'}
+                    size={20}
+                    color={'#000'}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              {/* Login Button */}
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                  mode="contained"
+                  style={styles.submitContainer}
+                  onPress={props.handleSubmit}
+                >
+                  <Text style={styles.submitText}>Login</Text>
+                </Button>
+              </View>
+            </View>
+          )}
+        </Formik>
+        {/* Don't have an account? Navigates to Sign Up component */}
+        <View style={styles.navContainer}>
+          <Text style={{ fontFamily: 'Roboto-Light' }}>
+            Don't have an account?
+          </Text>
+          <Text
+            style={[
+              {
+                color: '#Ef5c2b',
+                fontFamily: 'Roboto-Medium',
+              },
+              { marginLeft: 3 },
+            ]}
+            onPress={() =>
+              props.navigation.navigate('SignUp', { loggedIn: false })
+            }
+          >
+            Sign Up!
+          </Text>
+        </View>
+      </ImageBackground>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
   },
   image: {
     width: 100,
@@ -236,6 +242,10 @@ const styles = StyleSheet.create({
   background: {
     width: '100%',
     height: '100%',
+  },
+  scrollContainer: {
+    backgroundColor: '#FFF',
+    flexGrow: 1,
   },
 });
 

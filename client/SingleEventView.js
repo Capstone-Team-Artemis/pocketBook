@@ -113,7 +113,6 @@ export default class SingleEventView extends React.Component {
                 onPress={() => {
                   this.props.navigation.navigate('Chat', {
                     title: eventTitle,
-                    eventId: id,
                   });
                 }}
                 color="#E92228"

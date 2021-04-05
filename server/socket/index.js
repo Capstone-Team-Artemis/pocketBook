@@ -8,8 +8,8 @@ module.exports = (io) => {
 
     //setting up rooms
     socket.on('room', async (room) => {
-      console.log('ROOM BACKEND', room);
       await socket.join(room);
+      console.log('Joined room', room);
     });
 
     socket.on('leaveRoom', (room) => {
@@ -20,17 +20,14 @@ module.exports = (io) => {
 
     //step2: taking in msg(this.state.chatmessage from the front end) then it runs line 9
     socket.on('chat message', (msg) => {
-      console.log('in message backend: ', msg[0]);
-      // let roomId = msg[0].eventId.toString();
-      let eventTitle = msg[0].eventTitle;
-      console.log('event title-->', eventTitle);
-      //send messages to everyone except the one just joined
-      // socket.broadcast.emit('messages');
+      let message = msg[0]
+      let eventTitle = message.eventTitle
 
-      //step3: emiting the messages event to all the users and passing msg
-      // *******
-      io.to(eventTitle).emit('messages', msg[0]);
-      // io.emit('messages', msg[0]);
+      //send messages to everyone except the one just joined
+      socket.broadcast.emit('messages');
+
+      //step3: emiting the messages event to all the users and passing msg in the same room
+      io.to(eventTitle).emit('messages', message);
     });
 
     //user disconnected?
@@ -40,10 +37,4 @@ module.exports = (io) => {
   });
 };
 
-// io.on('connection', socket => {
-//   console.log(`A socket connection to the server has been made: ${socket.id}`)
 
-//   socket.on('disconnect', () => {
-//     console.log(`Connection ${socket.id} has left the building`)
-//   })
-// })

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -8,6 +8,7 @@ import {
   StatusBar,
   Dimensions,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -17,8 +18,10 @@ import { useFonts } from 'expo-font';
 
 const { width: WIDTH } = Dimensions.get("window");
 
+const img = { uri: "https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg"}
+
 const UserProfile = (props) => {
-  console.log("props in userprofile component", props.username)
+
   //hardcode it to 1 since no user loged in
 
   let id = props.userId || 4;
@@ -49,27 +52,9 @@ const UserProfile = (props) => {
     return null;
   }
 
-//  const getColor = (bookTitle) => {
-//     let sumChars = 0;
-//     for(let i = 0;i < bookTitle.length; i++){
-//       sumChars += bookTitle.charCodeAt(i);
-//     }
-
-//     const colors = [
-//       '#Ef5c2b', // flamingo
-//       '#2ecc71', // emerald
-//       '#e74c3c', // alizarin
-//       '#16a085', // green tea
-//       '#002850', // dark blue
-//       '#6646ee', // purple
-//     ];
-//     return colors[sumChars % colors.length];
-
-//{backgroundColor: getColor(book.book.title)
-// }
-
   return (
     <SafeAreaView style={styles.container}>
+      <ImageBackground source={img} style={styles.backgroundImg}>
       <ScrollView style={styles.scrollView}>
         <View>
           <TouchableOpacity
@@ -84,9 +69,6 @@ const UserProfile = (props) => {
           <Text style={styles.heading}>{`${username}'s Bookshelf`}</Text>
         </View>
 
-        {/* <View>
-                <Text style={styles.text}>My Bookshelf</Text>
-                </View> */}
         <View>
           <Text>{props.id}</Text>
           <Text style={styles.text}>Currently Reading</Text>
@@ -196,45 +178,48 @@ const UserProfile = (props) => {
           </ScrollView>
         </View>
       </ScrollView>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingTop: StatusBar.currentHeight,
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: "center",
+    backgroundColor: '#fff',
   },
   scrollView: {
-    backgroundColor: "#fff",
     marginHorizontal: 1,
-    width: WIDTH - 20,
+    width: WIDTH,
   },
   nav: {
-    alignItems: "flex-end", 
-    margin: 16
+    alignItems: 'flex-end', 
+    margin: 16,
+  },
+  backgroundImg:{
+    resizeMode: 'stretch',
   },
   heading: {
     fontSize: 30,
     margin: 0,
-    alignSelf: "center",
+    alignSelf: 'center',
     fontFamily: 'Roboto-Regular',
   },
   text: {
     fontSize: 20,
     fontFamily: 'Roboto-Light', 
     marginBottom: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
     textAlign: 'center',
   },
   bookList: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   cardContainer: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
     marginBottom: 20,

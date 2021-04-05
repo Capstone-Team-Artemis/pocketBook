@@ -27,12 +27,8 @@ class Chat extends Component {
     this.renderSend.bind(this)
   }
   componentDidMount() {
-<<<<<<< HEAD
     // place ngrok or deployed link here! 
     this.socket = io('https://pocketbook-gh.herokuapp.com/', {
-=======
-    this.socket = io('http://928ab6865087.ngrok.io', {
->>>>>>> 486b7d8721a3e4c9217496ce1c3462f08eab13aa
       transports: ['websocket'],
       jsonp: false,
     });
@@ -63,18 +59,11 @@ class Chat extends Component {
     // let eventId = this.props.route.params.eventId;
     let eventTitle = this.props.route.params.title;
     let submittedMessage = message[0];
-    // let addRoom = { ...submittedMessage, eventId };
     let addRoom = { ...submittedMessage, eventTitle };
 
     let newMessage = [];
     newMessage.push(addRoom);
     //step1: socket is emitting chat message to the backend line6 of index.js
-    let eventTitle = this.props.route.params.title
-    let submittedMessage = message[0]
-    let addRoom = {...submittedMessage, eventTitle}
-
-    let newMessage = []
-    newMessage.push(addRoom)
     this.socket.emit('chat message', newMessage);
 
     this.setState((previousMessages) =>

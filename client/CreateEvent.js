@@ -97,13 +97,13 @@ class CreateEvent extends Component {
       contentContainerStyle={styles.scrollContainer}
     >
       <SafeAreaView style={styles.container}>
-      <ImageBackground source={{ uri: 'https://i.ibb.co/3cP8BQC/booksignupscreen.jpg' }} style={styles.backgroundImg} >
+      {/* <ImageBackground source={{ uri: 'https://i.ibb.co/3cP8BQC/booksignupscreen.jpg' }} style={styles.backgroundImg} > */}
         
         {/* navigation bar */}
         <View style={styles.navbar}>
         <Image
           source={{
-          uri: 'https://i.ibb.co/yWQvLJL/POCKETBOOK-1-IN-01.png',
+          uri: 'https://i.ibb.co/NmBN3gY/pocketbook-icon.png',
           }}
           style={styles.image}
         />
@@ -191,7 +191,7 @@ class CreateEvent extends Component {
           <Text style={styles.submitText}>Go Back</Text>
           </Button> */}
         </View>
-        </ImageBackground>
+        {/* </ImageBackground> */}
       </SafeAreaView>
       </KeyboardAwareScrollView>
     );
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fff'
   },
   backgroundImg:{
     width: '100%',
@@ -213,16 +214,16 @@ const styles = StyleSheet.create({
   image: {
     marginTop: 20,
     marginBottom: -50,
-    width: 180,
-    height: 100,
-    left: -77
+    width: 90,
+    height: 80,
+    left: -150
   },
   navbar: {
     top: -50,
     marginBottom: -10,
     paddingLeft: 300,
     alignItems: "center",
-    //backgroundColor: '#6646ee'
+    backgroundColor: '#EF5C2B'
   },
   arrow: {
     left: -310,
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: '#fff',
-    fontFamily: 'Roboto-Light',
+    fontFamily: 'Roboto-Regular',
     fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',

@@ -4,7 +4,6 @@ import {
   View,
   SafeAreaView,
   Dimensions,
-  TouchableHighlight,
   TouchableOpacity,
   Alert,
   ImageBackground,
@@ -17,6 +16,7 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { TextInput, Button } from 'react-native-paper'
 // import thunk
 import { postEvent } from "./store/events";
+import * as Font from 'expo-font';
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -34,15 +34,29 @@ class CreateEvent extends Component {
       endTime: new Date(),
       description: "",
       hostId: path.hostId ? path.hostId : id,
+      fontsLoaded: false,
     };
     this.handleSubmit.bind(this);
     this.handleGoBack.bind(this);
   }
 
+  async loadFonts() {
+    await Font.loadAsync({
+      // Load a font `Montserrat` from a static resource
+      'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+    });
+    this.setState({ fontsLoaded: true });
+  }
+
+  componentDidMount() {
+    this.loadFonts();
+  }
+
   async handleSubmit() {
     try {
       await this.props.create({
-        ...this.state,
+        eventTitle: this.state.eventTitle,
         date: this.state.date,
         startTime: this.state.startTime.toLocaleTimeString("en", {
           hour: "2-digit",
@@ -54,6 +68,8 @@ class CreateEvent extends Component {
           minute: "2-digit",
           hour12: false,
         }),
+        description: this.state.description,
+        hostId: this.state.hostId,
       });
       this.setState({
         eventTitle: "",
@@ -172,8 +188,8 @@ const description = { height: 170 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   backgroundImg:{
     width: '100%',
@@ -190,15 +206,17 @@ const styles = StyleSheet.create({
     paddingLeft: 300,
   },
   heading: {
-    fontSize: 40,
-    textAlign: 'center'
+    fontSize: 35,
+    textAlign: 'center',
+    fontFamily: 'Roboto-Light'
   },
   input: {
     width: WIDTH - 45,
     height: 55,
     marginTop: 20,
     backgroundColor: "#fff",
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontFamily: 'Roboto-Light'
   },
   button: {
     width: 200,
@@ -209,10 +227,11 @@ const styles = StyleSheet.create({
     borderRadius: 350,
   },
   submitText: {
-    color: "white",
+    color: '#fff',
+    fontFamily: 'Roboto-Light',
     fontSize: 15,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     bottom: 2,
   },
 });

@@ -17,6 +17,7 @@ import * as Font from 'expo-font';
 // import thunk 
 import { deleteEvent } from './store/events';
 
+//SingleEvent component
 class SingleEvent extends React.Component {
   constructor(props) {
     super(props);
@@ -130,7 +131,7 @@ class SingleEvent extends React.Component {
               <View style={styles.registerButtonContainer}>
                 {user === event.hostId ? (
                   <Button
-                  onPress={() => {
+   onPress={() => {
                     this.openTwoButtonAlert();
                   }}
                   color="black"

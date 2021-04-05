@@ -21,7 +21,7 @@ class Chat extends React.Component {
   }
   componentDidMount() {
     // Place ngrok or deployed link here!
-    this.socket = io('http://50abb4f90cc0.ngrok.io', {
+    this.socket = io('http://5614549b9dee.ngrok.io', {
       transports: ['websocket'],
       jsonp: false,
     });

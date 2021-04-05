@@ -6,7 +6,6 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
-  ImageBackground,
   Image,
 } from "react-native";
 import React, { Component } from "react";
@@ -20,7 +19,9 @@ import * as Font from 'expo-font';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { width: WIDTH } = Dimensions.get("window");
-
+const { height: HEIGHT } = Dimensions.get("window");
+console.log(WIDTH)
+console.log(HEIGHT)
 //CreateEvent Component
 class CreateEvent extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class CreateEvent extends Component {
 
   async loadFonts() {
     await Font.loadAsync({
-      // Load a font `Montserrat` from a static resource
+      'Asap-Bold': require('../assets/fonts/Asap-Bold.ttf'),
       'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
       'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
     });
@@ -97,10 +98,9 @@ class CreateEvent extends Component {
       contentContainerStyle={styles.scrollContainer}
     >
       <SafeAreaView style={styles.container}>
-      {/* <ImageBackground source={{ uri: 'https://i.ibb.co/3cP8BQC/booksignupscreen.jpg' }} style={styles.backgroundImg} > */}
         
-        {/* navigation bar */}
-        <View style={styles.navbar}>
+        {/* top bar */}
+        <View style={styles.topBar}>
         <Image
           source={{
           uri: 'https://i.ibb.co/NmBN3gY/pocketbook-icon.png',
@@ -108,14 +108,15 @@ class CreateEvent extends Component {
           style={styles.image}
         />
 
+        {/* Go-back button */}
           <TouchableOpacity style={styles.arrow} onPress={() => this.handleGoBack()}>
           <Icon name='arrow-left' size={24} color='#161924' />
           </TouchableOpacity>
           
+          {/* nav bar */}
           <TouchableOpacity
-            // style={styles.navbar}
-            // style={{  margin: 10 }}
             onPress={this.props.navigation.openDrawer}
+            style={styles.threeBar}
           >
             <Icon name='bars' size={24} color='#161924' />
           </TouchableOpacity>
@@ -128,13 +129,20 @@ class CreateEvent extends Component {
           <TextInput
             value={this.state.eventTitle}
             style={styles.input}
+            mode='outlined'
             label="Title"
             multiline = {true}
+            theme={{
+              colors: { primary: '#6646ee', placeholder: '#6646ee' },
+              fonts: { regular: { fontFamily: 'Roboto-Light' } },
+            }}
+            left={<TextInput.Icon name="heart" />}
             onChangeText={(eventTitle) => {
               this.setState({ eventTitle });
             }}
           ></TextInput>
 
+          <Text></Text>
           <RNDateTimePicker
             value={this.state.date}
             type = {'outlined'}
@@ -173,7 +181,13 @@ class CreateEvent extends Component {
             style={[styles.input, description]}
             multiline = {true}
             error={true}
+            mode='outlined'
             label="Description"
+            theme={{
+              colors: { primary: 'E92228', placeholder: 'E92228' },
+              fonts: { regular: { fontFamily: 'Roboto-Light' } },
+            }}
+            left={<TextInput.Icon name="star" />}
             onChangeText={(description) => {
               this.setState({ description });
             }}
@@ -191,7 +205,6 @@ class CreateEvent extends Component {
           <Text style={styles.submitText}>Go Back</Text>
           </Button> */}
         </View>
-        {/* </ImageBackground> */}
       </SafeAreaView>
       </KeyboardAwareScrollView>
     );
@@ -201,39 +214,46 @@ class CreateEvent extends Component {
 const description = { height: 170 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: '#FFF',
+    flexGrow: 1,
+  },
   container: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff'
   },
-  backgroundImg:{
-    width: '100%',
-    height: '100%',
-    resizeMode: 'stretch',
-  },
+  //   resizeMode: 'stretch',
   image: {
     marginTop: 20,
     marginBottom: -50,
-    width: 90,
-    height: 80,
-    left: -150
+    width: 35,
+    height: 50,
+    left: -150,
+    top: 30
   },
-  navbar: {
+  topBar: {
     top: -50,
     marginBottom: -10,
     paddingLeft: 300,
     alignItems: "center",
-    backgroundColor: '#EF5C2B'
+    backgroundColor: '#EF5C2B',
+    height: 100,
+    width: WIDTH
   },
   arrow: {
     left: -310,
-    bottom: -23
+    bottom: -50
+  },
+  threeBar: {
+    right: -10,
+    bottom: -25
   },
   heading: {
     top: -20,
     fontSize: 35,
     textAlign: 'center',
-    fontFamily: 'Roboto-Light'
+    fontFamily: 'Asap-Bold'
   },
   input: {
     width: WIDTH - 45,
@@ -250,6 +270,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E92228',
     marginTop: 30,
     borderRadius: 350,
+    fontFamily: 'Roboto-Regular'
   },
   submitText: {
     color: '#fff',
@@ -258,6 +279,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     bottom: 2,
+  },
+  errorMsg: {
+    marginTop: 15,
+    color: '#E92228',
+    fontSize: 12,
+    marginBottom: -5,
+    fontFamily: 'Roboto-Light',
   },
 });
 

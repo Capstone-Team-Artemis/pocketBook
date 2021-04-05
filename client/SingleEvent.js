@@ -7,12 +7,12 @@ import {
   Button,
   Image,
   TouchableOpacity,
-} from "react-native";
-import { connect } from "react-redux";
-import React from "react";
-import axios from "axios";
-import { DateTime } from "luxon";
-import { deleteEvent } from "./store/events";
+} from 'react-native';
+import { connect } from 'react-redux';
+import React from 'react';
+import axios from 'axios';
+import { DateTime } from 'luxon';
+import { deleteEvent } from './store/events';
 
 //SingleEvent component
 class SingleEvent extends React.Component {
@@ -59,14 +59,14 @@ class SingleEvent extends React.Component {
 
   openTwoButtonAlert = () => {
     Alert.alert(
-      "Delete Event",
-      "Are you sure you want to delete this event?",
+      'Delete Event',
+      'Are you sure you want to delete this event?',
       [
-        { text: "Delete", onPress: () => this.handleDelete() },
+        { text: 'Delete', onPress: () => this.handleDelete() },
         {
-          text: "Cancel",
-          onPress: () => console.log("No button clicked"),
-          style: "cancel",
+          text: 'Cancel',
+          onPress: () => console.log('No button clicked'),
+          style: 'cancel',
         },
       ],
       {
@@ -91,11 +91,12 @@ class SingleEvent extends React.Component {
 
     return (
       <TouchableOpacity
-        onPress={() => navigate.navigate("SingleEventView", event)}
+        onPress={() => navigate.navigate('SingleEventView', event)}
       >
         <View style={styles.listContainer} key={event.id}>
           {/* Adds book image for each event */}
-          <Image source={{}} style={styles.image} />
+
+          <Image source={{ uri: event.image }} style={styles.image} />
           {/* Adds event info for each event */}
           <View style={styles.eventData}>
             <Text style={styles.eventTitle}>{event.eventTitle}</Text>
@@ -112,24 +113,24 @@ class SingleEvent extends React.Component {
               {user === event.hostId ? (
                 <Button
                   // 'Edit/Delete' button takes you to EditEvent page (ternary off of CreateEvent page)
-                  title={"Delete Event"}
+                  title={'Delete Event'}
                   onPress={() => {
                     this.openTwoButtonAlert();
                   }}
-                  color='white'
-                  accessibilityLabel='Status'
+                  color="white"
+                  accessibilityLabel="Status"
                 />
               ) : (
                 <Button
                   // check the event obj to see if logged-in user exists in the associated user array
                   // if user exists, that means user is attending and button should give 'Unregister' option
                   // else, the user isn't registered and should have the button option to 'Register' for the event
-                  title={event.users[0] ? "Unregister" : "Register"}
+                  title={event.users[0] ? 'Unregister' : 'Register'}
                   onPress={() => {
                     event.users[0] ? this.unregister() : this.register();
                   }}
-                  color='white'
-                  accessibilityLabel='Status'
+                  color="white"
+                  accessibilityLabel="Status"
                 />
               )}
             </View>
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 20,
     marginBottom: 2,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   date: {
     fontSize: 15,
@@ -172,9 +173,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   listContainer: {
-    flexDirection: "row",
-    borderStyle: "solid",
-    borderColor: "black",
+    flexDirection: 'row',
+    borderStyle: 'solid',
+    borderColor: 'black',
     borderWidth: 1,
     marginBottom: 15,
     marginTop: 15,
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   registerButtonContainer: {
-    backgroundColor: "#6475a5",
+    backgroundColor: '#6475a5',
     borderRadius: 15,
     padding: 0.8,
     width: 130,

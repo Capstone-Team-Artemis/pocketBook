@@ -13,6 +13,7 @@ import {
 import { connect, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getBooks } from "./store/books";
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -61,9 +62,6 @@ const UserProfile = (props) => {
           <Text style={styles.heading}>My Bookshelf</Text>
         </View>
 
-        {/* <View>
-                <Text style={styles.text}>My Bookshelf</Text>
-                </View> */}
         <View>
           <Text>{props.id}</Text>
           <Text style={styles.text}>Currently Reading</Text>
@@ -71,6 +69,9 @@ const UserProfile = (props) => {
             <View style={styles.bookList}>
               {currentBooks.length > 0 ? (
                 currentBooks.map((book, idx) => (
+
+                  <Card>
+
                   <TouchableOpacity
                     key={idx}
                     onPress={() => {
@@ -92,6 +93,8 @@ const UserProfile = (props) => {
                       <Text>{book.book.title}</Text>
                     </View>
                   </TouchableOpacity>
+                  
+                  </Card>
                 ))
               ) : (
                 <Text>No books</Text>

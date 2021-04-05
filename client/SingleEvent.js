@@ -4,11 +4,10 @@ import {
   Text,
   StyleSheet,
   View,
-  // Button,
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
 import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
@@ -111,50 +110,54 @@ class SingleEvent extends React.Component {
     );
     if (this.state.fontsLoaded) {
       return (
-        <TouchableOpacity
-          onPress={() => navigate.navigate('SingleEventView', event)}
-        >
-          <View style={styles.listContainer} key={event.id}>
-            {/* Adds book image for each event */}
-            <Image source={{ uri: event.image }} style={styles.image} />
-            {/* Adds event info for each event */}
-            <View style={styles.eventData}>
-              <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-              <Text style={styles.date}>Date: {formattedDate}</Text>
-              <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
-              <Text style={styles.time}>End Time: {formattedEndTime}</Text>
-              <Text style={styles.description}>
-                Description: {event.description}
-              </Text>
+        <Card style={styles.cardContainer}>
+          <TouchableOpacity
+            onPress={() => navigate.navigate('SingleEventView', event)}
+          >
+            <View style={styles.listContainer} key={event.id}>
+              {/* Adds book image for each event */}
+              <Card.Content style={styles.cardContent}>
+                  <Image source={{ uri: event.image }} style={styles.image} /> 
+                {/* Adds event info for each event */}
+                <View style={styles.eventData}>
+                  <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+                  <Text style={styles.date}>Date: {formattedDate}</Text>
+                  <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
+                  <Text style={styles.time}>End Time: {formattedEndTime}</Text>
+                  <Text style={styles.description}>
+                    Description: {event.description}
+                  </Text>
 
-              {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
-                          if not host, button can also say 'Un/Register' */}
-              <View style={styles.registerButtonContainer}>
-                {user === event.hostId ? (
-                  <Button
-                  onPress={() => {
-                    this.openTwoButtonAlert();
-                  }}
-                  color="white"
-                  accessibilityLabel="Status">
-                  <Text style={styles.deleteText}>Delete </Text>
-                  </Button>
-                ) : (
-                  <Button onPress={() => {
-                    event.users[0] ? this.unregister() : this.register();
-                  }}
-                  color="white"
-                  accessibilityLabel="Status">
-                    {/* // check the event obj to see if logged-in user exists in the associated user array
-                    // if user exists, that means user is attending and button should give 'Unregister' option
-                    // else, the user isn't registered and should have the button option to 'Register' for the event */}
-                    <Text style={styles.registerText}>{event.users[0] ? 'Unregister' : 'Register'} </Text>
-                  </Button>
-                )}
-              </View>
+                  {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                              if not host, button can also say 'Un/Register' */}
+                  <View style={styles.registerButtonContainer}>
+                    {user === event.hostId ? (
+                      <Button
+                      onPress={() => {
+                        this.openTwoButtonAlert();
+                      }}
+                      color="white"
+                      accessibilityLabel="Status">
+                      <Text style={styles.deleteText}>Delete </Text>
+                      </Button>
+                    ) : (
+                      <Button onPress={() => {
+                        event.users[0] ? this.unregister() : this.register();
+                      }}
+                      color="white"
+                      accessibilityLabel="Status">
+                        {/* // check the event obj to see if logged-in user exists in the associated user array
+                        // if user exists, that means user is attending and button should give 'Unregister' option
+                        // else, the user isn't registered and should have the button option to 'Register' for the event */}
+                        <Text style={styles.registerText}>{event.users[0] ? 'Unregister' : 'Register'} </Text>
+                      </Button>
+                    )}
+                  </View>
+                </View>
+              </Card.Content>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </Card>
       );
     } else {
       return null;
@@ -176,13 +179,12 @@ const styles = StyleSheet.create({
     width: 100,
     height: 160,
     marginTop: 10,
-    marginLeft: 10,
+    marginLeft: 3,
   },
   eventTitle: {
     fontSize: 20,
     marginBottom: 2,
     fontFamily: 'Roboto-Bold'
-
   },
   date: {
     fontSize: 15,
@@ -199,17 +201,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: 'Roboto-Regular'
   },
-  listContainer: {
-    flexDirection: 'row',
-    borderStyle: 'solid',
-    borderColor: '#Ef5c2b',
-    borderWidth: 1,
-    marginBottom: 15,
-    marginTop: 15,
-  },
   eventData: {
     padding: 10,
-    width: 250,
+    width: 200,
   },
   noEvents: {
     fontSize: 20,
@@ -226,8 +220,21 @@ const styles = StyleSheet.create({
     padding: 0.8,
     width: 135,
     height: 38,
-    marginLeft: 90,
+    marginTop: 10,
+    marginLeft: 50,
   },
+  cardContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 5,
+    marginTop: 20,
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  cardContent: {
+    flexDirection: 'row'
+  }
 });
 
 const mapDispatch = (dispatch) => {

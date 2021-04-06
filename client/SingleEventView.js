@@ -194,7 +194,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#24aae2',
     width: '100%',
-    height: '15%'
+    height: '15%',
+    alignItems: 'flex-end'
     },
   surface: {
     elevation: 5

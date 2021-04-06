@@ -88,7 +88,6 @@ const UserProfile = (props) => {
           <Text style={styles.heading}>{`${username}'s Bookshelf`}</Text>
         </View>
 
-        {/* <List.Section> */}
         <View>
           <Text>{props.id}</Text>
           <Text style={styles.text}>Currently Reading</Text>
@@ -131,9 +130,7 @@ const UserProfile = (props) => {
         </View>
 
         <View>
-          <View style={styles.title}>
           <Text style={styles.text}>To Read</Text>
-          </View>
           <ScrollView horizontal={true}>
             <View style={styles.bookList}>
               {futureRead.length > 0 ? (
@@ -211,7 +208,6 @@ const UserProfile = (props) => {
             </View>
           </ScrollView>
         </View>
-        {/* </List.Section> */}
       </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -278,7 +274,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    padding: 5
+    padding: 5,
+    width: 200
   },
   image: {
     width: 150, 

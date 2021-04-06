@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { Button, Card } from 'react-native-paper';
+import { Button, Card, Surface } from 'react-native-paper';
 import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
@@ -110,6 +110,7 @@ class SingleEvent extends React.Component {
     );
     if (this.state.fontsLoaded) {
       return (
+        <Surface style={styles.surface}>
         <Card style={styles.cardContainer}>
           <TouchableOpacity
             onPress={() => navigate.navigate('SingleEventView', event)}
@@ -121,11 +122,17 @@ class SingleEvent extends React.Component {
                 {/* Adds event info for each event */}
                 <View style={styles.eventData}>
                   <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-                  <Text style={styles.date}>Date: {formattedDate}</Text>
-                  <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
-                  <Text style={styles.time}>End Time: {formattedEndTime}</Text>
-                  <Text style={styles.description}>
-                    Description: {event.description}
+                  <Text style={styles.info}>Date: 
+                      <Text style={styles.innerText}>{` ${formattedDate}`}</Text>
+                  </Text>
+                  <Text style={styles.info}>Start Time: 
+                      <Text style={styles.innerText}>{` ${formattedStartTime}`}</Text>
+                  </Text>
+                  <Text style={styles.info}>End Time: 
+                      <Text style={styles.innerText}>{` ${formattedEndTime}`}</Text>
+                  </Text>
+                  <Text style={styles.info}>Description: 
+                    <Text style={styles.innerText}>{` ${event.description}`}</Text>
                   </Text>
 
                   {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
@@ -158,6 +165,7 @@ class SingleEvent extends React.Component {
             </View>
           </TouchableOpacity>
         </Card>
+        </Surface>
       );
     } else {
       return null;
@@ -183,23 +191,20 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     fontSize: 20,
-    marginBottom: 2,
+    marginBottom: 4,
     fontFamily: 'Roboto-Bold'
   },
-  date: {
+  info: {
+    fontFamily: 'Roboto-Regular',
+    color: '#E92228',
     fontSize: 15,
-    marginBottom: 5,
-    fontFamily: 'Roboto-Regular'
+    marginBottom: 5
   },
-  time: {
+  innerText: {
+    fontFamily: 'Roboto-Regular',
+    color: 'black',
     fontSize: 15,
-    marginBottom: 5,
-    fontFamily: 'Roboto-Regular'
-  },
-  description: {
-    fontSize: 15,
-    marginBottom: 5,
-    fontFamily: 'Roboto-Regular'
+    marginBottom: 5
   },
   eventData: {
     padding: 10,
@@ -228,12 +233,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 5,
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 20,
     marginLeft: 10,
     marginRight: 10
   },
   cardContent: {
     flexDirection: 'row'
+  },
+  surface: {
+    elevation: 15
   }
 });
 

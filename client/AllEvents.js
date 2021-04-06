@@ -29,6 +29,7 @@ export class AllEvents extends React.Component {
   async loadFonts() {
     await Font.loadAsync({
       // Load a font from a static resource
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
       'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
     });
     this.setState({ fontsLoaded: true });
@@ -45,21 +46,21 @@ export class AllEvents extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
-            {/* Adds Navbar */}
-            <TouchableOpacity
-              style={{ alignItems: 'flex-end', margin: 16 }}
-              onPress={this.props.navigation.openDrawer}
-            >
-              <Icon name="bars" size={24} color="#161924" />
-            </TouchableOpacity>
+              {/* Adds Navbar */}
+              <TouchableOpacity
+                style={{ alignItems: 'flex-end', margin: 16 }}
+                onPress={this.props.navigation.openDrawer}
+              >
+                <Icon name="bars" size={24} color="#161924" />
+              </TouchableOpacity>
             {/* Adds create event button */}
             <View style={styles.createButtonContainer}>
               <Button onPress={() => {
                   this.props.navigation.navigate('CreateEvent');
                 }}
-                color="black"
+                color="white"
                 accessibilityLabel="Create Event">
-                Create Event       
+                <Text style={styles.createText}>Create Event </Text>  
               </Button>
             </View>
             {/* Adds Dropdown menu */}
@@ -159,11 +160,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   createButtonContainer: {
-    backgroundColor: '#Faea26',
+    backgroundColor: '#Ef5c2b',
+    marginTop: 20,
     marginBottom: 20,
     borderRadius: 15,
     width: 150,
     height: 40,
+  },
+  createText: {
+    fontFamily: 'Roboto-Regular',
   },
   eventData: {
     padding: 10,

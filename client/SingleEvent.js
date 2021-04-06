@@ -4,11 +4,10 @@ import {
   Text,
   StyleSheet,
   View,
-  // Button,
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Card, Surface } from 'react-native-paper';
 import { connect } from 'react-redux';
 import React from 'react';
 import axios from 'axios';
@@ -37,6 +36,7 @@ class SingleEvent extends React.Component {
   async loadFonts() {
     await Font.loadAsync({
       // Load a font `Roboto` from a static resource
+      'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
       'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
       'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
     });
@@ -110,50 +110,62 @@ class SingleEvent extends React.Component {
     );
     if (this.state.fontsLoaded) {
       return (
-        <TouchableOpacity
-          onPress={() => navigate.navigate('SingleEventView', event)}
-        >
-          <View style={styles.listContainer} key={event.id}>
-            {/* Adds book image for each event */}
-            <Image source={{ uri: event.image }} style={styles.image} />
-            {/* Adds event info for each event */}
-            <View style={styles.eventData}>
-              <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-              <Text style={styles.date}>Date: {formattedDate}</Text>
-              <Text style={styles.time}>Start Time: {formattedStartTime}</Text>
-              <Text style={styles.time}>End Time: {formattedEndTime}</Text>
-              <Text style={styles.description}>
-                Description: {event.description}
-              </Text>
+        <Surface style={styles.surface}>
+        <Card style={styles.cardContainer}>
+          <TouchableOpacity
+            onPress={() => navigate.navigate('SingleEventView', event)}
+          >
+            <View style={styles.listContainer} key={event.id}>
+              {/* Adds book image for each event */}
+              <Card.Content style={styles.cardContent}>
+                  <Image source={{ uri: event.image }} style={styles.image} /> 
+                {/* Adds event info for each event */}
+                <View style={styles.eventData}>
+                  <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+                  <Text style={styles.info}>Date: 
+                      <Text style={styles.innerText}>{` ${formattedDate}`}</Text>
+                  </Text>
+                  <Text style={styles.info}>Start Time: 
+                      <Text style={styles.innerText}>{` ${formattedStartTime}`}</Text>
+                  </Text>
+                  <Text style={styles.info}>End Time: 
+                      <Text style={styles.innerText}>{` ${formattedEndTime}`}</Text>
+                  </Text>
+                  <Text style={styles.info}>Description: 
+                    <Text style={styles.innerText}>{` ${event.description}`}</Text>
+                  </Text>
 
-              {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
-                          if not host, button can also say 'Un/Register' */}
-              <View style={styles.registerButtonContainer}>
-                {user === event.hostId ? (
-                  <Button
-   onPress={() => {
-                    this.openTwoButtonAlert();
-                  }}
-                  color="black"
-                  accessibilityLabel="Status">
-                    Delete 
-                  </Button>
-                ) : (
-                  <Button onPress={() => {
-                    event.users[0] ? this.unregister() : this.register();
-                  }}
-                  color="black"
-                  accessibilityLabel="Status">
-                    {/* // check the event obj to see if logged-in user exists in the associated user array
-                    // if user exists, that means user is attending and button should give 'Unregister' option
-                    // else, the user isn't registered and should have the button option to 'Register' for the event */}
-                    {event.users[0] ? 'Unregister' : 'Register'}
-                  </Button>
-                )}
-              </View>
+                  {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                              if not host, button can also say 'Un/Register' */}
+                  <View style={styles.registerButtonContainer}>
+                    {user === event.hostId ? (
+                      <Button
+                      onPress={() => {
+                        this.openTwoButtonAlert();
+                      }}
+                      color="white"
+                      accessibilityLabel="Status">
+                      <Text style={styles.deleteText}>Delete </Text>
+                      </Button>
+                    ) : (
+                      <Button onPress={() => {
+                        event.users[0] ? this.unregister() : this.register();
+                      }}
+                      color="white"
+                      accessibilityLabel="Status">
+                        {/* // check the event obj to see if logged-in user exists in the associated user array
+                        // if user exists, that means user is attending and button should give 'Unregister' option
+                        // else, the user isn't registered and should have the button option to 'Register' for the event */}
+                        <Text style={styles.registerText}>{event.users[0] ? 'Unregister' : 'Register'} </Text>
+                      </Button>
+                    )}
+                  </View>
+                </View>
+              </Card.Content>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </Card>
+        </Surface>
       );
     } else {
       return null;
@@ -175,43 +187,37 @@ const styles = StyleSheet.create({
     width: 100,
     height: 160,
     marginTop: 10,
-    marginLeft: 10,
+    marginLeft: 3,
   },
   eventTitle: {
     fontSize: 20,
-    marginBottom: 2,
+    marginBottom: 4,
     fontFamily: 'Roboto-Bold'
-
   },
-  date: {
+  info: {
+    fontFamily: 'Roboto-Bold',
+    color: '#E92228',
     fontSize: 15,
-    marginBottom: 5,
-    fontFamily: 'Roboto-Regular'
+    marginBottom: 5
   },
-  time: {
+  innerText: {
+    fontFamily: 'Roboto-Regular',
+    color: 'black',
     fontSize: 15,
-    marginBottom: 5,
-    fontFamily: 'Roboto-Regular'
-  },
-  description: {
-    fontSize: 15,
-    marginBottom: 5,
-    fontFamily: 'Roboto-Regular'
-  },
-  listContainer: {
-    flexDirection: 'row',
-    borderStyle: 'solid',
-    borderColor: '#Ef5c2b',
-    borderWidth: 1,
-    marginBottom: 15,
-    marginTop: 15,
+    marginBottom: 5
   },
   eventData: {
     padding: 10,
-    width: 250,
+    width: 200,
   },
   noEvents: {
     fontSize: 20,
+  },
+  deleteText: {
+    fontFamily: 'Roboto-Regular',
+  },
+  registerText: {
+    fontFamily: 'Roboto-Regular',
   },
   registerButtonContainer: {
     backgroundColor: '#24aae2',
@@ -219,8 +225,24 @@ const styles = StyleSheet.create({
     padding: 0.8,
     width: 135,
     height: 38,
-    marginLeft: 90,
+    marginTop: 10,
+    marginLeft: 50,
   },
+  cardContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 5,
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  cardContent: {
+    flexDirection: 'row'
+  },
+  surface: {
+    elevation: 15
+  }
 });
 
 const mapDispatch = (dispatch) => {

@@ -12,7 +12,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { TextInput, Button } from 'react-native-paper'
+import { TextInput, Button, List} from 'react-native-paper'
 // import thunk
 import { postEvent } from "./store/events";
 import * as Font from 'expo-font';
@@ -20,8 +20,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const { width: WIDTH } = Dimensions.get("window");
 const { height: HEIGHT } = Dimensions.get("window");
-console.log(WIDTH)
-console.log(HEIGHT)
 //CreateEvent Component
 class CreateEvent extends Component {
   constructor(props) {
@@ -136,18 +134,20 @@ class CreateEvent extends Component {
               colors: { primary: '#6646ee', placeholder: '#6646ee' },
               fonts: { regular: { fontFamily: 'Roboto-Light' } },
             }}
-            left={<TextInput.Icon name="heart" />}
+            left={<TextInput.Icon name="heart" color='#6646ee'/>}
             onChangeText={(eventTitle) => {
               this.setState({ eventTitle });
             }}
           ></TextInput>
 
-          <Text></Text>
+          <List.Section>
+          <List.Item title="Date" style={styles.list} left={() => <List.Icon icon='calendar'/>} />
           <RNDateTimePicker
             value={this.state.date}
             type = {'outlined'}
             mode='date'
             display='default'
+            style={styles.picker}
             onChange={(event, selectedDate) =>
               this.setState({
                 date: selectedDate,
@@ -155,26 +155,32 @@ class CreateEvent extends Component {
             }
           />
 
+          <List.Item title="Start Time" style={styles.list} left={() => <List.Icon icon='clock-start'/>} />
           <RNDateTimePicker
             value={this.state.startTime}
             mode='time'
             display='default'
+            style={[styles.picker, timePicker]}
             onChange={(event, selectedTime) =>
               this.setState({
                 startTime: selectedTime,
               })
             }
           />
+
+          <List.Item title="End Time" style={styles.list}left={() => <List.Icon icon='clock-end'/>} />
           <RNDateTimePicker
             value={this.state.endTime}
             mode='time'
             display='default'
+            style={[styles.picker, timePicker]}
             onChange={(event, selectedTime) =>
               this.setState({
                 endTime: selectedTime,
               })
             }
           />
+          </List.Section>
 
           <TextInput
             value={this.state.description}
@@ -184,10 +190,10 @@ class CreateEvent extends Component {
             mode='outlined'
             label="Description"
             theme={{
-              colors: { primary: 'E92228', placeholder: 'E92228' },
+              colors: { primary: '#E92228', placeholder: '#E92228' },
               fonts: { regular: { fontFamily: 'Roboto-Light' } },
             }}
-            left={<TextInput.Icon name="star" />}
+            left={<TextInput.Icon name="star" color='#E92228'/>}
             onChangeText={(description) => {
               this.setState({ description });
             }}
@@ -212,6 +218,7 @@ class CreateEvent extends Component {
 }
 
 const description = { height: 170 };
+const timePicker = { right : -235}
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -263,6 +270,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontFamily: 'Roboto-Light'
   },
+  list:{
+    left: -15
+  },
+  picker: {
+    right: -211,
+    top: -52,
+    marginBottom: -65,
+  },
   button: {
     width: 200,
     alignSelf: 'center',
@@ -280,13 +295,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     bottom: 2,
   },
-  errorMsg: {
-    marginTop: 15,
-    color: '#E92228',
-    fontSize: 12,
-    marginBottom: -5,
-    fontFamily: 'Roboto-Light',
-  },
+  // errorMsg: {
+  //   marginTop: 15,
+  //   color: '#E92228',
+  //   fontSize: 12,
+  //   marginBottom: -5,
+  //   fontFamily: 'Roboto-Light',
+  // },
 });
 
 const mapState = (state) => {

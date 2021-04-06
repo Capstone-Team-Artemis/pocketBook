@@ -76,7 +76,7 @@ export default function LandingPage({ navigation, route }) {
           GOOGLE_API +
           // "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg" +
           // GOOGLE_API +
-          "&maxResults=25"
+          "&maxResults=15"
       )
       // Axios retrieves max list of 10 results
       .then((data) => {
@@ -197,6 +197,7 @@ export default function LandingPage({ navigation, route }) {
                       <View style={styles.bookList} style={styles.centeredView}>
                         {/* Map over "result" state and render each book object details */}
                         {result.map((book, idx) => {
+                          console.log("BOOK", book);
                           return (
                             <View key={idx}>
                               <TouchableOpacity
@@ -212,14 +213,19 @@ export default function LandingPage({ navigation, route }) {
                                   });
                                 }}
                               >
-                                <Image
-                                  alt={book.volumeInfo.title}
-                                  style={{ width: 100, height: 150 }}
-                                  source={{
-                                    uri:
-                                      book.volumeInfo.imageLinks.smallThumbnail,
-                                  }}
-                                />
+                                {book.volumeInfo.imageLinks.smallThumbnail ? (
+                                  <Image
+                                    alt={book.volumeInfo.title}
+                                    style={{ width: 100, height: 150 }}
+                                    source={{
+                                      uri:
+                                        book.volumeInfo.imageLinks
+                                          .smallThumbnail,
+                                    }}
+                                  />
+                                ) : (
+                                  "N/A"
+                                )}
 
                                 <Text style={styles.modalTitle}>
                                   {book.volumeInfo.title}

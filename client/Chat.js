@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
 import { connect } from 'react-redux';
+import { fetchUser } from './store/user';
 import { IconButton } from 'react-native-paper';
 import { io } from 'socket.io-client';
 
@@ -68,7 +69,7 @@ class Chat extends Component {
     );
   }
   //user get's different background color for their text message based on the number of characters of their username
-  getColor = () => {
+  getColor() {
     let username = this.props.userName;
     let sumChars = 0;
     for (let i = 0; i < username.length; i++) {
@@ -86,7 +87,7 @@ class Chat extends Component {
     return colors[sumChars % colors.length];
   }
 
-  scrollToBottomComponent = () => {
+  scrollToBottomComponent() {
     return (
       <View style={styles.bottomComponentContainer}>
         <IconButton icon="chevron-double-down" size={36} color="#24aae2" />
@@ -153,15 +154,13 @@ class Chat extends Component {
     );
   };
 
-  render = () => {
-    let user_Id = Number(this.props.userId) || 1
-
+  render() {
     return (
       <GiftedChat
         messages={this.state.messages}
         onSend={(message) => this.submitChatMessage(message)}
         user={{
-          id: user_Id || 1,
+          _id: this.props.userId,
           name: this.props.userName,
           avatar: this.props.image,
         }}
@@ -186,13 +185,14 @@ const mapState = (state) => {
   };
 };
 
-// const mapDispatch = (dispatch) => {
-//   return {
-//     getUser: (userId) => dispatch(fetchUser(userId)),
-//   };
-// };
+const mapDispatch = (dispatch) => {
+  return {
+    getUser: (userId) => dispatch(fetchUser(userId)),
+  };
+};
 
-export default connect(mapState)(Chat);
+// export default Chat;
+export default connect(mapState, mapDispatch)(Chat);
 
 const styles = StyleSheet.create({
   sendingContainer: {

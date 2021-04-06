@@ -24,6 +24,7 @@ export default function LandingPage({ navigation, route }) {
     "Asap-Bold": require("../assets/fonts/Asap-Bold.ttf"),
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
     "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
   });
 
   const [book, setBook] = useState("");
@@ -40,9 +41,9 @@ export default function LandingPage({ navigation, route }) {
           {
             //breaking up params can help with entering in different inputs for keys below and easier to see the params
             params: {
-              q: "puppies",
+              q: "food",
               key: GOOGLE_API,
-              orderBy: "relevance",
+              orderBy: "newest",
             },
           }
         );
@@ -75,7 +76,7 @@ export default function LandingPage({ navigation, route }) {
           GOOGLE_API +
           // "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg" +
           // GOOGLE_API +
-          "&maxResults=5"
+          "&maxResults=25"
       )
       // Axios retrieves max list of 10 results
       .then((data) => {
@@ -144,9 +145,6 @@ export default function LandingPage({ navigation, route }) {
                 {/* featureBook will only show up once the component mounts */}
                 {featureBook.id && (
                   <View>
-                    {/* <Text style={{ textAlign: 'center', fontSize: 30 }}>
-              Hi, {navigation.state.params.user.firstName}!
-            </Text> */}
                     <Text style={styles.published}>Newly Published</Text>
                     <TouchableOpacity
                       onPress={() => {
@@ -156,11 +154,20 @@ export default function LandingPage({ navigation, route }) {
                         });
                       }}
                     >
-                      {featureBook.volumeInfo.imageLinks && (
+                      {featureBook.volumeInfo.imageLinks ? (
                         <Image
                           alt={featureBook.volumeInfo.title}
                           source={{
                             uri: featureBook.volumeInfo.imageLinks.thumbnail,
+                          }}
+                          style={{ width: 200, height: 300, margin: "auto" }}
+                        />
+                      ) : (
+                        <Image
+                          alt={"flowers"}
+                          source={{
+                            uri:
+                              "http://books.google.com/books?id=GxXGDwAAQBAJ&printsec=frontcover&dq=Flowers&hl=&cd=3&source=gbs_api",
                           }}
                           style={{ width: 200, height: 300, margin: "auto" }}
                         />
@@ -177,17 +184,26 @@ export default function LandingPage({ navigation, route }) {
                   visible={modalVisible}
                 >
                   <SafeAreaView>
+                    <View style={styles.topBar}>
+                      <TouchableOpacity
+                        style={styles.arrow}
+                        onPress={() => setModalVisible(false)}
+                      >
+                        <Icon name='arrow-left' size={24} color='#161924' />
+                      </TouchableOpacity>
+                    </View>
                     <ScrollView>
                       {/* CSS on View to have books render left to right */}
                       <View style={styles.bookList} style={styles.centeredView}>
                         {/* Map over "result" state and render each book object details */}
                         {result.map((book, idx) => {
-                          // console.log('book in map: ', book.volumeInfo);
                           return (
                             <View key={idx}>
-                              {/* Render book cover image first, with styling */}
-                              {/* <TouchableOpacity onPress={() => }> */}
                               <TouchableOpacity
+                                style={{
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
                                 onPress={() => {
                                   setModalVisible(false);
                                   navigation.navigate("SingleBookView", {
@@ -197,7 +213,6 @@ export default function LandingPage({ navigation, route }) {
                                 }}
                               >
                                 <Image
-                                  // put react navigation here
                                   alt={book.volumeInfo.title}
                                   style={{ width: 100, height: 150 }}
                                   source={{
@@ -205,28 +220,24 @@ export default function LandingPage({ navigation, route }) {
                                       book.volumeInfo.imageLinks.smallThumbnail,
                                   }}
                                 />
-                                {/* </TouchableOpacity> */}
-                                {/* Render book title, authors array, rating */}
-                                <Text style={styles.bookInfo}>
+
+                                <Text style={styles.modalTitle}>
                                   {book.volumeInfo.title}
                                 </Text>
-                                <Text style={styles.bookInfo}>
+                                <Text style={styles.modalAuthor}>
                                   {book.volumeInfo.authors}
                                 </Text>
-                                <Text style={styles.bookInfo}>
-                                  {book.volumeInfo.averageRating}
+                                <Text style={styles.modalRating}>
+                                  Rating:{" "}
+                                  {book.volumeInfo.averageRating
+                                    ? book.volumeInfo.averageRating
+                                    : "N/A"}
                                 </Text>
                               </TouchableOpacity>
                             </View>
                           );
                         })}
                       </View>
-                      <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => setModalVisible(false)}
-                      >
-                        <Text>DONE</Text>
-                      </TouchableOpacity>
                     </ScrollView>
                   </SafeAreaView>
                 </Modal>
@@ -286,10 +297,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#24aae2",
   },
   submitText: {
-    fontFamily: "Roboto-Light",
+    fontFamily: "Roboto-Regular",
     color: "white",
     fontSize: 18,
     textAlign: "center",
+  },
+  button: {
+    bottom: 0,
+    position: "fixed",
+    top: 200,
   },
 
   //CSS for Modal
@@ -313,11 +329,30 @@ const styles = StyleSheet.create({
   button: {
     marginLeft: 35,
   },
-  bookInfo: {
-    fontWeight: "bold",
-    marginBottom: 4,
-    width: "100%",
+  modalTitle: {
+    marginTop: 5,
+    justifyContent: "center",
+    fontFamily: "Roboto-Regular",
   },
+  modalAuthor: {
+    marginTop: 5,
+    fontFamily: "Roboto-Light",
+  },
+  modalRating: {
+    marginTop: 5,
+    marginBottom: 15,
+    fontFamily: "Roboto-Light",
+  },
+  arrow: {
+    marginLeft: -325,
+    marginTop: 7,
+  },
+  topBar: {
+    alignItems: "center",
+    backgroundColor: "#24aae2",
+    height: 40,
+  },
+
   background: {
     width: "100%",
     height: "100%",

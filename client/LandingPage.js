@@ -3,13 +3,15 @@ import {
   Text,
   View,
   StyleSheet,
-  TextInput,
   Modal,
   SafeAreaView,
   ScrollView,
   Image,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
+import { Searchbar, Button } from "react-native-paper";
+import { useFonts } from "expo-font";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Formik } from "formik";
 import GOOGLE_API from "../secrets";
@@ -18,6 +20,13 @@ import axios from "axios";
 // const GOOGLE_API = "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg";
 
 export default function LandingPage({ navigation, route }) {
+  const [loaded] = useFonts({
+    "Asap-Bold": require("../assets/fonts/Asap-Bold.ttf"),
+    "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
+    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+  });
+
   const [book, setBook] = useState("");
   const [result, setResult] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,9 +41,9 @@ export default function LandingPage({ navigation, route }) {
           {
             //breaking up params can help with entering in different inputs for keys below and easier to see the params
             params: {
-              q: "puppies",
+              q: "food",
               key: GOOGLE_API,
-              orderBy: "relevance",
+              orderBy: "newest",
             },
           }
         );
@@ -67,7 +76,7 @@ export default function LandingPage({ navigation, route }) {
           GOOGLE_API +
           // "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg" +
           // GOOGLE_API +
-          "&maxResults=5"
+          "&maxResults=25"
       )
       // Axios retrieves max list of 10 results
       .then((data) => {
@@ -82,137 +91,160 @@ export default function LandingPage({ navigation, route }) {
     setBook("");
     setModalVisible(true);
   }
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <SafeAreaView>
-      <ScrollView style={styles.scrollView}>
-        <Formik>
-          <View style={styles.container}>
-            <TouchableOpacity
-              style={{ alignItems: "flex-end", margin: 16 }}
-              onPress={navigation.openDrawer}
-            >
-              <Icon name='bars' size={24} color='#161924' />
-            </TouchableOpacity>
-            <View style={styles.center}>
-              <Image
-                source={{
-                  uri: "https://i.ibb.co/rpJ7vjb/signupbook.png",
-                }}
-                style={styles.image}
-              />
-              <Text style={styles.heading}>Find a Book</Text>
-              <View style={styles.inputContainer}>
-                {/* <Icon name={"search"} size={30} color={"grey"} style={styles.icon} /> */}
-                <TextInput
-                  style={styles.inputText}
-                  // placeholder='Search by Title, Author, or Keyword'
-                  onChangeText={handleChange}
-                  value={book}
-                />
-              </View>
+      <ScrollView>
+        <ImageBackground
+          source={{ uri: "https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg" }}
+          style={styles.background}
+          imageStyle={{
+            resizeMode: "stretch",
+          }}
+        >
+          <Formik>
+            <View style={styles.container}>
               <TouchableOpacity
-                style={[styles.inputContainer, styles.submitContainer]}
-                onPress={handleSubmit}
+                style={{ alignItems: "flex-end", margin: 16 }}
+                onPress={navigation.openDrawer}
               >
-                <Text style={styles.submitText}>SUBMIT</Text>
+                <Icon name='bars' size={24} color='#161924' />
               </TouchableOpacity>
-              {/* <Button title='Submit' onPress={handleSubmit} /> */}
-              {/* featureBook will only show up once the component mounts */}
-              {featureBook.id && (
-                <View>
-                  {/* <Text style={{ textAlign: 'center', fontSize: 30 }}>
-              Hi, {navigation.state.params.user.firstName}!
-            </Text> */}
-                  <Text style={styles.published}>Newly Published</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("SingleBookView", {
-                        ...featureBook,
-                        userId: route.params.userId,
-                      });
-                    }}
-                  >
-                    {featureBook.volumeInfo.imageLinks && (
-                      <Image
-                        alt={featureBook.volumeInfo.title}
-                        source={{
-                          uri: featureBook.volumeInfo.imageLinks.thumbnail,
-                        }}
-                        style={{ width: 200, height: 300, margin: "auto" }}
-                      />
-                    )}
-                  </TouchableOpacity>
-                  {/* <Text>{featureBook.volumeInfo.description}</Text> */}
+              <View style={styles.center}>
+                <Image
+                  source={{
+                    uri: "https://i.ibb.co/Gn9bqym/pocketbook-icon.png",
+                  }}
+                  style={styles.image}
+                />
+                <Text style={styles.heading}>Find a Book</Text>
+                <View style={styles.center}>
+                  {/* <Icon name={"search"} size={30} color={"grey"} style={styles.icon} /> */}
+                  <Searchbar
+                    style={styles.searchBar}
+                    // placeholder='Search by Title, Author, or Keyword'
+                    onChangeText={handleChange}
+                    value={book}
+                  />
                 </View>
-              )}
-            </View>
-            <View style={styles.centeredView}>
-              <Modal
-                animationType='slide'
-                transparent={false}
-                visible={modalVisible}
-              >
-                <SafeAreaView>
-                  <ScrollView>
-                    {/* CSS on View to have books render left to right */}
-                    <View style={styles.bookList} style={styles.centeredView}>
-                      {/* Map over "result" state and render each book object details */}
-                      {result.map((book, idx) => {
-                        // console.log('book in map: ', book.volumeInfo);
-                        return (
-                          <View key={idx}>
-                            {/* Render book cover image first, with styling */}
-                            {/* <TouchableOpacity onPress={() => }> */}
-                            <TouchableOpacity
-                              onPress={() => {
-                                setModalVisible(false);
-                                navigation.navigate("SingleBookView", {
-                                  ...book,
-                                  userId: route.params.userId,
-                                });
-                              }}
-                            >
-                              <Image
-                                // put react navigation here
-                                alt={book.volumeInfo.title}
-                                style={{ width: 100, height: 150 }}
-                                source={{
-                                  uri:
-                                    book.volumeInfo.imageLinks.smallThumbnail,
-                                }}
-                              />
-                              {/* </TouchableOpacity> */}
-                              {/* Render book title, authors array, rating */}
-                              <Text style={styles.bookInfo}>
-                                {book.volumeInfo.title}
-                              </Text>
-                              <Text style={styles.bookInfo}>
-                                {book.volumeInfo.authors}
-                              </Text>
-                              <Text style={styles.bookInfo}>
-                                {book.volumeInfo.averageRating}
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
-                    </View>
+                <View>
+                  <TouchableOpacity
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                    onPress={handleSubmit}
+                  >
+                    <Button mode='contained' style={styles.subButton}>
+                      <Text style={styles.submitText}>SUBMIT</Text>
+                    </Button>
+                  </TouchableOpacity>
+                </View>
+                {/* <Button title='Submit' onPress={handleSubmit} /> */}
+                {/* featureBook will only show up once the component mounts */}
+                {featureBook.id && (
+                  <View>
+                    <Text style={styles.published}>Newly Published</Text>
                     <TouchableOpacity
-                      style={[
-                        styles.inputContainer,
-                        styles.submitContainer,
-                        styles.button,
-                      ]}
-                      onPress={() => setModalVisible(false)}
+                      onPress={() => {
+                        navigation.navigate("SingleBookView", {
+                          ...featureBook,
+                          userId: route.params.userId,
+                        });
+                      }}
                     >
-                      <Text style={styles.submitText}>DONE</Text>
+                      {featureBook.volumeInfo.imageLinks ? (
+                        <Image
+                          alt={featureBook.volumeInfo.title}
+                          source={{
+                            uri: featureBook.volumeInfo.imageLinks.thumbnail,
+                          }}
+                          style={{ width: 200, height: 300, margin: "auto" }}
+                        />
+                      ) : (
+                        <Image
+                          alt={"flowers"}
+                          source={{
+                            uri:
+                              "http://books.google.com/books?id=GxXGDwAAQBAJ&printsec=frontcover&dq=Flowers&hl=&cd=3&source=gbs_api",
+                          }}
+                          style={{ width: 200, height: 300, margin: "auto" }}
+                        />
+                      )}
                     </TouchableOpacity>
-                  </ScrollView>
-                </SafeAreaView>
-              </Modal>
+                    {/* <Text>{featureBook.volumeInfo.description}</Text> */}
+                  </View>
+                )}
+              </View>
+              <View style={styles.centeredView}>
+                <Modal
+                  animationType='slide'
+                  transparent={false}
+                  visible={modalVisible}
+                >
+                  <SafeAreaView>
+                    <View style={styles.topBar}>
+                      <TouchableOpacity
+                        style={styles.arrow}
+                        onPress={() => setModalVisible(false)}
+                      >
+                        <Icon name='arrow-left' size={24} color='#161924' />
+                      </TouchableOpacity>
+                    </View>
+                    <ScrollView>
+                      {/* CSS on View to have books render left to right */}
+                      <View style={styles.bookList} style={styles.centeredView}>
+                        {/* Map over "result" state and render each book object details */}
+                        {result.map((book, idx) => {
+                          return (
+                            <View key={idx}>
+                              <TouchableOpacity
+                                style={{
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                                onPress={() => {
+                                  setModalVisible(false);
+                                  navigation.navigate("SingleBookView", {
+                                    ...book,
+                                    userId: route.params.userId,
+                                  });
+                                }}
+                              >
+                                <Image
+                                  alt={book.volumeInfo.title}
+                                  style={{ width: 100, height: 150 }}
+                                  source={{
+                                    uri:
+                                      book.volumeInfo.imageLinks.smallThumbnail,
+                                  }}
+                                />
+
+                                <Text style={styles.modalTitle}>
+                                  {book.volumeInfo.title}
+                                </Text>
+                                <Text style={styles.modalAuthor}>
+                                  {book.volumeInfo.authors}
+                                </Text>
+                                <Text style={styles.modalRating}>
+                                  Rating:{" "}
+                                  {book.volumeInfo.averageRating
+                                    ? book.volumeInfo.averageRating
+                                    : "N/A"}
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    </ScrollView>
+                  </SafeAreaView>
+                </Modal>
+              </View>
             </View>
-          </View>
-        </Formik>
+          </Formik>
+        </ImageBackground>
       </ScrollView>
     </SafeAreaView>
   );
@@ -226,25 +258,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  scrollView: {
-    marginHorizontal: 10,
-  },
   image: {
-    marginTop: 40,
+    marginTop: 15,
     padding: 0,
     width: 100,
     height: 100,
-    marginTop: 50,
   },
   heading: {
     margin: 0,
-    fontSize: 30,
+    fontSize: 35,
+    fontFamily: "Asap-Bold",
   },
   published: {
     margin: 0,
     fontSize: 20,
     paddingTop: 10,
     paddingLeft: 25,
+    paddingBottom: 10,
+    fontFamily: "Roboto-Medium",
   },
   inputText: {
     fontWeight: "bold",
@@ -252,28 +283,29 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     width: "100%",
   },
-  inputContainer: {
-    marginTop: 20,
-    flexDirection: "row",
-    width: "80%",
-    height: 35,
-    borderRadius: 50,
-    borderWidth: 1.5,
-    // justifyContent: 'center',
-    alignItems: "center",
-    paddingTop: 5,
+  searchBar: {
+    margin: 0,
+    marginTop: 15,
+    marginLeft: 15,
+    marginRight: 15,
   },
-  submitContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#6475a5",
+  subButton: {
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 350,
+    width: 200,
+    backgroundColor: "#24aae2",
   },
   submitText: {
+    fontFamily: "Roboto-Regular",
     color: "white",
-    fontSize: 15,
-    fontWeight: "bold",
+    fontSize: 18,
     textAlign: "center",
-    bottom: 2,
+  },
+  button: {
+    bottom: 0,
+    position: "fixed",
+    top: 200,
   },
 
   //CSS for Modal
@@ -297,9 +329,32 @@ const styles = StyleSheet.create({
   button: {
     marginLeft: 35,
   },
-  bookInfo: {
-    fontWeight: "bold",
-    marginBottom: 4,
+  modalTitle: {
+    marginTop: 5,
+    justifyContent: "center",
+    fontFamily: "Roboto-Regular",
+  },
+  modalAuthor: {
+    marginTop: 5,
+    fontFamily: "Roboto-Light",
+  },
+  modalRating: {
+    marginTop: 5,
+    marginBottom: 15,
+    fontFamily: "Roboto-Light",
+  },
+  arrow: {
+    marginLeft: -325,
+    marginTop: 7,
+  },
+  topBar: {
+    alignItems: "center",
+    backgroundColor: "#24aae2",
+    height: 40,
+  },
+
+  background: {
     width: "100%",
+    height: "100%",
   },
 });

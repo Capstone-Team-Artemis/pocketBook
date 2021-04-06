@@ -11,47 +11,57 @@ import Chat from "../Chat";
 
 const Stack = createStackNavigator();
 
-const StackContainer = (props) => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name='LandingPage'
-      component={LandingPage}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name='SingleBookView'
-      component={SingleBookView}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name='AllEvents'
-      component={AllEvents}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name='CreateEvent'
-      component={CreateEvent}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name='SingleEventView'
-      component={SingleEventView}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name='UserProfile'
-      component={UserProfile}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name='Chat'
-      component={Chat}
-      options={({ route }) => ({
-        title: route.params.title,
-        headerBackTitleVisible: false,
-      })}
-    />
-  </Stack.Navigator>
-);
+const StackContainer = (props) => {
+  const loginState = props.route.params.loginState;
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name='LandingPage'
+        initialParams={{ userId: loginState.userId }}
+        component={LandingPage}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='SingleBookView'
+        initialParams={{ userId: loginState.userId }}
+        component={SingleBookView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='AllEvents'
+        initialParams={{ userId: loginState.userId }}
+        component={AllEvents}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='CreateEvent'
+        initialParams={{ userId: loginState.userId }}
+        component={CreateEvent}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='SingleEventView'
+        initialParams={{ userId: loginState.userId }}
+        component={SingleEventView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='UserProfile'
+        initialParams={{ userId: loginState.userId }}
+        component={UserProfile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='Chat'
+        initialParams={{ userId: loginState.userId }}
+        component={Chat}
+        options={({ route }) => ({
+          title: route.params.title,
+          headerBackTitleVisible: false,
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default StackContainer;

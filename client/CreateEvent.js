@@ -1,25 +1,25 @@
 import {
   Text,
-  TextInput,
   StyleSheet,
   View,
   SafeAreaView,
   Dimensions,
-  TouchableHighlight,
   TouchableOpacity,
-  Button,
   Alert,
+  Image,
 } from "react-native";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-
+import { TextInput, Button, List} from 'react-native-paper'
 // import thunk
 import { postEvent } from "./store/events";
+import * as Font from 'expo-font';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { width: WIDTH } = Dimensions.get("window");
-
+const { height: HEIGHT } = Dimensions.get("window");
 //CreateEvent Component
 class CreateEvent extends Component {
   constructor(props) {
@@ -34,15 +34,29 @@ class CreateEvent extends Component {
       endTime: new Date(),
       description: "",
       hostId: path.hostId ? path.hostId : id,
+      fontsLoaded: false,
     };
     this.handleSubmit.bind(this);
     this.handleGoBack.bind(this);
   }
 
+  async loadFonts() {
+    await Font.loadAsync({
+      'Asap-Bold': require('../assets/fonts/Asap-Bold.ttf'),
+      'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+      'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+    });
+    this.setState({ fontsLoaded: true });
+  }
+
+  componentDidMount() {
+    this.loadFonts();
+  }
+
   async handleSubmit() {
     try {
       await this.props.create({
-        ...this.state,
+        eventTitle: this.state.eventTitle,
         date: this.state.date,
         startTime: this.state.startTime.toLocaleTimeString("en", {
           hour: "2-digit",
@@ -54,6 +68,8 @@ class CreateEvent extends Component {
           minute: "2-digit",
           hour12: false,
         }),
+        description: this.state.description,
+        hostId: this.state.hostId,
       });
       this.setState({
         eventTitle: "",
@@ -72,36 +88,66 @@ class CreateEvent extends Component {
   }
 
   render() {
-    const { eventTitle } = this.props.route.params;
 
     return (
+      <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={false}
+      contentContainerStyle={styles.scrollContainer}
+    >
       <SafeAreaView style={styles.container}>
-        <View style={styles.navbar}>
+        
+        {/* top bar */}
+        <View style={styles.topBar}>
+        <Image
+          source={{
+          uri: 'https://i.ibb.co/NmBN3gY/pocketbook-icon.png',
+          }}
+          style={styles.image}
+        />
+
+        {/* Go-back button */}
+          <TouchableOpacity style={styles.arrow} onPress={() => this.handleGoBack()}>
+          <Icon name='arrow-left' size={24} color='#161924' />
+          </TouchableOpacity>
+          
+          {/* nav bar */}
           <TouchableOpacity
-            style={styles.navbar}
-            style={{ alignItems: "flex-end", margin: 16 }}
             onPress={this.props.navigation.openDrawer}
+            style={styles.threeBar}
           >
             <Icon name='bars' size={24} color='#161924' />
           </TouchableOpacity>
         </View>
-        <Text style={styles.heading}>{"Create Event"}</Text>
 
-        <View style={styles.inputContainer}>
-          {/* <GoogleAPI /> */}
+        <Text style={styles.heading}>Create Event</Text>
+
+        <View >
+
           <TextInput
             value={this.state.eventTitle}
             style={styles.input}
-            placeholder={"Title"}
+            mode='outlined'
+            label="Title"
+            multiline = {true}
+            theme={{
+              colors: { primary: '#6646ee', placeholder: '#6646ee' },
+              fonts: { regular: { fontFamily: 'Roboto-Light' } },
+            }}
+            left={<TextInput.Icon name="heart" color='#6646ee'/>}
             onChangeText={(eventTitle) => {
               this.setState({ eventTitle });
             }}
           ></TextInput>
 
+          <List.Section>
+          <List.Item title="Date" style={styles.list} left={() => <List.Icon icon='calendar'/>} />
           <RNDateTimePicker
             value={this.state.date}
+            type = {'outlined'}
             mode='date'
             display='default'
+            style={styles.picker}
             onChange={(event, selectedDate) =>
               this.setState({
                 date: selectedDate,
@@ -109,90 +155,153 @@ class CreateEvent extends Component {
             }
           />
 
+          <List.Item title="Start Time" style={styles.list} left={() => <List.Icon icon='clock-start'/>} />
           <RNDateTimePicker
             value={this.state.startTime}
             mode='time'
             display='default'
+            style={[styles.picker, timePicker]}
             onChange={(event, selectedTime) =>
               this.setState({
                 startTime: selectedTime,
               })
             }
           />
+
+          <List.Item title="End Time" style={styles.list}left={() => <List.Icon icon='clock-end'/>} />
           <RNDateTimePicker
             value={this.state.endTime}
             mode='time'
             display='default'
+            style={[styles.picker, timePicker]}
             onChange={(event, selectedTime) =>
               this.setState({
                 endTime: selectedTime,
               })
             }
           />
+          </List.Section>
 
           <TextInput
             value={this.state.description}
             style={[styles.input, description]}
-            placeholder={"Description"}
+            multiline = {true}
+            error={true}
+            mode='outlined'
+            label="Description"
+            theme={{
+              colors: { primary: '#E92228', placeholder: '#E92228' },
+              fonts: { regular: { fontFamily: 'Roboto-Light' } },
+            }}
+            left={<TextInput.Icon name="star" color='#E92228'/>}
             onChangeText={(description) => {
               this.setState({ description });
             }}
           ></TextInput>
 
-          <TouchableHighlight
-            style={styles.button}
-            onPress={() => this.handleSubmit()}
+          <Button
+           mode="contained"
+           style={styles.button}
+           onPress={() => this.handleSubmit()}
           >
             <Text style={styles.submitText}>Submit</Text>
-          </TouchableHighlight>
+          </Button>
 
-          <Button title='Go Back' onPress={() => this.handleGoBack()} />
+          {/* <Button mode="contained" style={styles.button} onPress={() => this.handleGoBack()}>
+          <Text style={styles.submitText}>Go Back</Text>
+          </Button> */}
         </View>
       </SafeAreaView>
+      </KeyboardAwareScrollView>
     );
   }
 }
 
-const description = { height: 155 };
+const description = { height: 170 };
+const timePicker = { right : -235}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-evenly",
+  scrollContainer: {
+    backgroundColor: '#FFF',
+    flexGrow: 1,
   },
-  inputContainer: {
-    //backgroundColor:'#f0f8ff',
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff'
+  },
+  //   resizeMode: 'stretch',
+  image: {
+    marginTop: 20,
+    marginBottom: -50,
+    width: 35,
+    height: 50,
+    left: -150,
+    top: 30
+  },
+  topBar: {
+    top: -50,
+    marginBottom: -10,
+    paddingLeft: 300,
+    alignItems: "center",
+    backgroundColor: '#EF5C2B',
+    height: 100,
+    width: WIDTH
+  },
+  arrow: {
+    left: -310,
+    bottom: -50
+  },
+  threeBar: {
+    right: -10,
+    bottom: -25
   },
   heading: {
-    fontSize: 40,
+    top: -20,
+    fontSize: 35,
+    textAlign: 'center',
+    fontFamily: 'Asap-Bold'
   },
   input: {
-    width: WIDTH - 55,
-    height: 35,
+    width: WIDTH - 45,
+    height: 55,
     marginTop: 20,
-    backgroundColor: "#f0f8ff",
-    borderRadius: 50,
-    borderWidth: 1.5,
+    backgroundColor: "#fff",
+    alignSelf: 'center',
+    fontFamily: 'Roboto-Light'
+  },
+  list:{
+    left: -15
+  },
+  picker: {
+    right: -211,
+    top: -52,
+    marginBottom: -65,
   },
   button: {
-    alignItems: "center",
-    backgroundColor: "#6475a5",
-    padding: 10,
-    borderRadius: 45,
-    marginTop: 20,
-    borderWidth: 1.5,
+    width: 200,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E92228',
+    marginTop: 30,
+    borderRadius: 350,
+    fontFamily: 'Roboto-Regular'
   },
   submitText: {
-    color: "white",
+    color: '#fff',
+    fontFamily: 'Roboto-Regular',
     fontSize: 15,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     bottom: 2,
   },
-  navbar: {
-    paddingLeft: 300,
-  },
+  // errorMsg: {
+  //   marginTop: 15,
+  //   color: '#E92228',
+  //   fontSize: 12,
+  //   marginBottom: -5,
+  //   fontFamily: 'Roboto-Light',
+  // },
 });
 
 const mapState = (state) => {

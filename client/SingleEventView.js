@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   info: {
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Roboto-Bold',
     color: '#E92228',
     fontSize: 15,
     marginBottom: 5
@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
   },
   liveChat: {
     fontFamily: 'Roboto-Regular',
-    
   }
 
 });

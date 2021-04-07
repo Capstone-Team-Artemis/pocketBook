@@ -63,7 +63,6 @@ class Chat extends Component {
     newMessage.push(addRoom);
     //step1: socket is emitting chat message to the backend line6 of index.js
     this.socket.emit('chat message', newMessage);
-
     this.setState((previousMessages) =>
       GiftedChat.append(previousMessages, message)
     );

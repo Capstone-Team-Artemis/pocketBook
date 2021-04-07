@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -9,25 +9,25 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
-} from "react-native";
-import { Searchbar, Button } from "react-native-paper";
-import { useFonts } from "expo-font";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Formik } from "formik";
-import GOOGLE_API from "../secrets";
-import axios from "axios";
+} from 'react-native';
+import { Searchbar, Button } from 'react-native-paper';
+import { useFonts } from 'expo-font';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Formik } from 'formik';
+import GOOGLE_API from '../secrets';
+import axios from 'axios';
 // import SingleBookView from "./SingleBookView";
 // const GOOGLE_API = "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg";
 
 export default function LandingPage({ navigation, route }) {
   const [loaded] = useFonts({
-    "Asap-Bold": require("../assets/fonts/Asap-Bold.ttf"),
-    "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+    'Asap-Bold': require('../assets/fonts/Asap-Bold.ttf'),
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+    'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
+    'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
   });
 
-  const [book, setBook] = useState("");
+  const [book, setBook] = useState('');
   const [result, setResult] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [featureBook, setFeatureBook] = useState({});
@@ -37,13 +37,13 @@ export default function LandingPage({ navigation, route }) {
     const getRandomBook = async () => {
       try {
         const { data } = await axios.get(
-          "https://www.googleapis.com/books/v1/volumes",
+          'https://www.googleapis.com/books/v1/volumes',
           {
             //breaking up params can help with entering in different inputs for keys below and easier to see the params
             params: {
-              q: "food",
+              q: 'food',
               key: GOOGLE_API,
-              orderBy: "newest",
+              orderBy: 'newest',
             },
           }
         );
@@ -70,13 +70,13 @@ export default function LandingPage({ navigation, route }) {
     // Axios runs, passing in "book" & our Google Books API key
     axios
       .get(
-        "https://www.googleapis.com/books/v1/volumes?q=" +
+        'https://www.googleapis.com/books/v1/volumes?q=' +
           book +
-          "&key=" +
+          '&key=' +
           GOOGLE_API +
           // "AIzaSyCCv2Y7h0jPvMK1NF0y_nmI9V-4_lTXsWg" +
           // GOOGLE_API +
-          "&maxResults=15"
+          '&maxResults=15'
       )
       // Axios retrieves max list of 10 results
       .then((data) => {
@@ -88,7 +88,7 @@ export default function LandingPage({ navigation, route }) {
       .catch((err) => {
         console.log(err);
       });
-    setBook("");
+    setBook('');
     setModalVisible(true);
   }
 
@@ -100,24 +100,24 @@ export default function LandingPage({ navigation, route }) {
     <SafeAreaView>
       <ScrollView>
         <ImageBackground
-          source={{ uri: "https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg" }}
+          source={{ uri: 'https://i.ibb.co/0t3nZGK/loginscreen-copy.jpg' }}
           style={styles.background}
           imageStyle={{
-            resizeMode: "stretch",
+            resizeMode: 'stretch',
           }}
         >
           <Formik>
             <View style={styles.container}>
               <TouchableOpacity
-                style={{ alignItems: "flex-end", margin: 16 }}
+                style={{ alignItems: 'flex-end', margin: 16 }}
                 onPress={navigation.openDrawer}
               >
-                <Icon name='bars' size={24} color='#161924' />
+                <Icon name="bars" size={24} color="#161924" />
               </TouchableOpacity>
               <View style={styles.center}>
                 <Image
                   source={{
-                    uri: "https://i.ibb.co/Gn9bqym/pocketbook-icon.png",
+                    uri: 'https://i.ibb.co/Gn9bqym/pocketbook-icon.png',
                   }}
                   style={styles.image}
                 />
@@ -125,6 +125,9 @@ export default function LandingPage({ navigation, route }) {
                 <View style={styles.center}>
                   {/* <Icon name={"search"} size={30} color={"grey"} style={styles.icon} /> */}
                   <Searchbar
+                    theme={{
+                      colors: { primary: '#000', placeholder: '#000' },
+                    }}
                     style={styles.searchBar}
                     // placeholder='Search by Title, Author, or Keyword'
                     onChangeText={handleChange}
@@ -133,10 +136,10 @@ export default function LandingPage({ navigation, route }) {
                 </View>
                 <View>
                   <TouchableOpacity
-                    style={{ justifyContent: "center", alignItems: "center" }}
+                    style={{ justifyContent: 'center', alignItems: 'center' }}
                     onPress={handleSubmit}
                   >
-                    <Button mode='contained' style={styles.subButton}>
+                    <Button mode="contained" style={styles.subButton}>
                       <Text style={styles.submitText}>SUBMIT</Text>
                     </Button>
                   </TouchableOpacity>
@@ -148,7 +151,7 @@ export default function LandingPage({ navigation, route }) {
                     <Text style={styles.published}>Newly Published</Text>
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate("SingleBookView", {
+                        navigation.navigate('SingleBookView', {
                           ...featureBook,
                           userId: route.params.userId,
                         });
@@ -160,16 +163,16 @@ export default function LandingPage({ navigation, route }) {
                           source={{
                             uri: featureBook.volumeInfo.imageLinks.thumbnail,
                           }}
-                          style={{ width: 200, height: 300, margin: "auto" }}
+                          style={{ width: 200, height: 300, margin: 'auto' }}
                         />
                       ) : (
                         <Image
-                          alt={"flowers"}
+                          alt={'flowers'}
                           source={{
                             uri:
-                              "http://books.google.com/books?id=GxXGDwAAQBAJ&printsec=frontcover&dq=Flowers&hl=&cd=3&source=gbs_api",
+                              'http://books.google.com/books?id=GxXGDwAAQBAJ&printsec=frontcover&dq=Flowers&hl=&cd=3&source=gbs_api',
                           }}
-                          style={{ width: 200, height: 300, margin: "auto" }}
+                          style={{ width: 200, height: 300, margin: 'auto' }}
                         />
                       )}
                     </TouchableOpacity>
@@ -179,7 +182,7 @@ export default function LandingPage({ navigation, route }) {
               </View>
               <View style={styles.centeredView}>
                 <Modal
-                  animationType='slide'
+                  animationType="slide"
                   transparent={false}
                   visible={modalVisible}
                 >
@@ -189,7 +192,7 @@ export default function LandingPage({ navigation, route }) {
                         style={styles.arrow}
                         onPress={() => setModalVisible(false)}
                       >
-                        <Icon name='arrow-left' size={24} color='#161924' />
+                        <Icon name="arrow-left" size={24} color="#161924" />
                       </TouchableOpacity>
                     </View>
                     <ScrollView>
@@ -197,17 +200,17 @@ export default function LandingPage({ navigation, route }) {
                       <View style={styles.bookList} style={styles.centeredView}>
                         {/* Map over "result" state and render each book object details */}
                         {result.map((book, idx) => {
-                          console.log("BOOK", book);
+                          console.log('BOOK', book);
                           return (
                             <View key={idx}>
                               <TouchableOpacity
                                 style={{
-                                  justifyContent: "center",
-                                  alignItems: "center",
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
                                 }}
                                 onPress={() => {
                                   setModalVisible(false);
-                                  navigation.navigate("SingleBookView", {
+                                  navigation.navigate('SingleBookView', {
                                     ...book,
                                     userId: route.params.userId,
                                   });
@@ -224,7 +227,7 @@ export default function LandingPage({ navigation, route }) {
                                     }}
                                   />
                                 ) : (
-                                  "N/A"
+                                  'N/A'
                                 )}
 
                                 <Text style={styles.modalTitle}>
@@ -234,10 +237,10 @@ export default function LandingPage({ navigation, route }) {
                                   {book.volumeInfo.authors}
                                 </Text>
                                 <Text style={styles.modalRating}>
-                                  Rating:{" "}
+                                  Rating:{' '}
                                   {book.volumeInfo.averageRating
                                     ? book.volumeInfo.averageRating
-                                    : "N/A"}
+                                    : 'N/A'}
                                 </Text>
                               </TouchableOpacity>
                             </View>
@@ -261,8 +264,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   center: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
     marginTop: 15,
@@ -273,7 +276,7 @@ const styles = StyleSheet.create({
   heading: {
     margin: 0,
     fontSize: 35,
-    fontFamily: "Asap-Bold",
+    fontFamily: 'Asap-Bold',
   },
   published: {
     margin: 0,
@@ -281,13 +284,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingLeft: 25,
     paddingBottom: 10,
-    fontFamily: "Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
   },
   inputText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 4,
     marginLeft: 50,
-    width: "100%",
+    width: '100%',
   },
   searchBar: {
     margin: 0,
@@ -300,34 +303,34 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 350,
     width: 200,
-    backgroundColor: "#24aae2",
+    backgroundColor: '#24aae2',
   },
   submitText: {
-    fontFamily: "Roboto-Regular",
-    color: "white",
+    fontFamily: 'Roboto-Regular',
+    color: 'white',
     fontSize: 18,
-    textAlign: "center",
+    textAlign: 'center',
   },
   button: {
     bottom: 0,
-    position: "fixed",
+    position: 'fixed',
     top: 200,
   },
 
   //CSS for Modal
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 0,
     padding: 35,
     opacity: 0,
-    alignItems: "center",
+    alignItems: 'center',
     shadowOpacity: 100,
     shadowRadius: 4,
     elevation: 5,
@@ -337,30 +340,30 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     marginTop: 5,
-    justifyContent: "center",
-    fontFamily: "Roboto-Regular",
+    justifyContent: 'center',
+    fontFamily: 'Roboto-Regular',
   },
   modalAuthor: {
     marginTop: 5,
-    fontFamily: "Roboto-Light",
+    fontFamily: 'Roboto-Light',
   },
   modalRating: {
     marginTop: 5,
     marginBottom: 15,
-    fontFamily: "Roboto-Light",
+    fontFamily: 'Roboto-Light',
   },
   arrow: {
     marginLeft: -325,
     marginTop: 7,
   },
   topBar: {
-    alignItems: "center",
-    backgroundColor: "#24aae2",
+    alignItems: 'center',
+    backgroundColor: '#24aae2',
     height: 40,
   },
 
   background: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
 });

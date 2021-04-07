@@ -47,9 +47,9 @@ async function seed() {
   const events = [
     {
       eventTitle: 'Harry Potter and the Deathly Hallows',
-      date: '2021-04-09',
-      startTime: '15:00',
-      endTime: '16:00',
+      date: '2021-04-06',
+      startTime: '18:00',
+      endTime: '19:00',
       description:
         'Muggles of Pocketbook, what did you think of the series? Were you satisfied with the ending? Let’s discuss our favorite scenes, characters, and more! If we have time, I would love to discuss which house you belong to!',
       hostId: 1,
@@ -82,7 +82,7 @@ async function seed() {
       endTime: '20:00',
       description:
         'For those who have read Atomic Habits, how did you enjoy it? How much of what you read did you apply into your daily lives? Everyone is welcome to join in as we discuss building better habits and stopping bad ones.',
-      hostId: 3,
+      hostId: 4,
       image: 'https://i.ibb.co/NxCn16Q/atomichabits.jpg',
     },
     {
@@ -102,7 +102,7 @@ async function seed() {
       endTime: '18:00',
       description:
         "Do you think you are getting enough sleep every night? Because after reading this book, I am shocked at the impact sleep has on our lives. I would love to hear your inputs. Also, if you have any tips on getting a good night's rest, please share!!",
-      hostId: 1,
+      hostId: 4,
       image: 'https://i.ibb.co/vhHkZbr/whywesleep.jpg',
     },
     {

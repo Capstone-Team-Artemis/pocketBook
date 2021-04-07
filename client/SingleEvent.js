@@ -13,7 +13,7 @@ import React from 'react';
 import axios from 'axios';
 import { DateTime } from 'luxon';
 import * as Font from 'expo-font';
-// import thunk 
+// import thunk
 import { deleteEvent } from './store/events';
 
 //SingleEvent component
@@ -22,7 +22,7 @@ class SingleEvent extends React.Component {
     super(props);
     this.state = {
       fontsLoaded: false,
-    }
+    };
     this.unregister = this.unregister.bind(this);
     this.register = this.register.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -111,60 +111,80 @@ class SingleEvent extends React.Component {
     if (this.state.fontsLoaded) {
       return (
         <Surface style={styles.surface}>
-        <Card style={styles.cardContainer}>
-          <TouchableOpacity
-            onPress={() => navigate.navigate('SingleEventView', event)}
-          >
-            <View style={styles.listContainer} key={event.id}>
-              {/* Adds book image for each event */}
-              <Card.Content style={styles.cardContent}>
-                  <Image source={{ uri: event.image }} style={styles.image} /> 
-                {/* Adds event info for each event */}
-                <View style={styles.eventData}>
-                  <Text style={styles.eventTitle}>{event.eventTitle}</Text>
-                  <Text style={styles.info}>Date: 
-                      <Text style={styles.innerText}>{` ${formattedDate}`}</Text>
-                  </Text>
-                  <Text style={styles.info}>Start Time: 
-                      <Text style={styles.innerText}>{` ${formattedStartTime}`}</Text>
-                  </Text>
-                  <Text style={styles.info}>End Time: 
-                      <Text style={styles.innerText}>{` ${formattedEndTime}`}</Text>
-                  </Text>
-                  <Text style={styles.info}>Description: 
-                    <Text style={styles.innerText}>{` ${event.description}`}</Text>
-                  </Text>
+          <Card style={styles.cardContainer}>
+            <TouchableOpacity
+              onPress={() => navigate.navigate('SingleEventView', event)}
+            >
+              <View style={styles.listContainer} key={event.id}>
+                {/* Adds book image for each event */}
+                <Card.Content style={styles.cardContent}>
+                  <Image source={{ uri: event.image }} style={styles.image} />
+                  {/* Adds event info for each event */}
+                  <View style={styles.eventData}>
+                    <Text style={styles.eventTitle}>{event.eventTitle}</Text>
+                    <Text style={styles.info}>
+                      Date:
+                      <Text
+                        style={styles.innerText}
+                      >{` ${formattedDate}`}</Text>
+                    </Text>
+                    <Text style={styles.info}>
+                      Start Time:
+                      <Text
+                        style={styles.innerText}
+                      >{` ${formattedStartTime}`}</Text>
+                    </Text>
+                    <Text style={styles.info}>
+                      End Time:
+                      <Text
+                        style={styles.innerText}
+                      >{` ${formattedEndTime}`}</Text>
+                    </Text>
+                    <Text style={styles.info}>
+                      Description:
+                      <Text
+                        style={styles.innerText}
+                      >{` ${event.description}`}</Text>
+                    </Text>
 
-                  {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
+                    {/* if logged in user is the HOST, button can only say 'Edit/Delete'.
                               if not host, button can also say 'Un/Register' */}
-                  <View style={styles.registerButtonContainer}>
-                    {user === event.hostId ? (
-                      <Button
-                      onPress={() => {
-                        this.openTwoButtonAlert();
-                      }}
-                      color="white"
-                      accessibilityLabel="Status">
-                      <Text style={styles.deleteText}>Delete </Text>
-                      </Button>
-                    ) : (
-                      <Button onPress={() => {
-                        event.users[0] ? this.unregister() : this.register();
-                      }}
-                      color="white"
-                      accessibilityLabel="Status">
-                        {/* // check the event obj to see if logged-in user exists in the associated user array
+                    <View style={styles.registerButtonContainer}>
+                      {user === event.hostId ? (
+                        <Button
+                          onPress={() => {
+                            this.openTwoButtonAlert();
+                          }}
+                          color="white"
+                          accessibilityLabel="Status"
+                        >
+                          <Text style={styles.deleteText}>Delete </Text>
+                        </Button>
+                      ) : (
+                        <Button
+                          style={styles.button}
+                          onPress={() => {
+                            event.users[0]
+                              ? this.unregister()
+                              : this.register();
+                          }}
+                          color="white"
+                          accessibilityLabel="Status"
+                        >
+                          {/* // check the event obj to see if logged-in user exists in the associated user array
                         // if user exists, that means user is attending and button should give 'Unregister' option
                         // else, the user isn't registered and should have the button option to 'Register' for the event */}
-                        <Text style={styles.registerText}>{event.users[0] ? 'Unregister' : 'Register'} </Text>
-                      </Button>
-                    )}
+                          <Text style={styles.registerText}>
+                            {event.users[0] ? 'Unregister' : 'Register'}
+                          </Text>
+                        </Button>
+                      )}
+                    </View>
                   </View>
-                </View>
-              </Card.Content>
-            </View>
-          </TouchableOpacity>
-        </Card>
+                </Card.Content>
+              </View>
+            </TouchableOpacity>
+          </Card>
         </Surface>
       );
     } else {
@@ -173,11 +193,10 @@ class SingleEvent extends React.Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   scrollView: {
     marginHorizontal: 10,
@@ -192,19 +211,19 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 20,
     marginBottom: 4,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Asap-Bold',
   },
   info: {
     fontFamily: 'Roboto-Bold',
     color: '#E92228',
     fontSize: 15,
-    marginBottom: 5
+    marginBottom: 5,
   },
   innerText: {
     fontFamily: 'Roboto-Regular',
     color: 'black',
     fontSize: 15,
-    marginBottom: 5
+    marginBottom: 5,
   },
   eventData: {
     padding: 10,
@@ -218,6 +237,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontFamily: 'Roboto-Regular',
+    textAlign: 'center',
   },
   registerButtonContainer: {
     backgroundColor: '#24aae2',
@@ -235,14 +255,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     marginLeft: 10,
-    marginRight: 10
+    marginRight: 10,
   },
   cardContent: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   surface: {
-    elevation: 15
-  }
+    elevation: 15,
+  },
+  button: {
+    width: 150,
+    marginLeft: -5,
+  },
 });
 
 const mapDispatch = (dispatch) => {

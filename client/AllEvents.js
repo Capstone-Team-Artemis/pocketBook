@@ -14,7 +14,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SingleEvent from './SingleEvent';
 import * as Font from 'expo-font';
-// import thunk 
+// import thunk
 import { fetchEvents } from './store/events';
 
 export class AllEvents extends React.Component {
@@ -46,21 +46,23 @@ export class AllEvents extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
-              {/* Adds Navbar */}
-              <TouchableOpacity
-                style={{ alignItems: 'flex-end', margin: 16 }}
-                onPress={this.props.navigation.openDrawer}
-              >
-                <Icon name="bars" size={24} color="#161924" />
-              </TouchableOpacity>
+            {/* Adds Navbar */}
+            <TouchableOpacity
+              style={{ alignItems: 'flex-end', margin: 16 }}
+              onPress={this.props.navigation.openDrawer}
+            >
+              <Icon name="bars" size={24} color="#161924" />
+            </TouchableOpacity>
             {/* Adds create event button */}
             <View style={styles.createButtonContainer}>
-              <Button onPress={() => {
+              <Button
+                onPress={() => {
                   this.props.navigation.navigate('CreateEvent');
                 }}
                 color="white"
-                accessibilityLabel="Create Event">
-                <Text style={styles.createText}>Create Event </Text>  
+                accessibilityLabel="Create Event"
+              >
+                <Text style={styles.createText}>Create Event </Text>
               </Button>
             </View>
             {/* Adds Dropdown menu */}
@@ -69,7 +71,7 @@ export class AllEvents extends React.Component {
               itemStyle={{ justifyContent: 'flex-start' }}
               dropDownStyle={{ backgroundColor: '#fafafa' }}
               containerStyle={{ height: 40 }}
-              labelStyle={{fontFamily: 'Roboto-Medium'}}
+              labelStyle={{ fontFamily: 'Roboto-Medium' }}
               activeLabelStyle={{ color: 'red' }}
               defaultValue={this.state.status}
               onChangeItem={(item) =>
@@ -85,7 +87,8 @@ export class AllEvents extends React.Component {
             />
             {/* Adds event list */}
             <View>
-              {this.props.events === 'There are currently no upcoming events!' ? (
+              {this.props.events ===
+              'There are currently no upcoming events!' ? (
                 <Text style={styles.noEvents}>
                   There are currently no upcoming events!
                 </Text>
@@ -122,13 +125,11 @@ export class AllEvents extends React.Component {
           </ScrollView>
         </SafeAreaView>
       );
-    }
-    else {
+    } else {
       return null;
     }
   }
 }
-
 
 const mapState = (state) => {
   return {
@@ -147,7 +148,7 @@ export default connect(mapState, mapDispatch)(AllEvents);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   scrollView: {
     marginHorizontal: 10,
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     borderRadius: 15,
-    width: 150,
+    width: 170,
     height: 40,
   },
   createText: {

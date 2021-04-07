@@ -124,23 +124,23 @@ export default class SingleEventView extends React.Component {
                   ** Live chat shows up below at the exact date and time of the
                   event!
                 </Text>
-                {/* {todaysDate === formattedDate &&
+                {todaysDate === formattedDate &&
                 todaysTime >= formattedStartTime &&
-                todaysTime <= formattedEndTime ? ( */}
-                <View style={styles.joinButtonContainer}>
-                  <Button
-                    onPress={() => {
-                      this.props.navigation.navigate('Chat', {
-                        title: eventTitle,
-                      });
-                    }}
-                    color="white"
-                    accessibilityLabel="Join Now"
-                  >
-                    <Text style={styles.joinNowText}>Join Now</Text>
-                  </Button>
-                </View>
-                {/* ) : null} */}
+                todaysTime <= formattedEndTime ? (
+                  <View style={styles.joinButtonContainer}>
+                    <Button
+                      onPress={() => {
+                        this.props.navigation.navigate('Chat', {
+                          title: eventTitle,
+                        });
+                      }}
+                      color="white"
+                      accessibilityLabel="Join Now"
+                    >
+                      <Text style={styles.joinNowText}>Join Now</Text>
+                    </Button>
+                  </View>
+                ) : null}
               </Card>
             </Surface>
           </ScrollView>

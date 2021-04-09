@@ -1,7 +1,18 @@
-### Pocketbook
+# Pocketbook
 An iOS application that allows book readers to search for books and connect with other book lovers through a chatting platform. Created by a team of developers during the Grace Hopper Program at Fullstack Academy.
 
-### Tech Stack
+# Screenshots
+
+<p float="left">
+  <img src="https://i.ibb.co/s11kzcN/login-copy.png" width="200" />
+  <img src="https://i.ibb.co/KGJtKR8/bookresults.png" width="200" /> 
+  <img src="https://i.ibb.co/WGdzgTP/bookshelf-copy.png" width="200" />
+  <img src="https://i.ibb.co/Rz9CXpb/events.png" width="200" />
+  <img src="https://i.ibb.co/cFfPx7Z/chat.png" width="200" />
+</p>
+
+
+# Tech Stack
 - React Native - mobile application framework
 - Redux - JS library for managing application state
 - PostgreSQL - relational database management system emphasizing extensibility and SQL compliance
@@ -12,7 +23,7 @@ An iOS application that allows book readers to search for books and connect with
 - Heroku - database host
 - Formik - form library
 
-### Installation
+# Installation
 ### Install Expo and iOS simulator
 1. npm install -g expo-cli
 2. Follow instructions to install iOS simulator: https://docs.expo.io/workflow/ios-simulator/
@@ -31,7 +42,7 @@ b. Scan QR code </br>
 a. Download Xcode from desktop app store </br>
 b. Press i in the terminal to run iOS simulator </br>
 
-### Developers
+# Developers
 - Selina Seonae Byeon
 - Sandy Dai
 - Catherine Martin

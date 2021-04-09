@@ -53,9 +53,9 @@ async function seed() {
   const events = [
     {
       eventTitle: 'Harry Potter and the Deathly Hallows',
-      date: '2021-04-06',
-      startTime: '18:00',
-      endTime: '19:00',
+      date: '2021-04-09',
+      startTime: '15:45',
+      endTime: '16:00',
       description:
         'Muggles of Pocketbook, what did you think of the series? Were you satisfied with the ending? Let’s discuss our favorite scenes, characters, and more! If we have time, I would love to discuss which house you belong to!',
       hostId: 1,
@@ -64,8 +64,8 @@ async function seed() {
     {
       eventTitle: 'The Little Prince',
       date: '2021-04-10',
-      startTime: '12:30',
-      endTime: '14:30',
+      startTime: '15:45',
+      endTime: '16:00',
       description:
         'The Little Prince introduces a variety of philosophical concepts including authority, loneliness, and ownership. Did you read this classic? If so, what was your opinion of the book? Looking forward to discussing with you all!',
       hostId: 2,

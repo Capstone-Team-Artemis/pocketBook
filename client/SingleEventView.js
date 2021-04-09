@@ -124,9 +124,9 @@ export default class SingleEventView extends React.Component {
                   ** Live chat shows up below at the exact date and time of the
                   event!
                 </Text>
-                {todaysDate === formattedDate &&
+                {/* {todaysDate === formattedDate &&
                 todaysTime >= formattedStartTime &&
-                todaysTime <= formattedEndTime ? (
+                todaysTime <= formattedEndTime ? ( */}
                   <View style={styles.joinButtonContainer}>
                     <Button
                       onPress={() => {
@@ -140,7 +140,7 @@ export default class SingleEventView extends React.Component {
                       <Text style={styles.joinNowText}>Join Now</Text>
                     </Button>
                   </View>
-                ) : null}
+                {/* ) : null} */}
               </Card>
             </Surface>
           </ScrollView>
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#24aae2',
     width: '100%',
-    height: '15%',
+    height: '9%',
     alignItems: 'flex-end',
   },
   surface: {

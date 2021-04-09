@@ -117,7 +117,7 @@ async function seed() {
       startTime: '19:00',
       endTime: '20:00',
       description:
-        "So..I finally read Harper Lee's classic and it definitely is a must read! For those who have read it and want to discuss, I would love to explore the themes of race, injustice, human nature, and more with everyone.",
+        "So...I finally read Harper Lee's classic and it definitely is a must read! For those who have read it and want to discuss, I would love to explore the themes of race, injustice, human nature, and more with everyone.",
       hostId: 2,
       image: 'https://i.ibb.co/2S1SSxq/tokillamockingbird.jpg',
     },
